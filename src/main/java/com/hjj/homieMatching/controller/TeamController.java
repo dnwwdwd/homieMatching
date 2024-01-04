@@ -11,6 +11,7 @@ import com.hjj.homieMatching.model.domain.Team;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.dto.TeamQuery;
 import com.hjj.homieMatching.model.request.TeamAddRequest;
+import com.hjj.homieMatching.model.vo.TeamUserVO;
 import com.hjj.homieMatching.service.TeamService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -89,18 +90,13 @@ public class TeamController {
     }
 
     @GetMapping("/list")
-    public BaseResponse<List<Team>> listTeams(TeamQuery teamQuery){
+    public BaseResponse<List<TeamUserVO>> listTeams(TeamQuery teamQuery, HttpServletRequest request){
         if (teamQuery == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        Team team = new Team();
-        try {
-            BeanUtils.copyProperties(team, teamQuery);
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
-        }
-        QueryWrapper<Team> queryWrapper = new QueryWrapper<>(team);
-        List<Team> teamList = teamService.list(queryWrapper);
+        User loginUser = userService.getLoginUser(request);
+        boolean isAdmin = userService.isAdmin(loginUser);
+        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, isAdmin);
         return ResultUtils.success(teamList);
     }
 

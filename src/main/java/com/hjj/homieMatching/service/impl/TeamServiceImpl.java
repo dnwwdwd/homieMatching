@@ -4,21 +4,27 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.mapper.TeamMapper;
 import com.hjj.homieMatching.model.domain.Team;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.domain.UserTeam;
+import com.hjj.homieMatching.model.dto.TeamQuery;
 import com.hjj.homieMatching.model.enums.TeamStatusEnum;
+import com.hjj.homieMatching.model.vo.TeamUserVO;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.TeamService;
-import com.hjj.homieMatching.mapper.TeamMapper;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.service.UserTeamService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.CalendarUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,6 +37,8 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     implements TeamService{
     @Resource
     UserTeamService userTeamService;
+    @Resource
+    UserService userService;
     @Transactional(rollbackFor = Exception.class) //插入到队伍表的SQL语句和插入到用户队伍表的SQL语句要么都不执行，要么都执行
     @Override
     public long addTeam(Team team, User loginUser) {
@@ -104,5 +112,82 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "创建队伍失败");
         }
         return teamId;
+    }
+
+    @Override
+    public List<TeamUserVO> listTeam(TeamQuery teamQuery, boolean isAdmin) {
+        QueryWrapper<Team> queryWrapper =  new QueryWrapper<>();
+        // 1.组合成立条件
+        if (teamQuery != null) {
+            Long id = teamQuery.getId();
+            if (id != null && id >=0) {
+                queryWrapper.eq("id", id);
+            }
+            // 搜索关键词从name字段和description两个字段里面查
+            String searchText = teamQuery.getSearchText();
+            if (StringUtils.isNotBlank(searchText)) {
+                queryWrapper.and(qw -> qw.like("teamName", searchText).or().like("description", searchText));
+            }
+            String teamName = teamQuery.getTeamName();
+            if (StringUtils.isNotBlank(teamName)) {
+                queryWrapper.like("teamName", teamName);
+            }
+            String description = teamQuery.getDescription();
+            if (StringUtils.isNotBlank(description)) {
+                queryWrapper.eq("description", description);
+            }
+            queryWrapper.like("description", description);
+            Integer maxNum = teamQuery.getMaxNum();
+            if (maxNum != null && maxNum > 0) {
+                // 查询人数相等的
+                queryWrapper.eq("maxNum", maxNum);
+            }
+            // 根据创建人查询
+            Long userId = teamQuery.getUserId();
+            if (userId != null && userId > 0) {
+                queryWrapper.eq("userId", userId);
+            }
+            // 根据状态查询
+            Integer status = teamQuery.getStatus();
+            TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
+            // statusEnum为空说明其是公开的
+            if (statusEnum == null){
+                statusEnum = TeamStatusEnum.PUBLIC;
+            }
+            if (!isAdmin && !statusEnum.equals(TeamStatusEnum.PUBLIC)) {
+                throw new BusinessException(ErrorCode.NO_AUTH);
+            }
+                queryWrapper.eq("status", statusEnum.getValue());
+        }
+        // 不展示已过期的队伍
+        // expireTime为空或者过期时间迟于当前时间
+        queryWrapper.and(qw -> qw.lt("expireTime", new Date())).or().isNull("expireTime");
+
+        List<Team> teamList = this.list(queryWrapper);
+        if (CollectionUtils.isEmpty(teamList)) {
+            return new ArrayList<>();
+        }
+        List<TeamUserVO> teamUserVOList = new ArrayList<>();
+        // 关联查询用户信息
+        for (Team team : teamList) {
+            Long userId = team.getUserId();
+            if (userId == null) {
+                continue;
+            }
+            // 关联查询用户信息
+            User user = userService.getById(userId);
+            // 脱敏用户信息
+            TeamUserVO teamUserVO = new TeamUserVO();
+            if (team != null) {
+                BeanUtils.copyProperties(team, teamUserVO);
+            }
+            UserVO userVO = new UserVO();
+            if (user != null) {
+                BeanUtils.copyProperties(user, userVO);
+            }
+            teamUserVO.setCreateUser(userVO);
+            teamUserVOList.add(teamUserVO);
+        }
+        return teamUserVOList;
     }
 }

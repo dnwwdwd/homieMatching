@@ -31,7 +31,7 @@ create table if not exists hjj.team
     description 	varchar(1024)                       null comment ' 描述',
     maxNum        	int    default 1              		null comment '最大人数',
     expireTime      datetime							null comment '过期时间',
-    userId 			bigint                              not null comment '队伍创建者id',
+    userId 			bigint                              not null comment '队伍创建者/队长id',
     status         	tinyint default 0 		        	null comment '队伍状态 - 0 - 公开， 1 - 私有，2 - 加密
 - ',
     password        varchar(512)                       null comment '队伍密码',

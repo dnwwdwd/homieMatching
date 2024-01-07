@@ -3,13 +3,13 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
-    name: user-center
+    name: homieMatching
   profiles:
     active: dev
   #DataSource config
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hjj?characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/hjj?characterEncoding=UTF-8
     username: root
     password: 123456
   #session失效时间（分钟）

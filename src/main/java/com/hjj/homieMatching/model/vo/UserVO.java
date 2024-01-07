@@ -1,8 +1,12 @@
 package com.hjj.homieMatching.model.vo;
 
 import lombok.Data;
+
 import java.util.Date;
 
+/**
+ * 用户信息封装类
+ */
 @Data
 public class UserVO {
     /**

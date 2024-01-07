@@ -11,6 +11,9 @@ import com.hjj.homieMatching.model.domain.Team;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.dto.TeamQuery;
 import com.hjj.homieMatching.model.request.TeamAddRequest;
+import com.hjj.homieMatching.model.request.TeamJoinRequest;
+import com.hjj.homieMatching.model.request.TeamQuitTeam;
+import com.hjj.homieMatching.model.request.TeamUpdateRequest;
 import com.hjj.homieMatching.model.vo.TeamUserVO;
 import com.hjj.homieMatching.service.TeamService;
 import com.hjj.homieMatching.service.UserService;
@@ -20,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -53,24 +55,34 @@ public class TeamController {
         return ResultUtils.success(teamId);
     }
 
+    /**
+     * 队长解散队伍/删除队伍
+     * @param id
+     * @return
+     */
     @PostMapping("/delete")
-    public BaseResponse<Boolean> deleteTeam(@RequestBody Long id){
+    public BaseResponse<Boolean> deleteTeam(@RequestBody long id, HttpServletRequest request){
         if (id <=0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        boolean result = teamService.removeById(id);
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.deleteTeam(id, loginUser);
         if (!result) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "删除失败！");
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "解散失败！");
         }
         return ResultUtils.success(result);
     }
 
     @PostMapping("/update")
-    public BaseResponse<Boolean> updateTeam(@RequestBody Team newTeam){
-        if (newTeam == null) {
+    public BaseResponse<Boolean> updateTeam(@RequestBody TeamUpdateRequest teamUpdateRequest, HttpServletRequest request){
+        if (teamUpdateRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        boolean result = teamService.updateById(newTeam);
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
+        boolean result = teamService.updateTeam(teamUpdateRequest, loginUser);
         if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败！");
         }
@@ -100,6 +112,7 @@ public class TeamController {
         return ResultUtils.success(teamList);
     }
 
+    // todo 查询分页
     @GetMapping("/list/page")
     public BaseResponse<IPage<Team>> listTeamsByPage(TeamQuery teamQuery){
         if (teamQuery == null) {
@@ -115,5 +128,28 @@ public class TeamController {
         QueryWrapper<Team> queryWrapper = new QueryWrapper<>(team);
         IPage<Team> teamIPage = teamService.page(page, queryWrapper);
         return ResultUtils.success(teamIPage);
+    }
+
+    @PostMapping("/join")
+    public BaseResponse<Boolean> joinTeam(@RequestBody TeamJoinRequest teamJoinRequest, HttpServletRequest request){
+        if (teamJoinRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
+        boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
+        return ResultUtils.success(result);
+    }
+
+    @PostMapping("/quit")
+    public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitTeam teamQuitTeam, HttpServletRequest request){
+        if (teamQuitTeam == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        boolean result = teamService.quitTeam(teamQuitTeam, loginUser);
+        return ResultUtils.success(result);
     }
 }

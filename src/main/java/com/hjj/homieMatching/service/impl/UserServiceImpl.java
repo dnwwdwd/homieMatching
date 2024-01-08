@@ -10,6 +10,9 @@ import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.service.UserService;
+import com.hjj.homieMatching.utils.AlgorithmUtils;
+
+import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -19,15 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static com.hjj.homieMatching.constant.UserConstant.*;
+import static com.hjj.homieMatching.constant.UserConstant.ADMIN_ROLE;
+import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 
 /**用户服务实现类
  *
@@ -233,6 +234,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return (User) userObj;
     }
+
     // 使用SQL实现标签的查询，@Deprecated表示该方法是过时的，暂不使用。private修饰该方法是为防止被误调用
     @Deprecated
     private List<User> searchUsersByTagsBySQL(List<String> tagNameList){
@@ -253,7 +255,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @return
      */
     @Override
-    public boolean isAdmin(HttpServletRequest request){
+    public boolean isAdmin(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
         User user=(User) userObj;
         return user != null && user.getUserRole() == ADMIN_ROLE;
@@ -261,7 +263,56 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     //
     @Override
-    public boolean isAdmin(User loginUser){
+    public boolean isAdmin(User loginUser) {
         return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
+    }
+
+    @Override
+    public List<User> matchUsers(long num, User loginUser) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.isNotNull("tags");
+        queryWrapper.select("id","tags");
+        List<User> userList = this.list(queryWrapper);
+
+        String tags = loginUser.getTags();
+        Gson gson = new Gson();
+        List<String> tagList = gson.fromJson(tags, new TypeToken<List<String>>() {
+        }.getType());
+        // 用户列表的下表 => 相似度'
+        List<Pair<User,Long>> list = new ArrayList<>();
+        // 依次计算当前用户和所有用户的相似度
+        for (int i = 0; i <userList.size(); i++) {
+            User user = userList.get(i);
+            String userTags = user.getTags();
+            //无标签的 或当前用户为自己
+            if (StringUtils.isBlank(userTags) || user.getId() == loginUser.getId()){
+                continue;
+            }
+            List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {
+            }.getType());
+            //计算分数
+            long distance = AlgorithmUtils.minDistance(tagList, userTagList);
+            list.add(new Pair<>(user,distance));
+        }
+        //按编辑距离有小到大排序
+        List<Pair<User, Long>> topUserPairList = list.stream()
+                .sorted((a, b) -> (int) (a.getValue() - b.getValue()))
+                .limit(num)
+                .collect(Collectors.toList());
+        //有顺序的userID列表
+        List<Long> userListVo = topUserPairList.stream().map(pari -> pari.getKey().getId()).collect(Collectors.toList());
+
+        //根据id查询user完整信息
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("id",userListVo);
+        Map<Long, List<User>> userIdUserListMap = this.list(userQueryWrapper).stream()
+                .map(user -> getSafetyUser(user))
+                .collect(Collectors.groupingBy(User::getId));
+
+        List<User> finalUserList = new ArrayList<>();
+        for (Long userId : userListVo){
+            finalUserList.add(userIdUserListMap.get(userId).get(0));
+        }
+        return finalUserList;
     }
 }

@@ -11,7 +11,6 @@ import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.utils.AlgorithmUtils;
-
 import javafx.util.Pair;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

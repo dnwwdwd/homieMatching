@@ -1,15 +1,10 @@
 package com.hjj.homieMatching.service;
 
-import com.hjj.homieMatching.common.BaseResponse;
-import com.hjj.homieMatching.constant.UserConstant;
-import com.hjj.homieMatching.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.hjj.homieMatching.model.vo.UserVO;
+import com.hjj.homieMatching.model.domain.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
-import static com.hjj.homieMatching.constant.UserConstant.ADMIN_ROLE;
 
 /**
  * 用户服务

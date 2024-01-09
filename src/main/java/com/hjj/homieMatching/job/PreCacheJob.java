@@ -47,7 +47,7 @@ public class PreCacheJob {
                     QueryWrapper<User> queryWrapper = new QueryWrapper<>();
                     IPage<User> page = new Page<>(1, 20);
                     IPage<User> userIPage = userService.page(page, queryWrapper);
-                    String redisKey = String.format("homie:user:recommend:%s", userId);
+                    String redisKey = String.format("homieMatching:user:recommend:%s", userId);
                     ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
                     // 写缓存
                     try{

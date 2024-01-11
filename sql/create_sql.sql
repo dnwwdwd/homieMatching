@@ -1,3 +1,4 @@
+create database if not exists hjj;
 
 /*用户表*/
 create table if not exists hjj.user

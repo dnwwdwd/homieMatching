@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -6,9 +8,9 @@ spring:
     name: homieMatching
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hjj?characterEncoding=UTF-8
-    username: root
-    password: 123456
+    url: jdbc:mysql://localhost:3306/库名?characterEncoding=UTF-8
+    username: MySQL账号
+    password: MySQL密码
   session:
     timeout: 86400
     store-type: redis
@@ -22,7 +24,7 @@ server:
     context-path: /api
     session:
       cookie:
-        domain: localhost
+        domain: 本机
         same-site: none
         secure: true
 mybatis-plus:

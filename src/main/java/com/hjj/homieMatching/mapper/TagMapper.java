@@ -1,7 +1,7 @@
 package com.hjj.homieMatching.mapper;
 
-import com.hjj.homieMatching.model.domain.Tag;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hjj.homieMatching.model.domain.Tag;
 
 /**
 * @author 17653
@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.hjj.usercenter.model.domain.Tag
 */
 public interface TagMapper extends BaseMapper<Tag> {
-
 }
 
 

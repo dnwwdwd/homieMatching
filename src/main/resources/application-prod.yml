@@ -6,9 +6,9 @@ spring:
     name: homieMatching
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://服务器IP地址:3306/MySQL库名?characterEncoding=UTF-8
-    username: 服务器MySQL账号
-    password: 服务器MySQL密码
+    url: jdbc:mysql://47.113.227.23:3306/hjj?characterEncoding=UTF-8
+    username: hejiajun
+    password: 13584064183cz
   session:
     timeout: 86400
     store-type: redis
@@ -16,16 +16,16 @@ spring:
     port: 6379
     host: 127.0.0.1
     database: 0
-    password: 服务器redis密码
+    password: 13584064183cz
 server:
   port: 8080
   servlet:
     context-path: /api
     session:
       cookie:
-        domain: 服务器IP地址或者域名（其实就是前端添加站点时的网站名，我这里还是建议全部设为服务器IP地址吧，但注意别把IP地址告诉任何人）
-        same-site: lax
-        secure: false
+        domain: homiematching.top
+        same-site: none
+        secure: true
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false

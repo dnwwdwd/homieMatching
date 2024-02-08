@@ -137,7 +137,7 @@ public class UserController {
         // 如果缓存中有数据，直接读缓存
         String redisKey = String.format("homie:user:recommend:%s", loginUser.getId());
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        IPage<User> userRedisPage =(IPage<User>) valueOperations.get(redisKey);
+        IPage<User> userRedisPage = (IPage<User>) valueOperations.get(redisKey);
         if(userRedisPage != null){
             return ResultUtils.success(userRedisPage);
         }

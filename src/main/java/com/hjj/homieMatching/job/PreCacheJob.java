@@ -32,7 +32,7 @@ public class PreCacheJob {
     @Resource
     RedissonClient redissonClient;
     // 重点用户
-    private List<Long> keyUsersIdList = Arrays.asList(1L);
+    private final List<Long> keyUsersIdList = Arrays.asList(1L);
     // 每天执行，预热缓存推荐用户
     @Scheduled(cron = "0 32 11 * * *")
     synchronized public void doCacheRecommendUser() {

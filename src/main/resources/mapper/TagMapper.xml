@@ -20,4 +20,5 @@
         parentId,isParent,createTime,
         updateTime,isDelete
     </sql>
+
 </mapper>

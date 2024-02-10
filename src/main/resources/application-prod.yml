@@ -23,9 +23,9 @@ server:
     context-path: /api
     session:
       cookie:
-        domain: homiematching.top
-        same-site: none
-        secure: true
+        domain: 47.113.227.23
+        same-site: lax
+        secure: false
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false

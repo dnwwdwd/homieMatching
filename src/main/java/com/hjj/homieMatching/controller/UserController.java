@@ -96,7 +96,7 @@ public class UserController {
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if(currentUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         long userId=currentUser.getId();
         User user = userService.getById(userId);

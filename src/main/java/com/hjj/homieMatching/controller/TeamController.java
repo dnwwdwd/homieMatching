@@ -52,6 +52,9 @@ public class TeamController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         Team team = new Team();
         try {
             BeanUtils.copyProperties(team, teamAddRequest);
@@ -74,6 +77,9 @@ public class TeamController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         long id = deleteRequest.getId();
         boolean result = teamService.deleteTeam(id, loginUser);
         if (!result) {
@@ -121,6 +127,9 @@ public class TeamController {
         if (teamQuery == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         boolean isAdmin = userService.isAdmin(request);
         // 1、查询队伍列表
         List<TeamUserVO> teamList = teamService.listTeam(teamQuery, isAdmin);
@@ -162,6 +171,9 @@ public class TeamController {
         if (teamQuery == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         User logininUser = userService.getLoginUser(request);
         QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userId",logininUser.getId());
@@ -184,6 +196,9 @@ public class TeamController {
         if (teamQuery == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         User loginUser = userService.getLoginUser(request);
         teamQuery.setUserId(loginUser.getId());
         List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
@@ -192,9 +207,12 @@ public class TeamController {
 
     // todo 查询分页
     @GetMapping("/list/page")
-    public BaseResponse<IPage<Team>> listTeamsByPage(TeamQuery teamQuery){
+    public BaseResponse<IPage<Team>> listTeamsByPage(TeamQuery teamQuery, HttpServletRequest request){
         if (teamQuery == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         Team team = new Team();
         try {
@@ -213,6 +231,9 @@ public class TeamController {
         if (teamJoinRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
@@ -225,6 +246,9 @@ public class TeamController {
     public BaseResponse<Boolean> quitTeam(@RequestBody TeamQuitTeam teamQuitTeam, HttpServletRequest request){
         if (teamQuitTeam == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         User loginUser = userService.getLoginUser(request);
         boolean result = teamService.quitTeam(teamQuitTeam, loginUser);

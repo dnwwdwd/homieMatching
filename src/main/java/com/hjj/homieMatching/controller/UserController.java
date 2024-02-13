@@ -106,6 +106,9 @@ public class UserController {
 
     @GetMapping("/search")
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request){
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         if(!userService.isAdmin(request)){
             throw  new BusinessException(ErrorCode.PARAMS_ERROR,"你没有管理员权限");
         }
@@ -120,6 +123,9 @@ public class UserController {
 
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUser(@RequestBody long id, HttpServletRequest request){
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         if(!userService.isAdmin(request)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -138,6 +144,9 @@ public class UserController {
         }
         // 2.校验权限
         User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         // 3.触发更新
         int result = userService.updateUser(user, loginUser);
         return ResultUtils.success(result);
@@ -145,6 +154,9 @@ public class UserController {
     @GetMapping("/recommend")
     public BaseResponse<IPage<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         // 如果缓存中有数据，直接读缓存
         String redisKey = String.format("homie:user:recommend:%s", loginUser.getId());
         ValueOperations valueOperations = redisTemplate.opsForValue();
@@ -166,7 +178,11 @@ public class UserController {
     }
 
     @GetMapping("/search/tags")
-    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList) {
+    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList,
+                                                      HttpServletRequest request) {
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         if(CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -180,6 +196,9 @@ public class UserController {
      */
     @GetMapping("/match")
     public BaseResponse<List<User>> matchUsers(long num, HttpServletRequest request){
+        if (userService.getLoginUser(request) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
         if (num <=0 || num > 20) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

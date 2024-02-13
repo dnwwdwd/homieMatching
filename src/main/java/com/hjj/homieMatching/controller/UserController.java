@@ -14,6 +14,7 @@ import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
@@ -47,10 +48,21 @@ public class UserController {
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
         String planetCode=userRegisterRequest.getPlanetCode();
-        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)) {
+        Integer gender = userRegisterRequest.getGender();
+        String avatarUrl= userRegisterRequest.getAvatarUrl();
+        String username= userRegisterRequest.getUsername();
+        String phone= userRegisterRequest.getPhone();
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode, avatarUrl)) {
             return ResultUtils.error(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword, planetCode);
+        if (gender == null || gender <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (phone.length() > 11) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "手机号不合法");
+        }
+        long result = userService.userRegister(userAccount, userPassword, checkPassword,
+                planetCode, gender, avatarUrl, username, phone);
         return ResultUtils.success(result);
     }
 

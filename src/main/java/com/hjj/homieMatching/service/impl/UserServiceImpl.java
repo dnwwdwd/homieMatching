@@ -46,7 +46,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     private static final String SALT="hjj";
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
+                             Integer gender, String avatarUrl, String username, String phone) {
         //1.校验
         if(StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)){
             // todo 修改为自定义异常
@@ -86,6 +87,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(count > 0){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号已存在");
         }
+        if(avatarUrl.length() >= 1024) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "头像参数过长");
+        }
         //2.加密
         String encryptPassword=DigestUtils.md5DigestAsHex((SALT+userPassword).getBytes());
         //3.插入数据
@@ -93,6 +97,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
         user.setPlanetCode(planetCode);
+        user.setGender(gender);
+        user.setAvatarUrl(avatarUrl);
+        user.setUsername(username);
+        user.setPhone(phone);
         boolean saveResult=this.save(user);
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "添加失败");

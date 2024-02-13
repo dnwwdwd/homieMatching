@@ -21,7 +21,8 @@ public interface UserService extends IService<User> {
      * @param planetCode    星球编号
      * @return 新用户id
      */
-    long userRegister(String userAccount, String userPassword, String checkPassword, String planetCode);
+    long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
+                             Integer gender, String avatarUrl, String username, String phone);
 
     /**
      * @param userAccount  用户账户

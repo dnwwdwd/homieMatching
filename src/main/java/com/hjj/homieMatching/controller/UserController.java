@@ -51,6 +51,7 @@ public class UserController {
         String avatarUrl= userRegisterRequest.getAvatarUrl();
         String username= userRegisterRequest.getUsername();
         String phone= userRegisterRequest.getPhone();
+        List<String> tagNameList = userRegisterRequest.getTagNameList();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode, avatarUrl)) {
             return ResultUtils.error(ErrorCode.PARAMS_ERROR);
         }
@@ -60,8 +61,15 @@ public class UserController {
         if (phone.length() > 11) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "手机号不合法");
         }
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
+        }
+        System.out.println(tagNameList);
+        for (String s : tagNameList) {
+            System.out.println(s);
+        }
         long result = userService.userRegister(userAccount, userPassword, checkPassword,
-                planetCode, gender, avatarUrl, username, phone);
+                planetCode, gender, avatarUrl, username, phone, tagNameList);
         return ResultUtils.success(result);
     }
 

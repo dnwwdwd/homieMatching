@@ -3,6 +3,7 @@ package com.hjj.homieMatching.model.request;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 用户注册请求体
@@ -19,5 +20,5 @@ public class UserRegisterRequest implements Serializable {
     private String avatarUrl;
     private String username;
     private String phone;
-
+    private List<String> tagNameList;
 }

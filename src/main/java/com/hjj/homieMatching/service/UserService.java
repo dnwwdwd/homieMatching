@@ -22,7 +22,7 @@ public interface UserService extends IService<User> {
      * @return 新用户id
      */
     long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
-                             Integer gender, String avatarUrl, String username, String phone);
+                             Integer gender, String avatarUrl, String username, String phone, List<String> tagNameList);
 
     /**
      * @param userAccount  用户账户

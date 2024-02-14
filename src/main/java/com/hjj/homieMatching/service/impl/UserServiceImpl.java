@@ -47,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private static final String SALT="hjj";
     @Override
     public long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
-                             Integer gender, String avatarUrl, String username, String phone) {
+                             Integer gender, String avatarUrl, String username, String phone, List<String> tagNameList) {
         //1.校验
         if(StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)){
             // todo 修改为自定义异常
@@ -90,6 +90,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(avatarUrl.length() >= 1024) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "头像参数过长");
         }
+        if (gender == null || gender <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (phone.length() > 11) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "手机号不合法");
+        }
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
+        }
         //2.加密
         String encryptPassword=DigestUtils.md5DigestAsHex((SALT+userPassword).getBytes());
         //3.插入数据
@@ -101,6 +110,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setAvatarUrl(avatarUrl);
         user.setUsername(username);
         user.setPhone(phone);
+        // 处理用户标签
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('[');
+        for (int i = 0;i < tagNameList.size();i++) {
+            stringBuilder.append('"').append(tagNameList.get(i)).append('"');
+            if (i < tagNameList.size() - 1) {
+                stringBuilder.append(',');
+            }
+        }
+        stringBuilder.append(']');
+        user.setTags(stringBuilder.toString());
         boolean saveResult=this.save(user);
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "添加失败");

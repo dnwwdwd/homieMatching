@@ -1,7 +1,7 @@
 package com.hjj.homieMatching.mapper;
 
-import com.hjj.homieMatching.model.domain.Friend;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.hjj.homieMatching.model.domain.Friend;
 
 /**
 * @author 17653

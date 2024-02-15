@@ -1,7 +1,7 @@
 package com.hjj.homieMatching.service;
 
-import com.hjj.homieMatching.model.domain.Friend;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hjj.homieMatching.model.domain.Friend;
 
 /**
 * @author 17653

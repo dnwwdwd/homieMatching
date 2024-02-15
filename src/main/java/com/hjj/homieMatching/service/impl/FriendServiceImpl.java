@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.mapper.FriendMapper;
 import com.hjj.homieMatching.model.domain.Friend;
 import com.hjj.homieMatching.service.FriendService;
-import com.hjj.homieMatching.mapper.FriendMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

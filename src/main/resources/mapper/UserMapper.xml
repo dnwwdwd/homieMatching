@@ -10,6 +10,7 @@
             <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
             <result property="avatarUrl" column="avatarUrl" jdbcType="VARCHAR"/>
             <result property="gender" column="gender" jdbcType="TINYINT"/>
+            <result property="profile" column="profile" jdbcType="VARCHAR"/>
             <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
             <result property="phone" column="phone" jdbcType="VARCHAR"/>
             <result property="email" column="email" jdbcType="VARCHAR"/>
@@ -20,14 +21,16 @@
             <result property="userRole" column="userRole" jdbcType="INTEGER"/>
             <result property="planetCode" column="planetCode" jdbcType="VARCHAR"/>
             <result property="tags" column="tags" jdbcType="VARCHAR"/>
+            <result property="longitude" column="longitude" jdbcType="DECIMAL"/>
+            <result property="dimension" column="dimension" jdbcType="DECIMAL"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,userAccount,
-        avatarUrl,gender,userPassword,
-        phone,email,userStatus,
-        createTime,updateTime,isDelete,
-        userRole,planetCode,tags
+        avatarUrl,gender,profile,
+        userPassword,phone,email,
+        userStatus,createTime,updateTime,
+        isDelete,userRole,planetCode,
+        tags,longitude,dimension
     </sql>
-
 </mapper>

@@ -5,12 +5,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.FriendMapper;
+import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.Friend;
+import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.service.FriendService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * @author 17653
@@ -22,13 +26,19 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
     implements FriendService{
 
     @Resource
+    UserMapper userMapper;
+
+    @Resource
     FriendMapper friendMapper;
 
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean addFriend(long userId, long friendId) {
+        if (userId == friendId) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "自己不能添加自己为好友'");
+        }
         // 查询是否添加了该用户
-        QueryWrapper queryWrapper = new QueryWrapper();
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper();
         queryWrapper.eq("userId", userId);
         queryWrapper.eq("friendId", friendId);
         Long count1 = friendMapper.selectCount(queryWrapper);
@@ -57,8 +67,17 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
         return result1 && result2;
     }
 
+    @Override
+    public List<User> listFriends(Long userId) {
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper();
+        queryWrapper.eq("userId", userId);
+        List<Friend> friendList = friendMapper.selectList(queryWrapper);
+        List<User> userList = new ArrayList<>();
+        for (Friend friend : friendList) {
+            long friendId = friend.getFriendId();
+            User user = userMapper.selectById(friendId);
+            userList.add(user);
+        }
+        return userList;
+    }
 }
-
-
-
-

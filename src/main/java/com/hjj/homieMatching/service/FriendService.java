@@ -2,6 +2,9 @@ package com.hjj.homieMatching.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.Friend;
+import com.hjj.homieMatching.model.domain.User;
+
+import java.util.List;
 
 /**
 * @author 17653
@@ -11,4 +14,6 @@ import com.hjj.homieMatching.model.domain.Friend;
 public interface FriendService extends IService<Friend> {
 
     boolean addFriend(long userId, long friendId);
+
+    List<User> listFriends(Long userId);
 }

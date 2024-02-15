@@ -91,6 +91,16 @@ public class User implements Serializable {
      */
     private String tags;
 
+    /**
+     * 经度
+     */
+    private Double longitude;
+
+    /**
+     * 维度
+     */
+    private Double dimension;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

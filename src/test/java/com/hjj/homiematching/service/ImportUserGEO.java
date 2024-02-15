@@ -30,5 +30,6 @@ public class ImportUserGEO {
             locationList.add(new RedisGeoCommands.GeoLocation<>(String.valueOf(user.getId()), new Point(user.getLongitude(), user.getDimension())));
         }
         stringRedisTemplate.opsForGeo().add(key, locationList);
+        System.out.println("你好");
     }
 }

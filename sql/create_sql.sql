@@ -55,3 +55,16 @@ create table if not exists hjj.user_team
     isDelete     	tinyint  default 0                 not null comment '是否删除'
 )
     comment '用户队伍关系表';
+
+
+create table if not exists hjj.friend
+(
+    id           bigint auto_increment comment '自己id'
+        primary key,
+    friendId     bigint not null comment '好友id',
+    createTime   datetime default CURRENT_TIMESTAMP null comment '创建时间',
+    updateTime   datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete     tinyint  default 0                 not null comment '是否删除'
+)
+    comment '好友表';
+

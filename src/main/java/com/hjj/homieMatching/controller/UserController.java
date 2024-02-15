@@ -152,19 +152,16 @@ public class UserController {
         }
         // 2.校验权限
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         // 3.触发更新
         int result = userService.updateUser(user, loginUser);
         return ResultUtils.success(result);
     }
+
     @GetMapping("/recommend")
     public BaseResponse<IPage<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         // 如果缓存中有数据，直接读缓存
         String redisKey = String.format("homie:user:recommend:%s", loginUser.getId());
         ValueOperations valueOperations = redisTemplate.opsForValue();

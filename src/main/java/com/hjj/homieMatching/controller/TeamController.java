@@ -52,9 +52,7 @@ public class TeamController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         Team team = new Team();
         try {
             BeanUtils.copyProperties(team, teamAddRequest);
@@ -77,9 +75,7 @@ public class TeamController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         long id = deleteRequest.getId();
         boolean result = teamService.deleteTeam(id, loginUser);
         if (!result) {
@@ -94,9 +90,7 @@ public class TeamController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         boolean result = teamService.updateTeam(teamUpdateRequest, loginUser);
         if (!result) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "更新失败！");
@@ -235,9 +229,7 @@ public class TeamController {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+
         boolean result = teamService.joinTeam(teamJoinRequest, loginUser);
         return ResultUtils.success(result);
     }

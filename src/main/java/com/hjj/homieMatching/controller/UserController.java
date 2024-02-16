@@ -3,18 +3,24 @@ package com.hjj.homieMatching.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
+import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserLoginRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +39,19 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
+
     @Resource
     private UserService userService;
+
     @Resource
     RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    ObjectMapper objectMapper;
+
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -159,27 +174,72 @@ public class UserController {
     }
 
     @GetMapping("/recommend")
-    public BaseResponse<IPage<User>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
+    public BaseResponse<List<UserVO>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN);
+        }
 
-        // 如果缓存中有数据，直接读缓存
         String redisKey = String.format("homie:user:recommend:%s", loginUser.getId());
-        ValueOperations valueOperations = redisTemplate.opsForValue();
-        IPage<User> userRedisPage = (IPage<User>) valueOperations.get(redisKey);
-        if(userRedisPage != null){
-            return ResultUtils.success(userRedisPage);
+        // 如果缓存中有数据，直接读缓存
+        List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
+        List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
+        if(userVOListRedis != null){
+            return ResultUtils.success(userVOListRedis);
         }
         // 无缓存，查询数据库，并将数据写入缓存
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         IPage<User> page = new Page<>(pageNum, pageSize);
         IPage<User> userIPage = userService.page(page, queryWrapper);
+
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+/*
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+        List<User> userList = userService.list();
+        for (User user : userList) {
+            Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
+                    String.valueOf(loginUser.getId()), String.valueOf(user.getId()),
+                    RedisGeoCommands.DistanceUnit.KILOMETERS);
+            double value = distance.getValue();
+        }
+*/
+        // 将User转换为UserVO
+        List<UserVO> userVOList = userIPage.getRecords().stream()
+                .map(user -> {
+                    // 查询距离
+                    Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
+                            String.valueOf(loginUser.getId()), String.valueOf(user.getId()),
+                            RedisGeoCommands.DistanceUnit.KILOMETERS);
+                    double value = distance.getValue();
+
+                    // 创建UserVO对象并设置属性
+                    UserVO userVO = new UserVO();
+                    userVO.setId(user.getId());
+                    userVO.setUsername(user.getUsername());
+                    userVO.setUserAccount(user.getUserAccount());
+                    userVO.setAvatarUrl(user.getAvatarUrl());
+                    userVO.setGender(user.getGender());
+                    userVO.setProfile(user.getProfile());
+                    userVO.setPhone(user.getPhone());
+                    userVO.setEmail(user.getEmail());
+                    userVO.setUserStatus(user.getUserStatus());
+                    userVO.setCreateTime(user.getCreateTime());
+                    userVO.setUpdateTime(user.getUpdateTime());
+                    userVO.setUserRole(user.getUserRole());
+                    userVO.setPlanetCode(user.getPlanetCode());
+                    userVO.setTags(user.getTags());
+                    userVO.setDistance(value); // 设置距离值
+
+                    return userVO;
+                })
+                .collect(Collectors.toList());
         // 写缓存
         try{
-            valueOperations.set(redisKey, userIPage, 30000, TimeUnit.MILLISECONDS);
+            redisTemplate.opsForList().rightPushAll(redisKey, userVOList);
         } catch (Exception e) {
             log.error("redis set key error", e);
         }
-        return ResultUtils.success(userIPage);
+        return ResultUtils.success(userVOList);
     }
 
     @GetMapping("/search/tags")

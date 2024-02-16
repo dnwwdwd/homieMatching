@@ -77,5 +77,10 @@ public class UserVO {
      */
     private String tags;
 
+    /**
+     * 用户Geo location
+     */
+    private Double distance;
+
     private static final long serialVersionUID = 1L;
 }

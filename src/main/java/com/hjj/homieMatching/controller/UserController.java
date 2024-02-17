@@ -21,14 +21,12 @@ import org.springframework.data.geo.Distance;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -176,15 +174,12 @@ public class UserController {
     @GetMapping("/recommend")
     public BaseResponse<List<UserVO>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
-        if (loginUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
 
-        String redisKey = String.format("homie:user:recommend:%s", loginUser.getId());
+        String redisKey = String.format("homieMatching:user:recommend:%s", loginUser.getId());
         // 如果缓存中有数据，直接读缓存
         List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
         List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
-        if(userVOListRedis != null){
+        if(!CollectionUtils.isEmpty(userVOListRedis)){
             return ResultUtils.success(userVOListRedis);
         }
         // 无缓存，查询数据库，并将数据写入缓存
@@ -260,7 +255,7 @@ public class UserController {
      * @return
      */
     @GetMapping("/match")
-    public BaseResponse<List<User>> matchUsers(long num, HttpServletRequest request){
+    public BaseResponse<List<UserVO>> matchUsers(long num, HttpServletRequest request){
         if (userService.getLoginUser(request) == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }

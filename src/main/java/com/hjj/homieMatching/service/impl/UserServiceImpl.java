@@ -5,15 +5,20 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hjj.homieMatching.common.ErrorCode;
+import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.utils.AlgorithmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
@@ -39,6 +44,9 @@ import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService{
+    @Resource
+    StringRedisTemplate stringRedisTemplate;
+
     @Resource
     private UserMapper userMapper;
     /**
@@ -295,7 +303,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public List<User> matchUsers(long num, User loginUser) {
+    public List<UserVO> matchUsers(long num, User loginUser) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.isNotNull("tags");
         queryWrapper.select("id","tags");
@@ -340,6 +348,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         for (Long userId : userListVo){
             finalUserList.add(userIdUserListMap.get(userId).get(0));
         }
-        return finalUserList;
+
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+        List<UserVO> finalUserVOList = finalUserList.stream().map(user -> {
+            Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey, String.valueOf(loginUser.getId()),
+                    String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
+
+            UserVO userVO = new UserVO();
+            userVO.setId(user.getId());
+            userVO.setUsername(user.getUsername());
+            userVO.setUserAccount(user.getUserAccount());
+            userVO.setAvatarUrl(user.getAvatarUrl());
+            userVO.setGender(user.getGender());
+            userVO.setProfile(user.getProfile());
+            userVO.setPhone(user.getPhone());
+            userVO.setEmail(user.getEmail());
+            userVO.setUserStatus(user.getUserStatus());
+            userVO.setCreateTime(user.getCreateTime());
+            userVO.setUpdateTime(user.getUpdateTime());
+            userVO.setUserRole(user.getUserRole());
+            userVO.setPlanetCode(user.getPlanetCode());
+            userVO.setTags(user.getTags());
+            userVO.setDistance(distance.getValue());
+            return userVO;
+
+        }).collect(Collectors.toList());
+        return finalUserVOList;
     }
 }

@@ -6,6 +6,7 @@ import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.FriendAddRequest;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.FriendService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -45,13 +46,13 @@ public class FriendController {
     }
 
     @GetMapping("/list")
-    public BaseResponse<List<User>> listFriends(HttpServletRequest request) {
+    public BaseResponse<List<UserVO>> listFriends(HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         long userId = loginUser.getId();
-        List<User> friendList = friendService.listFriends(userId);
+        List<UserVO> friendList = friendService.listFriends(userId, request);
         return ResultUtils.success(friendList);
     }
 }

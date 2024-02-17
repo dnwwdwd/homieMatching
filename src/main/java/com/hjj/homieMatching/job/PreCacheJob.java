@@ -5,19 +5,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * 缓存预热任务
@@ -26,17 +33,34 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class PreCacheJob {
     @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
     private UserService userService;
+
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
     @Resource
     RedissonClient redissonClient;
     // 重点用户
-    private final List<Long> keyUsersIdList = Arrays.asList(1L);
+    private List<Long> keyUsersIdList;
+
+    @PostConstruct
+    public void initialKeyUserIdList() {
+        List<User> userList = userService.list();
+        if (CollectionUtils.isEmpty(userList)) {
+            log.error("缓存预热时：用户列表为空");
+        }
+        this.keyUsersIdList = userList.stream().map(User::getId).collect(Collectors.toList());
+    }
+
     // 每天执行，预热缓存推荐用户
-    @Scheduled(cron = "0 32 11 * * *")
+    @Scheduled(cron = "0 34 18 * * *")
     synchronized public void doCacheRecommendUser() {
         String doCacheLockId = String.format("%s:precachejob:docache:lock", RedisConstant.SYSTEM_ID);
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+
         RLock lock = redissonClient.getLock(doCacheLockId);
         try {
             // 只有一个线程能够获取锁
@@ -48,6 +72,31 @@ public class PreCacheJob {
                     IPage<User> page = new Page<>(1, 20);
                     IPage<User> userIPage = userService.page(page, queryWrapper);
                     String redisKey = String.format("homieMatching:user:recommend:%s", userId);
+                    userIPage.getRecords().stream()
+                            .map(user -> {
+                                Distance distance = stringRedisTemplate.opsForGeo()
+                                        .distance(redisUserGeoKey, String.valueOf(userId),
+                                                String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
+                                UserVO userVO = new UserVO();
+                                user.setId(user.getId());
+                                userVO.setUsername(user.getUsername());
+                                userVO.setUserAccount(user.getUserAccount());
+                                userVO.setAvatarUrl(user.getAvatarUrl());
+                                userVO.setGender(user.getGender());
+                                userVO.setProfile(user.getProfile());
+                                userVO.setPhone(user.getPhone());
+                                userVO.setEmail(user.getEmail());
+                                userVO.setUserStatus(user.getUserStatus());
+                                userVO.setCreateTime(user.getCreateTime());
+                                userVO.setUpdateTime(user.getUpdateTime());
+                                userVO.setUserRole(user.getUserRole());
+                                userVO.setPlanetCode(user.getPlanetCode());
+                                userVO.setTags(user.getTags());
+                                userVO.setDistance(distance.getValue());
+                                return userVO;
+                    }).collect(Collectors.toList());
+
+
                     ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
                     // 写缓存
                     try{

@@ -5,25 +5,39 @@ import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisGeoCommands;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ImportUserGEO {
+    @Resource
+    RedisTemplate redisTemplate;
 
     @Resource
     UserService userService;
 
     @Resource
     StringRedisTemplate stringRedisTemplate;
+
+    private List<User> keyUsersList;
+
+    @PostConstruct
+    public void initialUserList() {
+         this.keyUsersList = userService.list();
+         if (this.keyUsersList.size() <= 0) {
+             System.out.println("keyUsersList is empty");
+         }
+    }
+
 
     @Test
     public void importUserGEOByRedis() {
@@ -56,11 +70,13 @@ public class ImportUserGEO {
 
 
 // 计算每个用户与登录用户的距离
-        for (User user : userList) {
-            Distance distance = stringRedisTemplate.opsForGeo().distance(key,
-                    "1", String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
-            System.out.println("User: " + user.getId() + ", Distance: " +
-                    distance.getValue() + " " + distance.getUnit());
-        }
+//        for (User user : userList) {
+//            Distance distance = stringRedisTemplate.opsForGeo().distance(key,
+//                    "1", String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
+//            System.out.println("User: " + user.getId() + ", Distance: " +
+//                    distance.getValue() + " " + distance.getUnit());
+//        }
+
+        System.out.println(keyUsersList);
     }
 }

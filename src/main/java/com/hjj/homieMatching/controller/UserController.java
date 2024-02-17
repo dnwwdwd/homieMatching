@@ -3,7 +3,6 @@ package com.hjj.homieMatching.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
@@ -46,9 +45,6 @@ public class UserController {
 
     @Resource
     StringRedisTemplate stringRedisTemplate;
-
-    @Resource
-    ObjectMapper objectMapper;
 
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -174,14 +170,14 @@ public class UserController {
     @GetMapping("/recommend")
     public BaseResponse<List<UserVO>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
-
         String redisKey = String.format("homieMatching:user:recommend:%s", loginUser.getId());
         // 如果缓存中有数据，直接读缓存
-        List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
-        List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
-        if(!CollectionUtils.isEmpty(userVOListRedis)){
-            return ResultUtils.success(userVOListRedis);
-        }
+//        List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
+//        List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
+//        if(!CollectionUtils.isEmpty(userVOListRedis)){
+//            System.out.println(userVOListRedis);
+//            return ResultUtils.success(userVOListRedis);
+//        }
         // 无缓存，查询数据库，并将数据写入缓存
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         IPage<User> page = new Page<>(pageNum, pageSize);
@@ -224,7 +220,6 @@ public class UserController {
                     userVO.setPlanetCode(user.getPlanetCode());
                     userVO.setTags(user.getTags());
                     userVO.setDistance(value); // 设置距离值
-
                     return userVO;
                 })
                 .collect(Collectors.toList());
@@ -234,6 +229,7 @@ public class UserController {
         } catch (Exception e) {
             log.error("redis set key error", e);
         }
+        System.out.println(userVOList);
         return ResultUtils.success(userVOList);
     }
 

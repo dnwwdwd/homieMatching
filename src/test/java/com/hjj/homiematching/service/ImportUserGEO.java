@@ -2,10 +2,10 @@ package com.hjj.homiematching.service;
 
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisGeoCommands;
@@ -76,7 +76,10 @@ public class ImportUserGEO {
 //            System.out.println("User: " + user.getId() + ", Distance: " +
 //                    distance.getValue() + " " + distance.getUnit());
 //        }
-
-        System.out.println(keyUsersList);
+//
+        String redisKey = String.format("homieMatching:user:recommend:%s", "1");
+        // 如果缓存中有数据，直接读缓存
+        List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
+        List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
     }
 }

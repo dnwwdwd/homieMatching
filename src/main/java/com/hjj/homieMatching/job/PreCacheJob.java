@@ -21,7 +21,6 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -72,7 +71,7 @@ public class PreCacheJob {
                     IPage<User> page = new Page<>(1, 20);
                     IPage<User> userIPage = userService.page(page, queryWrapper);
                     String redisKey = String.format("homieMatching:user:recommend:%s", userId);
-                    userIPage.getRecords().stream()
+                    List<UserVO> userVOList = userIPage.getRecords().stream()
                             .map(user -> {
                                 Distance distance = stringRedisTemplate.opsForGeo()
                                         .distance(redisUserGeoKey, String.valueOf(userId),
@@ -94,8 +93,7 @@ public class PreCacheJob {
                                 userVO.setTags(user.getTags());
                                 userVO.setDistance(distance.getValue());
                                 return userVO;
-                    }).collect(Collectors.toList());
-
+                            }).collect(Collectors.toList());
 
                     ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
                     // 写缓存

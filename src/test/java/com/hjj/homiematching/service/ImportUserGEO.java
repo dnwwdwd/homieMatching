@@ -6,7 +6,6 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;

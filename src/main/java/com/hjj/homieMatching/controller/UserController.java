@@ -234,7 +234,7 @@ public class UserController {
     }
 
     @GetMapping("/search/tags")
-    public BaseResponse<List<User>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList,
+    public BaseResponse<List<UserVO>> searchUsersByTags(@RequestParam(required = false) List<String> tagNameList,
                                                       HttpServletRequest request) {
         if (userService.getLoginUser(request) == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
@@ -242,7 +242,7 @@ public class UserController {
         if(CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        List<User> userList = userService.searchUsersByTags(tagNameList);
+        List<UserVO> userList = userService.searchUsersByTags(tagNameList, request);
         return ResultUtils.success(userList);
     }
 

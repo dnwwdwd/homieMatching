@@ -210,7 +210,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * @return
      */
     @Override
-    public List<User> searchUsersByTags(List<String> tagNameList) {
+    public List<UserVO> searchUsersByTags(List<String> tagNameList, HttpServletRequest request) {
         if(CollectionUtils.isEmpty(tagNameList)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -221,21 +221,45 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         List<User> userList = userMapper.selectList(queryWrapper);
         Gson gson = new Gson();
         // 2.在内存中判断是否包含要求的标签
-        return userList.stream().filter( user -> {
+        List<User> userListResult = userList.stream().filter(user -> {
             String tagStr = user.getTags();
-            if(StringUtils.isBlank(tagStr)) {
+            if (StringUtils.isBlank(tagStr)) {
                 return false;
             }
             //将数据库中的json字符串反序列化为java对象
-            Set<String> tagNameSet = gson.fromJson(tagStr, new TypeToken<Set<String>>(){}.getType());
+            Set<String> tagNameSet = gson.fromJson(tagStr, new TypeToken<Set<String>>() {
+            }.getType());
             tagNameSet = Optional.ofNullable(tagNameSet).orElse(new HashSet<>());
-            for(String tagName : tagNameList){
-                if(!tagNameSet.contains(tagName)){
+            for (String tagName : tagNameList) {
+                if (!tagNameSet.contains(tagName)) {
                     return false;
                 }
             }
             return true;
         }).map(this::getSafetyUser).collect(Collectors.toList());
+        User loginUser = getLoginUser(request);
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+        return userListResult.stream().map(user -> {
+            Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey, String.valueOf(loginUser.getId()),
+                    String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
+            UserVO userVO = new UserVO();
+            userVO.setId(user.getId());
+            userVO.setUsername(user.getUsername());
+            userVO.setUserAccount(user.getUserAccount());
+            userVO.setAvatarUrl(user.getAvatarUrl());
+            userVO.setGender(user.getGender());
+            userVO.setProfile(user.getProfile());
+            userVO.setPhone(user.getPhone());
+            userVO.setEmail(user.getEmail());
+            userVO.setUserStatus(user.getUserStatus());
+            userVO.setCreateTime(user.getCreateTime());
+            userVO.setUpdateTime(user.getUpdateTime());
+            userVO.setUserRole(user.getUserRole());
+            userVO.setPlanetCode(user.getPlanetCode());
+            userVO.setTags(user.getTags());
+            userVO.setDistance(distance.getValue());
+            return userVO;
+        }).collect(Collectors.toList());
     }
 
     @Override

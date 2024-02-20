@@ -9,6 +9,7 @@ import com.hjj.homieMatching.model.request.TeamQuitTeam;
 import com.hjj.homieMatching.model.request.TeamUpdateRequest;
 import com.hjj.homieMatching.model.vo.TeamUserVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -62,4 +63,16 @@ public interface TeamService extends IService<Team> {
      * @return
      */
     boolean deleteTeam(long id, User loginUser);
+
+    /**
+     * 我加入的队伍
+     * @param loginUser
+     */
+    List<TeamUserVO> listMyJoinTeam(User loginUser);
+
+    /**
+     * 我创建的队伍
+     * @param loginUser
+     */
+    List<TeamUserVO> listMyCreateTeam(User loginUser);
 }

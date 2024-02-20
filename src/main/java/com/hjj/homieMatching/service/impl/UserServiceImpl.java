@@ -180,7 +180,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public User getSafetyUser(User originUser){
         if (originUser == null){
-            throw new BusinessException(ErrorCode.NULL_EEOR);
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         User safetyUser=new User();
         safetyUser.setId(originUser.getId());
@@ -214,10 +214,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(CollectionUtils.isEmpty(tagNameList)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        User loginUser = getLoginUser(request);
         // 定义开始时间
         long startTime = System.currentTimeMillis();
         // 1.先查询所有用户
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("id", loginUser.getId());
         List<User> userList = userMapper.selectList(queryWrapper);
         Gson gson = new Gson();
         // 2.在内存中判断是否包含要求的标签
@@ -237,7 +239,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             }
             return true;
         }).map(this::getSafetyUser).collect(Collectors.toList());
-        User loginUser = getLoginUser(request);
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
         return userListResult.stream().map(user -> {
             Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey, String.valueOf(loginUser.getId()),
@@ -277,7 +278,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         User oldUser = userMapper.selectById(userId);
         if (oldUser == null){
-            throw new BusinessException(ErrorCode.NULL_EEOR);
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
 
         return userMapper.updateById(user);
@@ -298,7 +299,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Deprecated
     private List<User> searchUsersByTagsBySQL(List<String> tagNameList){
         if(CollectionUtils.isEmpty(tagNameList)){
-            throw new BusinessException(ErrorCode.NULL_EEOR);
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         for(String tagName : tagNameList){
@@ -330,6 +331,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public List<UserVO> matchUsers(long num, User loginUser) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.isNotNull("tags");
+        queryWrapper.ne("id", loginUser.getId());
         queryWrapper.select("id","tags");
         List<User> userList = this.list(queryWrapper);
 

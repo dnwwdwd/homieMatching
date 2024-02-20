@@ -6,7 +6,7 @@ package com.hjj.homieMatching.common;
 public enum ErrorCode {
     SUCCESS(0,"ok",""),
     PARAMS_ERROR(40000,"请求参数错误",""),
-    NULL_EEOR(40001,"请求数据为空",""),
+    NULL_ERROR(40001,"请求数据为空",""),
     NOT_LOGIN(40100,"未登录",""),
     NO_AUTH(40101,"无权限",""),
     FORBIDDEN(40301,"禁止操作",""),

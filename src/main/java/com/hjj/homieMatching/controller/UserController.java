@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -180,6 +181,7 @@ public class UserController {
 //        }
         // 无缓存，查询数据库，并将数据写入缓存
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("id", loginUser.getId());
         IPage<User> page = new Page<>(pageNum, pageSize);
         IPage<User> userIPage = userService.page(page, queryWrapper);
 
@@ -224,11 +226,11 @@ public class UserController {
                 })
                 .collect(Collectors.toList());
         // 写缓存
-        try{
-            redisTemplate.opsForList().rightPushAll(redisKey, userVOList);
-        } catch (Exception e) {
-            log.error("redis set key error", e);
-        }
+//        try{
+//            redisTemplate.opsForList().rightPushAll(redisKey, userVOList);
+//        } catch (Exception e) {
+//            log.error("redis set key error", e);
+//        }
         System.out.println(userVOList);
         return ResultUtils.success(userVOList);
     }

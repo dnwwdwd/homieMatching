@@ -13,6 +13,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 登录拦截 AOP
+ */
 @Aspect
 @Component
 public class LoginInterceptor {

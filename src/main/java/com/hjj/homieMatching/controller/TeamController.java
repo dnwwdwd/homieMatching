@@ -105,7 +105,7 @@ public class TeamController {
         }
         Team team = teamService.getById(id);
         if (team == null) {
-            throw new BusinessException(ErrorCode.NULL_EEOR);
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         return ResultUtils.success(team);
     }
@@ -156,46 +156,59 @@ public class TeamController {
 
     /**
      * 获取我加入的队伍
-     * @param teamQuery
      * @param request
      * @return
      */
+//    @GetMapping("/list/my/join")
+//    public BaseResponse<List<TeamUserVO>> listMyJoinTeams(TeamQuery teamQuery, HttpServletRequest request){
+//        if (teamQuery == null) {
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
+//        if (userService.getLoginUser(request) == null) {
+//            throw new BusinessException(ErrorCode.NOT_LOGIN);
+//        }
+//        User logininUser = userService.getLoginUser(request);
+//        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.eq("userId",logininUser.getId());
+//        List<UserTeam> userTeamlist = userTeamService.list(queryWrapper);
+//        // 取出不重复的队伍 id
+//        Map<Long, List<UserTeam>> listMap = userTeamlist.stream().collect(Collectors.groupingBy(UserTeam::getTeamId));
+//        ArrayList<Long> idList = new ArrayList<>(listMap.keySet());
+//        teamQuery.setIdList(idList);
+//        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
+//        return ResultUtils.success(teamList);
+//    }
+
     @GetMapping("/list/my/join")
-    public BaseResponse<List<TeamUserVO>> listMyJoinTeams(TeamQuery teamQuery, HttpServletRequest request){
-        if (teamQuery == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        if (userService.getLoginUser(request) == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
-        User logininUser = userService.getLoginUser(request);
-        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId",logininUser.getId());
-        List<UserTeam> userTeamlist = userTeamService.list(queryWrapper);
-        // 取出不重复的队伍 id
-        Map<Long, List<UserTeam>> listMap = userTeamlist.stream().collect(Collectors.groupingBy(UserTeam::getTeamId));
-        ArrayList<Long> idList = new ArrayList<>(listMap.keySet());
-        teamQuery.setIdList(idList);
-        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
+    public BaseResponse<List<TeamUserVO>> listMyJoinTeams(HttpServletRequest request){
+        User loginUser = userService.getLoginUser(request);
+        List<TeamUserVO> teamList = teamService.listMyJoinTeam(loginUser);
         return ResultUtils.success(teamList);
     }
+
+//    @GetMapping("/list/my/create")
+//    public BaseResponse<List<TeamUserVO>> listMyCreateTeams(TeamQuery teamQuery, HttpServletRequest request){
+//        if (teamQuery == null) {
+//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+//        }
+//        if (userService.getLoginUser(request) == null) {
+//            throw new BusinessException(ErrorCode.NOT_LOGIN);
+//        }
+//        User loginUser = userService.getLoginUser(request);
+//        teamQuery.setUserId(loginUser.getId());
+//        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
+//        return ResultUtils.success(teamList);
+//    }
+
     /**
      * 获取我创建的队伍
-     * @param teamQuery
      * @param request
      * @return
      */
     @GetMapping("/list/my/create")
-    public BaseResponse<List<TeamUserVO>> listMyCreateTeams(TeamQuery teamQuery, HttpServletRequest request){
-        if (teamQuery == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        if (userService.getLoginUser(request) == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
+    public BaseResponse<List<TeamUserVO>> listMyCreateTeams(HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
-        teamQuery.setUserId(loginUser.getId());
-        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
+        List<TeamUserVO> teamList = teamService.listMyCreateTeam(loginUser);
         return ResultUtils.success(teamList);
     }
 

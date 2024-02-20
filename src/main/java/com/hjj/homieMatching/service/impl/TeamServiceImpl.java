@@ -29,11 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
 * @author 17653
@@ -43,12 +42,16 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     implements TeamService{
+
     @Resource
     UserTeamService userTeamService;
+
     @Resource
     UserService userService;
+
     @Resource
     private RedissonClient redissonClient;
+
     @Transactional(rollbackFor = Exception.class) // 插入到队伍表的SQL语句和插入到用户队伍表的SQL语句要么都不执行，要么都执行
     @Override
     public long addTeam(Team team, User loginUser) {
@@ -212,7 +215,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         Team oldTeam = this.getById(id);
         if (oldTeam == null) {
-            throw new BusinessException(ErrorCode.NULL_EEOR);
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         // 只有管理员和队伍创建人才能更新队伍信息
         if (oldTeam.getUserId() != loginUser.getId() && !userService.isAdmin(loginUser)) {
@@ -238,12 +241,12 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         Team team = getTeamById(teamId);
         long userId = loginUser.getId();
         if (team.getExpireTime() != null && team.getExpireTime().before(new Date())) {
-            throw new BusinessException(ErrorCode.NULL_EEOR, "队伍已过期");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "队伍已过期");
         }
         Integer status = team.getStatus();
         TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
         if (TeamStatusEnum.PRIVATE.equals(statusEnum)) {
-            throw new BusinessException(ErrorCode.NULL_EEOR, "禁止加入私有队伍");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "禁止加入私有队伍");
         }
         String password = teamJoinRequest.getPassword();
         if (statusEnum.equals(TeamStatusEnum.SECRET)) {
@@ -277,7 +280,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                     // 队伍中的用户数量
                     long teamHasUserNum = teamHasUserNum(teamId);
                     if (teamHasUserNum > team.getMaxNum()) {
-                        throw new BusinessException(ErrorCode.NULL_EEOR, "队伍已满");
+                        throw new BusinessException(ErrorCode.NULL_ERROR, "队伍已满");
                     }
                     // 将用户加入队伍的信息添加到user_team表中
                     UserTeam userTeam = new UserTeam();
@@ -308,7 +311,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         Team team = this.getById(teamId);
         if (team == null) {
-            throw new BusinessException(ErrorCode.NULL_EEOR, "队伍不存在");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "队伍不存在");
         }
         return team;
     }
@@ -325,7 +328,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         Team team = this.getById(teamId);
         if (team == null) {
-            throw new BusinessException(ErrorCode.NULL_EEOR, "队伍不存在");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "队伍不存在");
         }
         long userId = loginUser.getId();
         QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
@@ -408,5 +411,61 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         queryWrapper.eq("teamId", teamId);
         long teamHasUserNum = userTeamService.count(queryWrapper); // 队伍里的用户人数
         return teamHasUserNum;
+    }
+
+    @Override
+    public List<TeamUserVO> listMyJoinTeam(User loginUser) {
+        long userId = loginUser.getId();
+        User user = userService.getById(userId);
+        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userId);
+        List<Long> teamIdList = userTeamService.list(queryWrapper).stream().map(UserTeam::getTeamId).collect(Collectors.toList());
+        List<TeamUserVO> teamUserVOList = teamIdList.stream().map(teamId -> {
+            UserVO userVO = new UserVO();
+            Team team = this.getById(teamId);
+            TeamUserVO teamUserVO = new TeamUserVO();
+            BeanUtils.copyProperties(team, teamUserVO);
+            BeanUtils.copyProperties(user, userVO);
+            teamUserVO.setCreateUser(userVO);
+            int hasJoinNum = (int) teamHasUserNum(teamId);
+            teamUserVO.setHasJoinNum(hasJoinNum);
+            QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
+            // 不能重复加入已加入的队伍
+            userTeamQueryWrapper.eq("userId", userId);
+            userTeamQueryWrapper.eq("teamId", teamId);
+            boolean hasJoin = userTeamService.count(userTeamQueryWrapper) == 1; // 同一个用户加入同一个队伍的数量
+            teamUserVO.setHasJoin(hasJoin);
+            return teamUserVO;
+        }).collect(Collectors.toList());
+        return teamUserVOList;
+    }
+
+    @Override
+    public List<TeamUserVO> listMyCreateTeam(User loginUser) {
+        long userId = loginUser.getId();
+        User user = userService.getById(userId);
+        QueryWrapper<Team> teamQueryWrapper = new QueryWrapper<>();
+        teamQueryWrapper.eq("userId", userId);
+        List<Team> myCreateTeamList = this.list(teamQueryWrapper);
+        List<Long> teamIdList = myCreateTeamList.stream().map(Team::getId).collect(Collectors.toList());
+        QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
+        List<TeamUserVO> teamUserVOList = teamIdList.stream().map(teamId -> {
+            UserVO userVO = new UserVO();
+            Team team = this.getById(teamId);
+            TeamUserVO teamUserVO = new TeamUserVO();
+            BeanUtils.copyProperties(team, teamUserVO);
+            BeanUtils.copyProperties(user, userVO);
+            teamUserVO.setCreateUser(userVO);
+            int hasJoinNum = (int) teamHasUserNum(teamId);
+            teamUserVO.setHasJoinNum(hasJoinNum);
+            QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
+            // 不能重复加入已加入的队伍
+            userTeamQueryWrapper.eq("userId", userId);
+            userTeamQueryWrapper.eq("teamId", teamId);
+            boolean hasJoin = userTeamService.count(userTeamQueryWrapper) == 1; // 同一个用户加入同一个队伍的数量
+            teamUserVO.setHasJoin(hasJoin);
+            return teamUserVO;
+        }).collect(Collectors.toList());
+        return teamUserVOList;
     }
 }

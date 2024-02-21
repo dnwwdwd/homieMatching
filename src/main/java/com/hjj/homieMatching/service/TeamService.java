@@ -9,7 +9,6 @@ import com.hjj.homieMatching.model.request.TeamQuitTeam;
 import com.hjj.homieMatching.model.request.TeamUpdateRequest;
 import com.hjj.homieMatching.model.vo.TeamUserVO;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

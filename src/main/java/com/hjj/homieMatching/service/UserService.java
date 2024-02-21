@@ -2,7 +2,6 @@ package com.hjj.homieMatching.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
-import com.hjj.homieMatching.model.vo.TeamUserVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,4 +66,5 @@ public interface UserService extends IService<User> {
 
     List<UserVO> matchUsers(long num, User loginUser);
 
+    List<UserVO> searchNearby(int radius, User loginUser);
 }

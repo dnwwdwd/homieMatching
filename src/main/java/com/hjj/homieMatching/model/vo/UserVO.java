@@ -78,7 +78,7 @@ public class UserVO {
     private String tags;
 
     /**
-     * 用户Geo location
+     * 用户距离
      */
     private Double distance;
 

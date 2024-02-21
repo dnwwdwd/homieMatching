@@ -16,16 +16,16 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -254,13 +254,24 @@ public class UserController {
      */
     @GetMapping("/match")
     public BaseResponse<List<UserVO>> matchUsers(long num, HttpServletRequest request){
-        if (userService.getLoginUser(request) == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN);
-        }
         if (num <=0 || num > 20) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = userService.getLoginUser(request);
         return ResultUtils.success(userService.matchUsers(num ,loginUser));
+    }
+
+    /**
+     * 搜索附近用户
+     */
+    @GetMapping("/searchNearby")
+    public BaseResponse<List<UserVO>> searchNearby(int radius, HttpServletRequest request) {
+        if (radius <= 0 || radius > 10000) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getLoginUser(request);
+        User loginUser = userService.getById(user.getId());
+        List<UserVO> userVOList = userService.searchNearby(radius, loginUser);
+        return ResultUtils.success(userVOList);
     }
 }

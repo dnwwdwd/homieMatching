@@ -2,7 +2,6 @@ package com.hjj.homiematching.service;
 
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.model.domain.User;
-import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,32 +52,24 @@ public class ImportUserGEO {
 
     @Test
     public void getUserGeo() {
-        User loginUser = userService.getById(1);
         String key = RedisConstant.USER_GEO_KEY;
         List<User> userList = userService.list();
-        List<Double> longitudeList = userList.stream().map(User::getLongitude).collect(Collectors.toList());
-        System.out.println(longitudeList);
-        List<Double> dimensionList = userList.stream().map(User::getDimension).collect(Collectors.toList());
-        Double longitude = loginUser.getLongitude();
-        Double dimension = loginUser.getDimension();
 
-// 计算每个用户与登录用户的距离
+        // 计算每个用户与登录用户的距离
         for (User user : userList) {
             Distance distance = stringRedisTemplate.opsForGeo().distance(key,
                     "1", String.valueOf(user.getId()), RedisGeoCommands.DistanceUnit.KILOMETERS);
             System.out.println("User: " + user.getId() + ", Distance: " +
                     distance.getValue() + " " + distance.getUnit());
         }
-
     }
+
     @Test
     public void searchUserByGeo() {
         User loginUser = userService.getById(1);
         Distance geoRadius = new Distance(1500, RedisGeoCommands.DistanceUnit.KILOMETERS);
         Circle circle  = new Circle(new Point(loginUser.getLongitude(), loginUser.getDimension()), geoRadius);
-        RedisGeoCommands.GeoRadiusCommandArgs geoRadiusCommandArgs = RedisGeoCommands.GeoRadiusCommandArgs
-                .newGeoRadiusArgs().includeCoordinates();
-        GeoResults<RedisGeoCommands.GeoLocation<String>> results = stringRedisTemplate.opsForGeo().radius(RedisConstant.USER_GEO_KEY, circle, geoRadiusCommandArgs);
+        GeoResults<RedisGeoCommands.GeoLocation<String>> results = stringRedisTemplate.opsForGeo().radius(RedisConstant.USER_GEO_KEY, circle);
         for (GeoResult<RedisGeoCommands.GeoLocation<String>> result : results) {
             if (!result.getContent().getName().equals("1")) {
                 System.out.println(result.getContent().getName());

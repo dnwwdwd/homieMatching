@@ -16,7 +16,9 @@ import com.hjj.homieMatching.utils.AlgorithmUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
-import org.springframework.data.geo.Distance;
+import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -400,5 +402,39 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         }).collect(Collectors.toList());
         return finalUserVOList;
+    }
+
+    @Override
+    public List<UserVO> searchNearby(int radius, User loginUser) {
+        String geoKey = RedisConstant.USER_GEO_KEY;
+        String userId = String.valueOf(loginUser.getId());
+        Double longitude = loginUser.getLongitude();
+        Double dimension = loginUser.getDimension();
+        if (longitude == null || dimension == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "登录用户经纬度参数为空");
+        }
+        Distance geoRadius = new Distance(radius, RedisGeoCommands.DistanceUnit.KILOMETERS);
+        Circle circle = new Circle(new Point(longitude, dimension), geoRadius);
+        GeoResults<RedisGeoCommands.GeoLocation<String>> results = stringRedisTemplate.opsForGeo()
+                .radius(geoKey, circle);
+        List<Long> userIdList = new ArrayList<>();
+        for (GeoResult<RedisGeoCommands.GeoLocation<String>> result : results) {
+            String id = result.getContent().getName();
+            if (!userId.equals(id)) {
+                userIdList.add(Long.parseLong(id));
+            }
+        }
+        List<UserVO> userVOList = userIdList.stream().map(
+                id -> {
+                    UserVO userVO = new UserVO();
+                    User user = this.getById(id);
+                    BeanUtils.copyProperties(user, userVO);
+                    Distance distance = stringRedisTemplate.opsForGeo().distance(geoKey, userId, String.valueOf(id),
+                            RedisGeoCommands.DistanceUnit.KILOMETERS);
+                    userVO.setDistance(distance.getValue());
+                    return userVO;
+                }
+        ).collect(Collectors.toList());
+        return userVOList;
     }
 }

@@ -16,7 +16,7 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.geo.*;
+import org.springframework.data.geo.Distance;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

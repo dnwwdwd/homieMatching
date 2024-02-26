@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;

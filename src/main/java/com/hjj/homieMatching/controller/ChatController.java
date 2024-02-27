@@ -1,9 +1,9 @@
 package com.hjj.homieMatching.controller;
 
 import com.hjj.homieMatching.common.BaseResponse;
-import com.hjj.homieMatching.constant.ChatConstant;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
+import com.hjj.homieMatching.constant.ChatConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;

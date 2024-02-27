@@ -6,7 +6,6 @@ import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
 
-
 import java.util.Date;
 import java.util.List;
 

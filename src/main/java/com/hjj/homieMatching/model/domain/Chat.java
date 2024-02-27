@@ -1,9 +1,6 @@
 package com.hjj.homieMatching.model.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,52 +9,46 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 消息
+ * 聊天
  *
  * @author OchiaMalu
- * @TableName message
+ * @TableName chat
  * @date 2023/07/28
  */
-@TableName(value = "message")
+@TableName(value = "chat")
 @Data
-@ApiModel(value = "消息")
-public class Message implements Serializable {
+@ApiModel(value = "聊天")
+public class Chat implements Serializable {
     /**
-     * 主键
+     * 聊天记录id
      */
     @TableId(type = IdType.AUTO)
     @ApiModelProperty(value = "id")
     private Long id;
 
     /**
-     * 类型-0 博文点赞,1 评论点赞
+     * 发送消息id
      */
-    @ApiModelProperty(value = "类型")
-    private Integer type;
-
-    /**
-     * 消息发送的用户id
-     */
-    @ApiModelProperty(value = "消息发送的用户id")
+    @ApiModelProperty(value = "发送消息id")
     private Long fromId;
 
     /**
-     * 消息接收的用户id
+     * 接收消息id
      */
-    @ApiModelProperty(value = "消息接收的用户id")
+    @ApiModelProperty(value = "接收消息id")
     private Long toId;
 
     /**
-     * 消息内容
+     * 正文
      */
-    @ApiModelProperty(value = "消息内容")
-    private String data;
+    @ApiModelProperty(value = "正文")
+    private String text;
 
     /**
-     * 已读-0 未读 ,1 已读
+     * 聊天类型 1-私聊 2-群聊
      */
-    @ApiModelProperty(value = "已读")
-    private Integer isRead;
+    @ApiModelProperty(value = "聊天类型")
+    private Integer chatType;
 
     /**
      * 创建时间
@@ -72,8 +63,15 @@ public class Message implements Serializable {
     private Date updateTime;
 
     /**
+     * 队伍id
+     */
+    @ApiModelProperty(value = "队伍id")
+    private Long teamId;
+
+    /**
      * 逻辑删除
      */
+    @TableLogic
     @ApiModelProperty(value = "逻辑删除")
     private Integer isDelete;
 

@@ -21,4 +21,6 @@ public class UserRegisterRequest implements Serializable {
     private String username;
     private String phone;
     private List<String> tagNameList;
+    private Double longitude;
+    private Double dimension;
 }

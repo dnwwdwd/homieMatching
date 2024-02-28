@@ -21,6 +21,7 @@ import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,8 +56,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     private static final String SALT="hjj";
     @Override
+    @Transactional( rollbackFor = Exception.class)
     public long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
-                             Integer gender, String avatarUrl, String username, String phone, List<String> tagNameList) {
+                                 Integer gender, String avatarUrl, String username, String phone,
+                                 List<String> tagNameList, Double longitude, Double dimension){
         //1.校验
         if(StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)){
             // todo 修改为自定义异常
@@ -108,8 +111,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
         }
+        if (longitude == null || longitude > 180 || longitude < -180) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标经度不合法");
+        }
+        if (dimension == null || dimension > 90 || dimension < -90) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
+        }
         //2.加密
-        String encryptPassword=DigestUtils.md5DigestAsHex((SALT+userPassword).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT+userPassword).getBytes());
         //3.插入数据
         User user=new User();
         user.setUserAccount(userAccount);
@@ -119,6 +128,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setAvatarUrl(avatarUrl);
         user.setUsername(username);
         user.setPhone(phone);
+        user.setLongitude(longitude);
+        user.setDimension(dimension);
         // 处理用户标签
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
@@ -130,9 +141,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         stringBuilder.append(']');
         user.setTags(stringBuilder.toString());
-        boolean saveResult=this.save(user);
+        boolean saveResult = this.save(user);
         if(!saveResult){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "添加失败");
+        }
+        // 如果用户信息插入数据库，则计算用户坐标信息并存入Redis
+        Long addToRedisResult = stringRedisTemplate.opsForGeo().add(RedisConstant.USER_GEO_KEY,
+                new Point(user.getLongitude(), user.getDimension()), String.valueOf(user.getId()));
+        if (addToRedisResult == null || addToRedisResult <= 0) {
+            log.error("用户注册时坐标信息存入Redis失败");
         }
         return user.getId();
     }

@@ -39,9 +39,6 @@ public class FriendController {
         }
         long userId = loginUser.getId();
         boolean result = friendService.addFriend(userId, friendId);
-//        if (!result) {
-//            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "添加好友失败");
-//        }
         return ResultUtils.success(result);
     }
 

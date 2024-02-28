@@ -3,6 +3,8 @@ package com.hjj.homieMatching.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +52,6 @@ public class UserController {
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
-            /*return ResultUtils.error(ErrorCode.PARAMS_ERROR);*/
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         String userAccount = userRegisterRequest.getUserAccount();
@@ -61,6 +63,8 @@ public class UserController {
         String username= userRegisterRequest.getUsername();
         String phone= userRegisterRequest.getPhone();
         List<String> tagNameList = userRegisterRequest.getTagNameList();
+        Double longitude = userRegisterRequest.getLongitude();
+        Double dimension = userRegisterRequest.getDimension();
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode, avatarUrl)) {
             return ResultUtils.error(ErrorCode.PARAMS_ERROR);
         }
@@ -73,12 +77,14 @@ public class UserController {
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
         }
-        System.out.println(tagNameList);
-        for (String s : tagNameList) {
-            System.out.println(s);
+        if (longitude == null || longitude > 180 || longitude < -180) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标经度不合法");
+        }
+        if (dimension == null || dimension > 90 || dimension < -90) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
         long result = userService.userRegister(userAccount, userPassword, checkPassword,
-                planetCode, gender, avatarUrl, username, phone, tagNameList);
+                planetCode, gender, avatarUrl, username, phone, tagNameList, longitude, dimension);
         return ResultUtils.success(result);
     }
 
@@ -170,14 +176,15 @@ public class UserController {
     @GetMapping("/recommend")
     public BaseResponse<List<UserVO>> recommendUsers(long pageSize, long pageNum, HttpServletRequest request){
         User loginUser = userService.getLoginUser(request);
-        String redisKey = String.format("homieMatching:user:recommend:%s", loginUser.getId());
+        String redisKey = RedisConstant.USER_RECOMMEND_KEY + ":" + loginUser.getId();
         // 如果缓存中有数据，直接读缓存
-//        List<Object> userObjectVOListRedis = redisTemplate.opsForList().range(redisKey, 0, -1);
-//        List<UserVO> userVOListRedis = (List<UserVO>)(List<?>) userObjectVOListRedis;
-//        if(!CollectionUtils.isEmpty(userVOListRedis)){
-//            System.out.println(userVOListRedis);
-//            return ResultUtils.success(userVOListRedis);
-//        }
+        List<UserVO> userVOListRedis = new Gson().fromJson(stringRedisTemplate.opsForValue().get(redisKey), new TypeToken<List<UserVO>>() {
+        }.getType());
+        System.out.println(userVOListRedis);
+        if(!CollectionUtils.isEmpty(userVOListRedis)){
+           System.out.println(userVOListRedis);
+           return ResultUtils.success(userVOListRedis);
+       }
         // 无缓存，查询数据库，并将数据写入缓存
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.ne("id", loginUser.getId());
@@ -185,16 +192,7 @@ public class UserController {
         IPage<User> userIPage = userService.page(page, queryWrapper);
 
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
-/*
-        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
-        List<User> userList = userService.list();
-        for (User user : userList) {
-            Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
-                    String.valueOf(loginUser.getId()), String.valueOf(user.getId()),
-                    RedisGeoCommands.DistanceUnit.KILOMETERS);
-            double value = distance.getValue();
-        }
-*/
+
         // 将User转换为UserVO
         List<UserVO> userVOList = userIPage.getRecords().stream()
                 .map(user -> {
@@ -225,11 +223,11 @@ public class UserController {
                 })
                 .collect(Collectors.toList());
         // 写缓存
-//        try{
-//            redisTemplate.opsForList().rightPushAll(redisKey, userVOList);
-//        } catch (Exception e) {
-//            log.error("redis set key error", e);
-//        }
+       try{
+           stringRedisTemplate.opsForValue().set(redisKey, new Gson().toJson(userVOList), 1, TimeUnit.MINUTES);
+       } catch (Exception e) {
+           log.error("redis set key error", e);
+       }
         System.out.println(userVOList);
         return ResultUtils.success(userVOList);
     }

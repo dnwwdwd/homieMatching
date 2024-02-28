@@ -3,6 +3,7 @@ package com.hjj.homieMatching.aop;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Aspect
 @Component
+@Slf4j
 public class LoginInterceptor {
 
     @Resource
@@ -30,6 +32,7 @@ public class LoginInterceptor {
         RequestAttributes attributes = RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = ((ServletRequestAttributes) attributes).getRequest();
         if (userService.getLoginUser(request) == null) {
+            log.info("拦截登陆成功！");
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
     }

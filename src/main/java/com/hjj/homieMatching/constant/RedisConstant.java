@@ -4,6 +4,8 @@ public interface RedisConstant {
     String SYSTEM_ID = "homieMatching:team:join";
     String USER_JOIN_TEAM = "homieMatching:team:join";
     String USER_GEO_KEY = "homiemacthing:user:geo";
+    String USER_ADD_KEY = "homiematching:user:add";
+    String USER_RECOMMEND_KEY = "homieMatching:user:recommend";
     public static final String LOGIN_USER_KEY = "homieMatching:login:token:";
 
     public static final Long LOGIN_USER_TTL = 15L;
@@ -54,8 +56,6 @@ public interface RedisConstant {
     /**
      * 用户推荐缓存
      */
-    public static final String USER_RECOMMEND_KEY = "homieMatching:recommend:";
-
     /**
      * 最小缓存随机时间
      */

@@ -12,6 +12,9 @@ import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.FriendService;
 import com.hjj.homieMatching.service.UserService;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
 * @createDate 2024-02-15 16:45:45
 */
 @Service
+@Slf4j
 public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
     implements FriendService{
 
@@ -44,39 +49,60 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    RedissonClient redissonClient;
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean addFriend(long userId, long friendId) {
         if (userId == friendId) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "自己不能添加自己为好友'");
         }
-        // 查询是否添加了该用户
-        QueryWrapper<Friend> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("userId", userId);
-        queryWrapper.eq("friendId", friendId);
-        Long count1 = friendMapper.selectCount(queryWrapper);
-        if (count1 > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
+        // 设置锁名称，锁范围是同一个人加同一个人为好友
+        String addUserLock = RedisConstant.USER_ADD_KEY + userId + friendId;
+        RLock lock = redissonClient.getLock(addUserLock);
+        boolean result1 = false;
+        boolean result2 = false;
+        try{
+            // 尝试获取锁
+           if (lock.tryLock(0, 30000, TimeUnit.MILLISECONDS)) {
+               log.info(Thread.currentThread().getId() + "我拿到锁了");
+               // 查询是否添加了该用户
+               QueryWrapper<Friend> queryWrapper = new QueryWrapper();
+               queryWrapper.eq("userId", userId);
+               queryWrapper.eq("friendId", friendId);
+               Long count1 = friendMapper.selectCount(queryWrapper);
+               if (count1 > 0) {
+                   throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
+               }
+               // 查询是否添加了该用户
+               queryWrapper = new QueryWrapper();
+               queryWrapper.eq("userId", friendId);
+               queryWrapper.eq("friendId", userId);
+               Long count2 = friendMapper.selectCount(queryWrapper);
+               if (count2 > 0) {
+                   throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
+               }
+               // 插入id: userId, friendId: friendId
+               Friend friendByUserId = new Friend();
+               friendByUserId.setUserId(userId);
+               friendByUserId.setFriendId(friendId);
+               // 插入id:friendId , friendId: userId（注意添加事务，即要么都添加要么都不添加）
+               result1 = this.save(friendByUserId);
+               Friend friendByFriendId = new Friend();
+               friendByFriendId.setUserId(friendId);
+               friendByFriendId.setFriendId(userId);
+               // 写入数据库
+               result2 = this.save(friendByFriendId);
+           }
+        } catch (InterruptedException e) {
+            log.error("addUser error", e);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                log.info(Thread.currentThread().getId() + "锁已经被释放");
+                lock.unlock();
+            }
         }
-        // 查询是否添加了该用户
-        queryWrapper = new QueryWrapper();
-        queryWrapper.eq("userId", friendId);
-        queryWrapper.eq("friendId", userId);
-        Long count2 = friendMapper.selectCount(queryWrapper);
-        if (count2 > 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
-        }
-        // 插入id: userId, friendId: friendId
-        Friend friendByUserId = new Friend();
-        friendByUserId.setUserId(userId);
-        friendByUserId.setFriendId(friendId);
-        // 插入id:friendId , friendId: userId（注意添加事务，即要么都添加要么都不添加）
-        boolean result1 = this.save(friendByUserId);
-        Friend friendByFriendId = new Friend();
-        friendByFriendId.setUserId(friendId);
-        friendByFriendId.setFriendId(userId);
-        // 写入数据库
-        boolean result2 = this.save(friendByFriendId);
         return result1 && result2;
     }
 

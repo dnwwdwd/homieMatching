@@ -28,15 +28,15 @@ public final class ChatConstant {
     /**
      * 缓存聊天大厅
      */
-    public static final String CACHE_CHAT_HALL = "supper:chat:chat_records:chat_hall";
+    public static final String CACHE_CHAT_HALL = "homiematching:chat:chat_records:chat_hall";
 
     /**
      * 缓存私人聊天
      */
-    public static final String CACHE_CHAT_PRIVATE = "super:chat:chat_records:chat_private:";
+    public static final String CACHE_CHAT_PRIVATE = "homiematching:chat:chat_records:chat_private:";
 
     /**
      * 缓存聊天团队
      */
-    public static final String CACHE_CHAT_TEAM = "super:chat:chat_records:chat_team:";
+    public static final String CACHE_CHAT_TEAM = "homiematching:chat:chat_records:chat_team:";
 }

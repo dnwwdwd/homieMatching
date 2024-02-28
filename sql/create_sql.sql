@@ -1,5 +1,7 @@
 create database if not exists hjj;
 
+use hjj;
+
 /*用户表*/
 create table hjj.user
 (
@@ -61,19 +63,21 @@ create table if not exists hjj.user_team
     comment '用户队伍关系表';
 
 
-create table if not exists hjj.friend
+create table hjj.friend
 (
-    id           bigint auto_increment comment '自己id'
+    id         bigint auto_increment comment 'id'
         primary key,
-    friendId     bigint not null comment '好友id',
-    createTime   datetime default CURRENT_TIMESTAMP null comment '创建时间',
-    updateTime   datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
-    isDelete     tinyint  default 0                 not null comment '是否删除'
+    userId     bigint                             not null comment '用户id（即自己id）',
+    friendId   bigint                             not null comment '好友id',
+    createTime datetime default CURRENT_TIMESTAMP null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint  default 0                 not null comment '是否删除'
 )
     comment '好友表';
 
+
+
 use hjj;
-DROP TABLE `chat`;
 CREATE TABLE `chat`  (
                          `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '聊天记录id',
                          `fromId` bigint(20) NOT NULL COMMENT '发送消息id',

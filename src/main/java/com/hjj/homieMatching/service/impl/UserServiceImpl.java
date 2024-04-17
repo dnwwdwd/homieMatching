@@ -10,10 +10,7 @@ import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
-<<<<<<< HEAD
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
-=======
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.utils.AlgorithmUtils;
@@ -59,10 +56,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      * 盐值为'hjj'，用以混淆密码
      */
     private static final String SALT="hjj";
+
     @Override
     @Transactional( rollbackFor = Exception.class)
-<<<<<<< HEAD
-    public long userRegister(UserRegisterRequest userRegisterRequest){
+    public long userRegister(UserRegisterRequest userRegisterRequest) {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
@@ -71,80 +68,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         Double longitude = userRegisterRequest.getLongitude();
         Double dimension = userRegisterRequest.getDimension();
         //1.校验
-        if(StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)){
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             // todo 修改为自定义异常
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码为空");
         }
-        if(userAccount.length() < 4){
+        if (userAccount.length() < 4) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短，至少要4位");
         }
-        if(userPassword.length() < 8||checkPassword.length() < 8){
+        if (userPassword.length() < 8 || checkPassword.length() < 8) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短，至少要8位");
-=======
-    public long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
-                                 Integer gender, String avatarUrl, String username, String phone,
-                                 List<String> tagNameList, Double longitude, Double dimension){
-        //1.校验
-        if(StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode)){
-            // todo 修改为自定义异常
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
-        if(userAccount.length() < 4){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
-        }
-        if(userPassword.length() < 8||checkPassword.length() < 8){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短");
-        }
-        //对星球编码进行校验
-        if(planetCode.length() > 5){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号过长");
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
-        }
-        //账户不能包含特殊字符
-        String validPattern="[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-        Matcher matcher= Pattern.compile(validPattern).matcher(userAccount);
-        if(matcher.find()){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号含有特殊字符");
-        }
-        //密码和校验密码得相同
-        if(!userPassword.equals(checkPassword)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码和校验密码不相同");
-        }
-        //账户不能重复
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("userAccount",userAccount);
-        long count = userMapper.selectCount(queryWrapper);//将查询条件注入进去
-        if(count > 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号已存在");
-        }
-<<<<<<< HEAD
-/*        //编号重复
-=======
-        //编号重复
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
-        queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("planetCode",planetCode);
-        count = userMapper.selectCount(queryWrapper);//将查询条件注入进去
-        if(count > 0){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "星球编号已存在");
-        }
-        if(avatarUrl.length() >= 1024) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "头像参数过长");
-        }
-<<<<<<< HEAD
-        if (gender == null || gender < 0) {
-=======
-        if (gender == null || gender <= 0) {
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-        }
-        if (phone.length() > 11) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "手机号不合法");
-<<<<<<< HEAD
-        }*/
-=======
-        }
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
         }
@@ -155,26 +88,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
         //2.加密
-        String encryptPassword = DigestUtils.md5DigestAsHex((SALT+userPassword).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
         //3.插入数据
-        User user=new User();
+        User user = new User();
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
-<<<<<<< HEAD
-        user.setUsername(username);
-=======
-        user.setPlanetCode(planetCode);
-        user.setGender(gender);
-        user.setAvatarUrl(avatarUrl);
-        user.setUsername(username);
-        user.setPhone(phone);
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
         user.setLongitude(longitude);
         user.setDimension(dimension);
         // 处理用户标签
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');
-        for (int i = 0;i < tagNameList.size();i++) {
+        for (int i = 0; i < tagNameList.size(); i++) {
             stringBuilder.append('"').append(tagNameList.get(i)).append('"');
             if (i < tagNameList.size() - 1) {
                 stringBuilder.append(',');
@@ -183,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         stringBuilder.append(']');
         user.setTags(stringBuilder.toString());
         boolean saveResult = this.save(user);
-        if(!saveResult){
+        if (!saveResult) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "添加失败");
         }
         // 如果用户信息插入数据库，则计算用户坐标信息并存入Redis
@@ -192,7 +116,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (addToRedisResult == null || addToRedisResult <= 0) {
             log.error("用户注册时坐标信息存入Redis失败");
         }
-<<<<<<< HEAD
         // 设置星球编号
         long userId = user.getId();
         User updateUser = new User();
@@ -203,9 +126,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             log.info("{}用户星球编号设置失败", userId);
         }
         return userId;
-=======
-        return user.getId();
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
     }
 
     @Override
@@ -266,10 +186,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setUserRole(originUser.getUserRole());
         safetyUser.setUserStatus(originUser.getUserStatus());
         safetyUser.setCreateTime(originUser.getCreateTime());
-<<<<<<< HEAD
         safetyUser.setProfile(originUser.getProfile());
-=======
->>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
         safetyUser.setTags(originUser.getTags());
         return safetyUser;
     }

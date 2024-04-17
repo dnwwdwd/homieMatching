@@ -5,9 +5,15 @@ use hjj;
 /*用户表*/
 create table hjj.user
 (
+<<<<<<< HEAD
     id           bigint auto_increment comment 'id'
         primary key,
     username     varchar(256)                       null comment '用户昵称',
+=======
+    username     varchar(256)                       null comment '用户昵称',
+    id           bigint auto_increment comment 'id'
+        primary key,
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
     userAccount  varchar(256)                       null comment '账户',
     avatarUrl    varchar(1024)                      null comment '用户头像',
     gender       tinyint                            null comment '用户性别',

@@ -54,7 +54,41 @@ public class UserController {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+<<<<<<< HEAD
         long result = userService.userRegister(userRegisterRequest);
+=======
+        String userAccount = userRegisterRequest.getUserAccount();
+        String userPassword = userRegisterRequest.getUserPassword();
+        String checkPassword = userRegisterRequest.getCheckPassword();
+        String planetCode=userRegisterRequest.getPlanetCode();
+        Integer gender = userRegisterRequest.getGender();
+        String avatarUrl= userRegisterRequest.getAvatarUrl();
+        String username= userRegisterRequest.getUsername();
+        String phone= userRegisterRequest.getPhone();
+        List<String> tagNameList = userRegisterRequest.getTagNameList();
+        Double longitude = userRegisterRequest.getLongitude();
+        Double dimension = userRegisterRequest.getDimension();
+        if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword, planetCode, avatarUrl)) {
+            return ResultUtils.error(ErrorCode.PARAMS_ERROR);
+        }
+        if (gender == null || gender <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (phone.length() > 11) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "手机号不合法");
+        }
+        if (CollectionUtils.isEmpty(tagNameList)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
+        }
+        if (longitude == null || longitude > 180 || longitude < -180) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标经度不合法");
+        }
+        if (dimension == null || dimension > 90 || dimension < -90) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
+        }
+        long result = userService.userRegister(userAccount, userPassword, checkPassword,
+                planetCode, gender, avatarUrl, username, phone, tagNameList, longitude, dimension);
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
         return ResultUtils.success(result);
     }
 
@@ -198,6 +232,10 @@ public class UserController {
        } catch (Exception e) {
            log.error("redis set key error", e);
        }
+<<<<<<< HEAD
+=======
+        System.out.println(userVOList);
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
         return ResultUtils.success(userVOList);
     }
 

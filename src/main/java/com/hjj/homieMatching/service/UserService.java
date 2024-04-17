@@ -2,7 +2,10 @@ package com.hjj.homieMatching.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
+<<<<<<< HEAD
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+=======
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
 import com.hjj.homieMatching.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,10 +20,22 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
     /**
+<<<<<<< HEAD
      * @param userRegisterRequest
      * @return 新用户id
      */
     long userRegister(UserRegisterRequest userRegisterRequest);
+=======
+     * @param userAccount   用户账户
+     * @param userPassword  用户密码
+     * @param checkPassword 校验密码
+     * @param planetCode    星球编号
+     * @return 新用户id
+     */
+    long userRegister(String userAccount, String userPassword, String checkPassword ,String planetCode,
+                             Integer gender, String avatarUrl, String username, String phone,
+                      List<String> tagNameList, Double longitude, Double dimension);
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
 
     /**
      * @param userAccount  用户账户

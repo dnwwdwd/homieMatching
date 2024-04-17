@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Data
 public class UserRegisterRequest implements Serializable {
+<<<<<<< HEAD
 
     private static final long serialVersionUID=3191241716373120793L;
 
@@ -34,5 +35,18 @@ public class UserRegisterRequest implements Serializable {
 
     private Double longitude;
 
+=======
+    private static final long serialVersionUID=3191241716373120793L;
+    private String userAccount;
+    private String userPassword;
+    private String checkPassword;
+    private String planetCode;
+    private Integer gender;
+    private String avatarUrl;
+    private String username;
+    private String phone;
+    private List<String> tagNameList;
+    private Double longitude;
+>>>>>>> 55c2d1b2d36429f4d11db279a9446ead320cb342
     private Double dimension;
 }

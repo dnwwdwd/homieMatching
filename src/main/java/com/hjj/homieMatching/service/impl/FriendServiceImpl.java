@@ -116,7 +116,6 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
             User user = userMapper.selectById(friend.getFriendId());
             return user;
         }).collect(Collectors.toList());
-        System.out.println(userList);
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
         List<UserVO> userVOList = userList.stream().map(user -> {
             Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,

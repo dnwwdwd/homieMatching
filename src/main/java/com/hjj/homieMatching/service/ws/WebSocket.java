@@ -1,6 +1,5 @@
 package com.hjj.homieMatching.service.ws;
 
-
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
@@ -35,12 +34,9 @@ import static com.hjj.homieMatching.constant.ChatConstant.*;
 import static com.hjj.homieMatching.constant.UserConstant.ADMIN_ROLE;
 import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 
-
 /**
  * WebSocket服务
  *
- * @author OchiaMalu
- * @date 2023/06/22
  */
 @Component
 @Slf4j

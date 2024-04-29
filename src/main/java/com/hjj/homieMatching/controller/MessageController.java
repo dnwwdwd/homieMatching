@@ -20,8 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 消息控制器
  *
- * @author OchiaMalu
- * @date 2023/06/22
  */
 @RestController
 @RequestMapping("/message")

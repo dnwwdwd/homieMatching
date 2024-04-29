@@ -24,8 +24,6 @@ import java.util.List;
 /**
  * 聊天控制器
  *
- * @author OchiaMalu
- * @date 2023/06/19
  */
 @RestController
 @RequestMapping("/chat")

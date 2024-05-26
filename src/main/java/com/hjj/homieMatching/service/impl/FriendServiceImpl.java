@@ -9,6 +9,7 @@ import com.hjj.homieMatching.mapper.FriendMapper;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.Friend;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.request.FriendQueryRequest;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.FriendService;
 import com.hjj.homieMatching.service.UserService;
@@ -145,6 +146,46 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
 //            User user = userMapper.selectById(friendId);
 //            userList.add(user);
 //        }
+        return userVOList;
+    }
+
+    @Override
+    public List<UserVO> searchFriends(FriendQueryRequest friendQueryRequest, long userId) {
+        String searchParam = friendQueryRequest.getSearchParam();
+        QueryWrapper<Friend> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", userId);
+        // 查询登录用户的所有好友
+        List<Friend> friendList = this.list(queryWrapper);
+        List<Long> frinedIdList = friendList.stream().map(Friend::getFriendId).collect(Collectors.toList());
+        // 根据 id 和 username 查询目标用户
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.in("id", frinedIdList);
+        userQueryWrapper.like("username", searchParam);
+        List<User> userList = userService.list(userQueryWrapper);
+        String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+        // 查询登录用户和好友的距离
+        List<UserVO> userVOList = userList.stream().map(user -> {
+            Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
+                    String.valueOf(userId), String.valueOf(user.getId()),
+                    RedisGeoCommands.DistanceUnit.KILOMETERS);
+            UserVO userVO = new UserVO();
+            userVO.setId(user.getId());
+            userVO.setUsername(user.getUsername());
+            userVO.setUserAccount(user.getUserAccount());
+            userVO.setAvatarUrl(user.getAvatarUrl());
+            userVO.setGender(user.getGender());
+            userVO.setProfile(user.getProfile());
+            userVO.setPhone(user.getPhone());
+            userVO.setEmail(user.getEmail());
+            userVO.setUserStatus(user.getUserStatus());
+            userVO.setCreateTime(user.getCreateTime());
+            userVO.setUpdateTime(user.getUpdateTime());
+            userVO.setUserRole(user.getUserRole());
+            userVO.setPlanetCode(user.getPlanetCode());
+            userVO.setTags(user.getTags());
+            userVO.setDistance(distance.getValue()); // 设置距离值
+            return userVO;
+        }).collect(Collectors.toList());
         return userVOList;
     }
 }

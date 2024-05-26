@@ -36,7 +36,6 @@ import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 
 /**
  * WebSocket服务
- *
  */
 @Component
 @Slf4j
@@ -180,38 +179,44 @@ public class WebSocket {
                        @PathParam(value = "userId") String userId,
                        @PathParam(value = "teamId") String teamId,
                        EndpointConfig config) {
+        log.info("onOpen called with userId: {}, teamId: {}", userId, teamId);
         try {
             if (StringUtils.isBlank(userId) || "undefined".equals(userId)) {
                 sendError(userId, "参数有误");
                 return;
             }
+            log.info("Retrieving HttpSession from EndpointConfig...");
             HttpSession userHttpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+            log.info("HttpSession: {}", userHttpSession);
+
+            if (userHttpSession == null) {
+                log.error("HttpSession is null");
+                return;
+            }
+
             User user = (User) userHttpSession.getAttribute(USER_LOGIN_STATE);
             if (user != null) {
                 this.session = session;
                 this.httpSession = userHttpSession;
             }
+
             if (!"NaN".equals(teamId)) {
                 if (!ROOMS.containsKey(teamId)) {
-                    ConcurrentHashMap<String, WebSocket> room = new ConcurrentHashMap<>(0);
+                    ConcurrentHashMap<String, WebSocket> room = new ConcurrentHashMap(0);
                     room.put(userId, this);
                     ROOMS.put(String.valueOf(teamId), room);
-                    // 在线数加1
                     addOnlineCount();
-                } else {
-                    if (!ROOMS.get(teamId).containsKey(userId)) {
-                        ROOMS.get(teamId).put(userId, this);
-                        // 在线数加1
-                        addOnlineCount();
-                    }
+                } else if (!((ConcurrentHashMap) ROOMS.get(teamId)).containsKey(userId)) {
+                    ((ConcurrentHashMap) ROOMS.get(teamId)).put(userId, this);
+                    addOnlineCount();
                 }
             } else {
                 SESSIONS.add(session);
                 SESSION_POOL.put(userId, session);
-                sendAllUsers();
+                this.sendAllUsers();
             }
-        } catch (Exception e) {
-            log.error("exception message", e);
+        } catch (Exception var8) {
+            log.error("exception message", var8);
         }
     }
 

@@ -10,7 +10,7 @@
         <result property="fromId" column="from_id" jdbcType="BIGINT"/>
         <result property="toId" column="to_id" jdbcType="BIGINT"/>
         <result property="data" column="data" jdbcType="VARCHAR"/>
-        <result property="read" column="read" jdbcType="TINYINT"/>
+        <result property="isRead" column="read" jdbcType="TINYINT"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>

@@ -17,7 +17,6 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
     /**
-<<<<<<< HEAD
      * @param userRegisterRequest
      * @return 新用户id
      */
@@ -37,6 +36,7 @@ public interface UserService extends IService<User> {
      * @return
      */
     User getSafetyUser(User originUser);
+
     int userLogout(HttpServletRequest request);
 
     /**
@@ -52,6 +52,7 @@ public interface UserService extends IService<User> {
      * @return
      */
     int updateUser(User user, User loginUser);
+
     User getLoginUser(HttpServletRequest request);
 
     /**
@@ -65,4 +66,7 @@ public interface UserService extends IService<User> {
     List<UserVO> matchUsers(long num, User loginUser);
 
     List<UserVO> searchNearby(int radius, User loginUser);
+
+    List<UserVO> recommendUsers(long pageSize, long pageNum, HttpServletRequest request);
+
 }

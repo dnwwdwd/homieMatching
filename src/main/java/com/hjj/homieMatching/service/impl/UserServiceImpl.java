@@ -1,5 +1,6 @@
 package com.hjj.homieMatching.service.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
@@ -52,10 +53,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
     /**
      * 盐值为'hjj'，用以混淆密码
      */
     private static final String SALT="hjj";
+
+    // 表示 Redis 是否有数据
+    private boolean redisHasData = false;
 
     @Override
     @Transactional( rollbackFor = Exception.class)
@@ -124,6 +129,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         boolean updateResult = this.updateById(updateUser);
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
+        }
+        Boolean delete = stringRedisTemplate.delete(RedisConstant.USER_RECOMMEND_KEY);
+        if (!delete) {
+            log.info("{}用户推荐缓存删除失败", userId);
         }
         return userId;
     }
@@ -313,7 +322,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
-    //
     @Override
     public boolean isAdmin(User loginUser) {
         return loginUser != null && loginUser.getUserRole() == ADMIN_ROLE;
@@ -427,4 +435,79 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         ).collect(Collectors.toList());
         return userVOList;
     }
+
+    @Override
+    public synchronized List<UserVO> recommendUsers(long pageSize, long pageNum, HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        String redisKey = RedisConstant.USER_RECOMMEND_KEY + ":" + loginUser.getId();
+        // 如果缓存中有数据，直接读缓存
+        long start = (pageNum - 1) * pageSize;
+        long end = start + pageSize - 1;
+        List<String> userVOJsonListRedis = stringRedisTemplate.opsForList().range(redisKey, start, end);
+        // 将查询的缓存反序列化为 User 对象
+        List<UserVO> userVOList = new ArrayList<>();
+        userVOList = userVOJsonListRedis.stream()
+                .map(UserServiceImpl::transferToUserVO).collect(Collectors.toList());
+        // 判断 Redis 中是否有数据
+        redisHasData = !CollectionUtils.isEmpty(stringRedisTemplate.opsForList().range(redisKey, 0, -1));
+        if (!CollectionUtils.isEmpty(userVOJsonListRedis)) {
+            return userVOList;
+        }
+        // 缓存无数据再走数据库
+        if (!redisHasData) {
+            // 无缓存，查询数据库，并将数据写入缓存
+            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+            queryWrapper.ne("id", loginUser.getId());
+            List<User> userList = this.list(queryWrapper);
+
+            String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
+
+            // 将User转换为UserVO，在进行序列化
+            userVOList = userList.stream()
+                    .map(user -> {
+                        // 查询距离
+                        Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
+                                String.valueOf(loginUser.getId()), String.valueOf(user.getId()),
+                                RedisGeoCommands.DistanceUnit.KILOMETERS);
+                        double value = distance.getValue();
+
+                        // 创建UserVO对象并设置属性
+                        UserVO userVO = new UserVO();
+                        userVO.setId(user.getId());
+                        userVO.setUsername(user.getUsername());
+                        userVO.setUserAccount(user.getUserAccount());
+                        userVO.setAvatarUrl(user.getAvatarUrl());
+                        userVO.setGender(user.getGender());
+                        userVO.setProfile(user.getProfile());
+                        userVO.setPhone(user.getPhone());
+                        userVO.setEmail(user.getEmail());
+                        userVO.setUserStatus(user.getUserStatus());
+                        userVO.setCreateTime(user.getCreateTime());
+                        userVO.setUpdateTime(user.getUpdateTime());
+                        userVO.setUserRole(user.getUserRole());
+                        userVO.setPlanetCode(user.getPlanetCode());
+                        userVO.setTags(user.getTags());
+                        userVO.setDistance(value); // 设置距离值
+                        return userVO;
+                    })
+                    .collect(Collectors.toList());
+            // 将序列化的 List 写入缓存
+            List<String> userVOJsonList = userVOList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
+            try {
+                stringRedisTemplate.opsForList().rightPushAll(redisKey, userVOJsonList);
+            } catch (Exception e) {
+                log.error("redis set key error", e);
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "缓存写入失败");
+            }
+        }
+        userVOList = stringRedisTemplate.opsForList().range(redisKey, start, end)
+                .stream().map(UserServiceImpl::transferToUserVO).collect(Collectors.toList());
+        return userVOList;
+    }
+
+    private static UserVO transferToUserVO(String userVOJson) {
+        return JSONUtil.toBean(userVOJson, UserVO.class);
+    }
+
+
 }

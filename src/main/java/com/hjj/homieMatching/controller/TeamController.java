@@ -18,6 +18,7 @@ import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.service.UserTeamService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -127,6 +128,9 @@ public class TeamController {
         boolean isAdmin = userService.isAdmin(request);
         // 1、查询队伍列表
         List<TeamUserVO> teamList = teamService.listTeam(teamQuery, isAdmin);
+        if (CollectionUtils.isEmpty(teamList)) {
+            return ResultUtils.success(teamList);
+        }
         final List<Long> teamIdList = teamList.stream().map(TeamUserVO::getId).collect(Collectors.toList());
         // 2、判断当前用户是否已加入队伍
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();

@@ -3,6 +3,8 @@ package com.hjj.homieMatching.service.impl;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.rholder.retry.RetryException;
+import com.github.rholder.retry.Retryer;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hjj.homieMatching.common.ErrorCode;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -53,6 +56,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private Retryer<Boolean> retryer;
 
     /**
      * 盐值为'hjj'，用以混淆密码
@@ -130,9 +136,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
         }
-        Boolean delete = stringRedisTemplate.delete(RedisConstant.USER_RECOMMEND_KEY);
-        if (!delete) {
-            log.info("{}用户推荐缓存删除失败", userId);
+        try {
+            retryer.call(() -> stringRedisTemplate.delete(RedisConstant.USER_RECOMMEND_KEY));
+        } catch (ExecutionException e) {
+            log.error("用户注册后删除缓存重试时失败");
+            throw new RuntimeException(e);
+        } catch (RetryException e) {
+            log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
+            throw new RuntimeException(e);
         }
         return userId;
     }

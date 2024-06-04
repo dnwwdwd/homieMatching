@@ -25,9 +25,9 @@ public class HttpSessionConfig extends ServerEndpointConfig.Configurator impleme
         HttpSession httpSession = (HttpSession) request.getHttpSession();
         if (httpSession != null) {
             sec.getUserProperties().put(HttpSession.class.getName(), httpSession);
-            log.info("HttpSession set in modifyHandshake: {}", httpSession.getId());
+            log.info("修改握手中设置的HttpSession: {}", httpSession.getId());
         } else {
-            log.error("HttpSession is null in modifyHandshake");
+            log.error("修改握手中的HttpSession为空");
         }
         super.modifyHandshake(sec, request, response);
     }

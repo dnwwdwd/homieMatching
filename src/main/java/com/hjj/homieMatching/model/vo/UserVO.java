@@ -72,6 +72,7 @@ public class UserVO {
      * 星球编号
      */
     private String planetCode;
+
     /**
      * 标签列表 json
      */

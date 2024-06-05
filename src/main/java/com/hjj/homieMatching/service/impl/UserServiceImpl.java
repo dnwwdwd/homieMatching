@@ -353,18 +353,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 用户列表的下表 => 相似度'
         List<Pair<User,Long>> list = new ArrayList<>();
         // 依次计算当前用户和所有用户的相似度
-        for (int i = 0; i <userList.size(); i++) {
-            User user = userList.get(i);
+        for (User user : userList) {
             String userTags = user.getTags();
             //无标签的 或当前用户为自己
-            if (StringUtils.isBlank(userTags) || user.getId() == loginUser.getId()){
+            if (StringUtils.isBlank(userTags) || user.getId() == loginUser.getId()) {
                 continue;
             }
             List<String> userTagList = gson.fromJson(userTags, new TypeToken<List<String>>() {
             }.getType());
             //计算分数
             long distance = AlgorithmUtils.minDistance(tagList, userTagList);
-            list.add(new Pair<>(user,distance));
+            list.add(new Pair<>(user, distance));
         }
         //按编辑距离有小到大排序
         List<Pair<User, Long>> topUserPairList = list.stream()

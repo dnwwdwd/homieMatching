@@ -145,17 +145,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         boolean updateResult = this.updateById(updateUser);
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
-        }
-        Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
-        for (String key : keys) {
-            try {
-                retryer.call(() -> stringRedisTemplate.delete(key));
-            } catch (ExecutionException e) {
-                log.error("用户注册后删除缓存重试时失败");
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
-            } catch (RetryException e) {
-                log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        } else {
+            Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
+            for (String key : keys) {
+                try {
+                    retryer.call(() -> stringRedisTemplate.delete(key));
+                } catch (ExecutionException e) {
+                    log.error("用户注册后删除缓存重试时失败");
+                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+                } catch (RetryException e) {
+                    log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
+                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+                }
             }
         }
         return userId;
@@ -305,8 +306,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (oldUser == null){
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-
-        return userMapper.updateById(user);
+        int i = userMapper.updateById(user);
+        if (i > 0) {
+            Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
+            for (String key : keys) {
+                try {
+                    retryer.call(() -> stringRedisTemplate.delete(key));
+                } catch (ExecutionException e) {
+                    log.error("用户修改信息后删除缓存重试时失败");
+                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+                } catch (RetryException e) {
+                    log.error("用户修改信息后删除缓存达到最大重试次数或超过时间限制");
+                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+                }
+            }
+        }
+        return i;
     }
     @Override
     public User getLoginUser(HttpServletRequest request){

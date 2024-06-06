@@ -98,6 +98,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (dimension == null || dimension > 90 || dimension < -90) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        Long userCount = userMapper.selectCount(queryWrapper);
+        if (userCount > 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号已存在");
+        }
         //2.加密
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
         //3.插入数据
@@ -136,14 +142,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
         }
-        try {
-            retryer.call(() -> stringRedisTemplate.delete(RedisConstant.USER_RECOMMEND_KEY));
-        } catch (ExecutionException e) {
-            log.error("用户注册后删除缓存重试时失败");
-            throw new RuntimeException(e);
-        } catch (RetryException e) {
-            log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
-            throw new RuntimeException(e);
+        Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
+        for (String key : keys) {
+            try {
+                retryer.call(() -> stringRedisTemplate.delete(key));
+            } catch (ExecutionException e) {
+                log.error("用户注册后删除缓存重试时失败");
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            } catch (RetryException e) {
+                log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            }
         }
         return userId;
     }
@@ -479,8 +488,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                         Distance distance = stringRedisTemplate.opsForGeo().distance(redisUserGeoKey,
                                 String.valueOf(loginUser.getId()), String.valueOf(user.getId()),
                                 RedisGeoCommands.DistanceUnit.KILOMETERS);
-                        double value = distance.getValue();
-
+                        Double value = distance.getValue();
                         // 创建UserVO对象并设置属性
                         UserVO userVO = new UserVO();
                         userVO.setId(user.getId());
@@ -497,7 +505,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                         userVO.setUserRole(user.getUserRole());
                         userVO.setPlanetCode(user.getPlanetCode());
                         userVO.setTags(user.getTags());
-                        userVO.setDistance(value); // 设置距离值
+                        if (value != null) {
+                            userVO.setDistance(value); // 设置距离值
+                        } else {
+                            userVO.setDistance(0.0);
+                        }
                         return userVO;
                     })
                     .collect(Collectors.toList());

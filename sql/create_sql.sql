@@ -9,7 +9,7 @@ create table hjj.user
         primary key,
     username     varchar(256)                       null comment '用户昵称',
     userAccount  varchar(256)                       null comment '账户',
-    avatarUrl    varchar(1024)                      null comment '用户头像',
+    avatarUrl    varchar(1024)                      null comment '用户头像' default 'https://www.keaitupian.cn/cjpic/frombd/0/253/936677050/470164789.jpg',
     gender       tinyint                            null comment '用户性别',
     profile      varchar(512)                       null comment '个人简介',
     userPassword varchar(512)                       not null comment '用户密码',

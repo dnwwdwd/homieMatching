@@ -92,6 +92,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请至少选择一个标签");
         }
+        if (StringUtils.isBlank(username) || username.length() > 10) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "昵称不合法，长度不得超过 10");
+        }
         if (longitude == null || longitude > 180 || longitude < -180) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标经度不合法");
         }
@@ -112,6 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserPassword(encryptPassword);
         user.setLongitude(longitude);
         user.setDimension(dimension);
+        user.setUsername(username);
         // 处理用户标签
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('[');

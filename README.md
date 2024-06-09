@@ -70,7 +70,7 @@ homie 匹配系统是一个移动端网页的在线云交友平台。实现了�
 
 一个普通学校的大三学生，即将大四毕业了，正在做毕设。
 
-<img src="https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/20240609142050.jpg" alt="597f123b20d2e350ad2916f61c377ef" style="zoom:50%;" />
+<img src="https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/20240609142050.jpg" alt="597f123b20d2e350ad2916f61c377ef" style="zoom: 33%;" />
 
 > 觉得项目还不错的同学可否给我项目点个 Star 呢？如果可以，小弟不胜感激，谢谢！
 
@@ -130,7 +130,7 @@ homie 匹配系统是一个移动端网页的在线云交友平台。实现了�
 
 
 
-## <img src="https://wimg.588ku.com/gif/22/03/11/88adaa926e1096804e2e0c002ec69c62.gif" alt="卡通小星星素材图片免费下载-千库网" style="zoom:8%;" />项目亮点
+## 项目亮点
 
 1. 基于 Spring AOP + Axios 实现前端登录拦截
 2. 基于 Redis 实现分布式 Session 存储
@@ -150,7 +150,7 @@ homie 匹配系统是一个移动端网页的在线云交友平台。实现了�
 
 
 
-## <img src="https://wimg.588ku.com/gif/22/03/11/88adaa926e1096804e2e0c002ec69c62.gif" alt="卡通小星星素材图片免费下载-千库网" style="zoom:8%;" />数据库表
+## 数据库表
 
 > 如果大家拉取了后端源码，直接找到 sql/create_sql.sql 文件直接运行即可创建相应数据库和表结构
 

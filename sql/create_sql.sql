@@ -62,7 +62,7 @@ create table if not exists hjj.user_team
 )
     comment '用户队伍关系表';
 
-
+/*好友表*/
 create table hjj.friend
 (
     id         bigint auto_increment comment 'id'
@@ -76,8 +76,7 @@ create table hjj.friend
     comment '好友表';
 
 
-
-use hjj;
+/*聊天表*/
 CREATE TABLE `chat`  (
                          `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '聊天记录id',
                          `fromId` bigint(20) NOT NULL COMMENT '发送消息id',
@@ -90,19 +89,4 @@ CREATE TABLE `chat`  (
                          `isDelete` tinyint(4) NULL DEFAULT 0,
                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '聊天消息表' ROW_FORMAT = COMPACT;
-
-
-DROP TABLE IF EXISTS `message`;
-CREATE TABLE `message`  (
-                            `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
-                            `type` tinyint(4) NULL DEFAULT NULL COMMENT '类型-1 点赞',
-                            `from_id` bigint(20) NULL DEFAULT NULL COMMENT '消息发送的用户id',
-                            `to_id` bigint(20) NULL DEFAULT NULL COMMENT '消息接收的用户id',
-                            `data` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '消息内容',
-                            `is_read` tinyint(4) NULL DEFAULT 0 COMMENT '已读-0 未读 ,1 已读',
-                            `create_time` datetime NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                            `update_time` datetime NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                            `is_delete` tinyint(4) NULL DEFAULT 0 COMMENT '逻辑删除',
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = COMPACT;
 

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 算法工具测试类
+ * 算法工具
  */
 public class AlgorithmUtils {
         public static int minDistance(List<String> tagList1, List<String> tagList2) {
@@ -38,14 +38,7 @@ public class AlgorithmUtils {
             return d[n][m];
         }
 
-        /**
-         * 编辑距离算法（用于计算最相似的两个字符串）
-         * 原理：https://blog.csdn.net/DBC_121/article/details/104198838
-         *
-         * @param word1
-         * @param word2
-         * @return
-         */
+
         public static int minDistance(String word1, String word2) {
             int n = word1.length();
             int m = word2.length();

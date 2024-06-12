@@ -28,11 +28,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
-* @author 17653
-* @description 针对表【friend(好友表)】的数据库操作Service实现
-* @createDate 2024-02-15 16:45:45
-*/
 @Service
 @Slf4j
 public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>

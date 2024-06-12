@@ -36,11 +36,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-/**
-* @author 17653
-* @description 针对表【team(队伍信息)】的数据库操作Service实现
-* @createDate 2023-12-30 15:24:44
-*/
 @Service
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     implements TeamService{
@@ -256,7 +251,6 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码错误");
             }
         }
-
 
         // 该用户加入的队伍数量
         RLock lock = redissonClient.getLock(RedisConstant.USER_JOIN_TEAM);

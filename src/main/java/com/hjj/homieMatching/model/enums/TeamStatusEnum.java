@@ -3,7 +3,6 @@ package com.hjj.homieMatching.model.enums;
 /**
  * 队伍状态枚举类
  */
-
 public enum TeamStatusEnum {
     PUBLIC(0, "公开"),
     PRIVATE(1, "私有"),

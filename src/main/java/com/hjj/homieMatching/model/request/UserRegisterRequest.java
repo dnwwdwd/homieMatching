@@ -5,10 +5,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 用户注册请求体
- * @author hjj
- */
 @Data
 public class UserRegisterRequest implements Serializable {
 

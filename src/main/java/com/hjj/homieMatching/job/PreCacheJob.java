@@ -1,9 +1,9 @@
 package com.hjj.homieMatching.job;
 
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.Gson;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.vo.UserVO;
@@ -38,9 +38,6 @@ public class PreCacheJob {
     private UserService userService;
 
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Resource
     RedissonClient redissonClient;
     // 重点用户
     private List<Long> keyUsersIdList;
@@ -55,7 +52,7 @@ public class PreCacheJob {
     }
 
     // 每天执行，预热缓存推荐用户
-    @Scheduled(cron = "0 30 19 * * *")
+    @Scheduled(cron = "0 00 00 * * *")
     synchronized public void doCacheRecommendUser() {
         String doCacheLockId = String.format("%s:precachejob:docache:lock", RedisConstant.SYSTEM_ID);
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
@@ -94,10 +91,10 @@ public class PreCacheJob {
                                 userVO.setDistance(distance.getValue());
                                 return userVO;
                             }).collect(Collectors.toList());
-
+                    List<String> list = userVOList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
                     // 写缓存
                     try{
-                        stringRedisTemplate.opsForValue().set(redisKey, new Gson().toJson(userVOList), 2, TimeUnit.MINUTES);
+                        stringRedisTemplate.opsForList().rightPushAll(redisKey, list);
                     } catch (Exception e) {
                         log.error("redis set key error", e);
                     }

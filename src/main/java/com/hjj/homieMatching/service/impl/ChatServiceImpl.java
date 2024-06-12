@@ -33,14 +33,6 @@ import static com.hjj.homieMatching.constant.RedisConstant.*;
 import static com.hjj.homieMatching.constant.UserConstant.ADMIN_ROLE;
 
 
-/**
- * 聊天服务实现
- *
- * @author OchiaMalu
- * @description 针对表【chat(聊天消息表)】的数据库操作Service实现
- * @createDate 2023-06-17 21:50:15
- * @date 2024/01/25
- */
 @Service
 public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         implements ChatService {

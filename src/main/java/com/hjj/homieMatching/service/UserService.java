@@ -8,13 +8,6 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-/**
- * 用户服务
- *
- * @author 17653
- * @description 针对表【user(用户)】的数据库操作Service
- * @createDate 2023-10-04 13:54:07
- */
 public interface UserService extends IService<User> {
     /**
      * @param userRegisterRequest

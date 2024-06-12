@@ -6,12 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * 消息请求
- *
- * @author OchiaMalu
- * @date 2023/06/19
- */
 @Data
 @ApiModel(value = "消息请求")
 public class MessageRequest implements Serializable {

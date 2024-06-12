@@ -41,12 +41,6 @@ import java.util.stream.Collectors;
 import static com.hjj.homieMatching.constant.UserConstant.ADMIN_ROLE;
 import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 
-/**用户服务实现类
- *
-* @author 17653
-* @description 针对表【user(用户)】的数据库操作Service实现
-* @createDate 2023-10-04 13:54:07
-*/
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>

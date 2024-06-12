@@ -7,10 +7,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 队伍和用户信息封装类（脱敏）
- * @author 17653
- */
 @Data
 public class TeamUserVO implements Serializable {
     /**

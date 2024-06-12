@@ -9,14 +9,6 @@ import com.hjj.homieMatching.model.vo.ChatMessageVO;
 import java.util.Date;
 import java.util.List;
 
-/**
- * 聊天服务
- *
- * @author OchiaMalu
- * @description 针对表【chat(聊天消息表)】的数据库操作Service
- * @createDate 2023-06-17 21:50:15
- * @date 2024/01/25
- */
 public interface ChatService extends IService<Chat> {
     /**
      * 获取私人聊天

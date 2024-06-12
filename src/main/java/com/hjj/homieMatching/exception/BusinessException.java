@@ -2,10 +2,6 @@ package com.hjj.homieMatching.exception;
 
 import com.hjj.homieMatching.common.ErrorCode;
 
-/**
- * 自定义异常
- * @author hjj
- */
 public class BusinessException extends RuntimeException{
     private final int code;
     private final String description;

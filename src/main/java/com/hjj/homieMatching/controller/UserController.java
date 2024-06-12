@@ -28,11 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * 用户接口
- *
- * @author hjj
- */
+
 @RestController
 @RequestMapping("/user")
 @Slf4j

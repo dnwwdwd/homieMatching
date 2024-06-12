@@ -11,11 +11,6 @@ import com.hjj.homieMatching.model.vo.TeamUserVO;
 
 import java.util.List;
 
-/**
-* @author 17653
-* @description 针对表【team(队伍信息)】的数据库操作Service
-* @createDate 2023-12-30 15:24:44
-*/
 public interface TeamService extends IService<Team> {
     /**
      * 创建队伍

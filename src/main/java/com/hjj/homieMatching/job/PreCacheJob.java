@@ -13,7 +13,6 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.redis.connection.RedisGeoCommands;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -107,7 +106,7 @@ public class PreCacheJob {
             // 只能释放自己的锁
             if (lock.isHeldByCurrentThread()) { // 判断当前的锁是不是当前这个线程加的锁，每次抢锁时都会有一个线程Id，
                 // 这个Id会存在redis中，验证线程的id就好了
-                System.out.println(Thread.currentThread().getId() + "锁已经释放了");
+                log.info(Thread.currentThread().getId() + "锁已经释放了");
                 lock.unlock(); // 执行业务逻辑后，要释放锁
             }
         }

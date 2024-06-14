@@ -3,6 +3,8 @@ package com.hjj.homiematching.service;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.service.UserService;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.geo.*;

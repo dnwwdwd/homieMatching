@@ -11,12 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
-/**
- * @author: shayu
- * @date: 2022/12/06
- * @ClassName: yupao-backend01
- * @Description:    用户插入单元测试，注意打包时要删掉或忽略，不然打一次包就插入一次
- */
 @SpringBootTest
 public class InsertUserTest {
 
@@ -58,7 +52,7 @@ public class InsertUserTest {
     }
 
     /**
-     * 并发批量插入用户   100000  耗时： 26830ms
+     * 并发批量插入用户  耗时： 18600ms
      */
     @Test
     public void doConcurrencyInsertUser() {
@@ -68,7 +62,7 @@ public class InsertUserTest {
         // 分十组
         int j = 0;
         //批量插入数据的大小
-        int batchSize = 5000;
+        int batchSize = 10000;
         List<CompletableFuture<Void>> futureList = new ArrayList<>();
         // i 要根据数据量和插入批量来计算需要循环的次数。（鱼皮这里直接取了个值，会有问题,我这里随便写的）
         for (int i = 0; i < INSERT_NUM/batchSize; i++) {
@@ -97,8 +91,8 @@ public class InsertUserTest {
             CompletableFuture<Void> future = CompletableFuture.runAsync(() ->{
                 System.out.println("ThreadName：" + Thread.currentThread().getName());
                 userService.saveBatch(userList,batchSize);
-            },executorService);
-                futureList.add(future);
+            }, executorService);
+            futureList.add(future);
         }
         CompletableFuture.allOf(futureList.toArray(new CompletableFuture[]{})).join();
 

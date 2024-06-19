@@ -89,4 +89,3 @@ CREATE TABLE `chat`  (
                          `isDelete` tinyint(4) NULL DEFAULT 0,
                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '聊天消息表' ROW_FORMAT = COMPACT;
-

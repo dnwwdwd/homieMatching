@@ -2,8 +2,6 @@ package com.hjj.homieMatching.utils;
 
 import com.hjj.homieMatching.model.domain.User;
 
-import java.math.BigInteger;
-
 public class Test {
 
     public static void main(String[] args) {
@@ -16,6 +14,5 @@ public class Test {
         Integer one = new Integer(1);
         Integer one1 = new Integer(1);
         System.out.println(one.equals(one1));
-        BigInteger
     }
 }

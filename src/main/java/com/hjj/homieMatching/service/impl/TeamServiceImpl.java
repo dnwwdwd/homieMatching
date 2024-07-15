@@ -19,6 +19,7 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.TeamService;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.service.UserTeamService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -37,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     implements TeamService{
 
@@ -230,6 +232,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean joinTeam(TeamJoinRequest teamJoinRequest, User loginUser) {
         if (teamJoinRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -252,17 +255,17 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             }
         }
 
-        // 该用户加入的队伍数量
-        RLock lock = redissonClient.getLock(RedisConstant.USER_JOIN_TEAM);
+        String lockId = RedisConstant.USER_JOIN_TEAM + teamId;
+        RLock lock = redissonClient.getLock(lockId);
         try {
             // 只有一个线程能够获取锁，并执行下面的代码
             while (true) {
                 if (lock.tryLock(0, 30000, TimeUnit.MILLISECONDS)) {
-                    System.out.println(Thread.currentThread().getId() + "我拿到锁了");
+                    log.info(Thread.currentThread().getId() + "我拿到锁了");
                     QueryWrapper<UserTeam> queryWrapper = new QueryWrapper<>();
                     queryWrapper.eq("userId", userId);
                     long userJoinTeamNum = userTeamService.count(queryWrapper); // 用户加入的队伍数量
-                    if (userJoinTeamNum > 5) {
+                    if (userJoinTeamNum >= 5) {
                         throw new BusinessException(ErrorCode.PARAMS_ERROR, "最多加入5个队伍");
                     }
                     queryWrapper = new QueryWrapper<>();
@@ -274,8 +277,8 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                         throw new BusinessException(ErrorCode.PARAMS_ERROR, "已经加入该队伍");
                     }
                     // 队伍中的用户数量
-                    long teamHasUserNum = teamHasUserNum(teamId);
-                    if (teamHasUserNum > team.getMaxNum()) {
+                    long teamHasUserNum = this.teamHasUserNum(teamId);
+                    if (teamHasUserNum >= team.getMaxNum()) {
                         throw new BusinessException(ErrorCode.NULL_ERROR, "队伍已满");
                     }
                     // 将用户加入队伍的信息添加到user_team表中
@@ -287,13 +290,13 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
                 }
             }
         } catch (InterruptedException e) {
-            log.error("userJoinTeam error", e);
+            log.error("User join team error，获取分布式锁后执行逻辑异常", e);
             return  false;
         } finally { // 不管所是否会失效都会执行下段保证释放锁
             // 只能释放自己的锁
             if (lock.isHeldByCurrentThread()) { // 判断当前的锁是不是当前这个线程加的锁，每次抢锁时都会有一个线程Id，
                 // 这个Id会存在redis中，验证线程的id就好了
-                System.out.println(Thread.currentThread().getId() + "锁已经释放了");
+                log.info(Thread.currentThread().getId() + "锁已经释放了");
                 lock.unlock(); // 执行业务逻辑后，要释放锁
             }
         }

@@ -10,7 +10,7 @@ create table hjj.user
     username     varchar(256)                       null comment '用户昵称',
     userAccount  varchar(256)                       null comment '账户',
     avatarUrl    varchar(1024)                      null comment '用户头像' default 'https://www.keaitupian.cn/cjpic/frombd/0/253/936677050/470164789.jpg',
-    gender       tinyint                            null comment '用户性别',
+    gender       tinyint                            null comment '用户性别' default 1,
     profile      varchar(512)                       null comment '个人简介',
     userPassword varchar(512)                       not null comment '用户密码',
     phone        varchar(128)                       null comment '电话',
@@ -89,3 +89,19 @@ CREATE TABLE `chat`  (
                          `isDelete` tinyint(4) NULL DEFAULT 0,
                          PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '聊天消息表' ROW_FORMAT = COMPACT;
+
+
+select userId from user_team where teamId = 6 and isDelete = 0;
+
+select * from team where id = 6 and isDelete = 0;
+
+# select * from user where id = 44 and isDelete = 0;
+
+select * from user_team where teamId = 3;
+
+SELECT ut.teamId, COUNT(ut.userId) AS member_count, MAX(t.maxNum) AS maxNum
+FROM hjj.user_team ut
+         JOIN hjj.team t ON ut.teamId = t.id
+WHERE ut.isDelete = 0 AND t.isDelete = 0
+GROUP BY ut.teamId
+HAVING member_count > MAX(t.maxNum);

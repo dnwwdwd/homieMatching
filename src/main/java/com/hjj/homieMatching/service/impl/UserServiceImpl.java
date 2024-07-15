@@ -11,6 +11,7 @@ import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.manager.RedisLimiterManager;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
@@ -54,6 +55,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Resource
     private Retryer<Boolean> retryer;
 
+    @Resource
+    private RedisLimiterManager redisLimiterManager;
+
     /**
      * 盐值为'hjj'，用以混淆密码
      */
@@ -95,6 +99,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (dimension == null || dimension > 90 || dimension < -90) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
+        // 限流
+        redisLimiterManager.doRateLimiter(userAccount);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         Long userCount = userMapper.selectCount(queryWrapper);

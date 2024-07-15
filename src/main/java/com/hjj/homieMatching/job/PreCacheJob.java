@@ -60,7 +60,7 @@ public class PreCacheJob {
         try {
             // 只有一个线程能够获取锁
             if (lock.tryLock(0, 300000, TimeUnit.MILLISECONDS)) {
-                System.out.println(Thread.currentThread().getId() + "我拿到锁了");
+                log.info(Thread.currentThread().getId() + "我拿到锁了");
                 for (Long userId : keyUsersIdList) {
                     // 查数据库数据
                     QueryWrapper<User> queryWrapper = new QueryWrapper<>();

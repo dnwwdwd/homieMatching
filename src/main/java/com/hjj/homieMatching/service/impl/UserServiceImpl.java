@@ -68,7 +68,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     @Transactional( rollbackFor = Exception.class)
-    public long userRegister(UserRegisterRequest userRegisterRequest) {
+    public long userRegister(HttpServletRequest request, UserRegisterRequest userRegisterRequest) {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
@@ -76,6 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String username = userRegisterRequest.getUsername();
         Double longitude = userRegisterRequest.getLongitude();
         Double dimension = userRegisterRequest.getDimension();
+        String ip = request.getRemoteHost();
         //1.校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             // todo 修改为自定义异常
@@ -100,7 +101,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
         // 限流
-        redisLimiterManager.doRateLimiter(userAccount);
+        redisLimiterManager.doRateLimiter(RedisConstant.REDIS_LIMITER_REGISTER + ip);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         Long userCount = userMapper.selectCount(queryWrapper);

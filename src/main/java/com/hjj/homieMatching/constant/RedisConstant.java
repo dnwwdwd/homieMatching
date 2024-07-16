@@ -6,6 +6,8 @@ public interface RedisConstant {
     String USER_GEO_KEY = "homiemacthing:user:geo";
     String USER_ADD_KEY = "homiematching:user:add";
     String USER_RECOMMEND_KEY = "homieMatching:user:recommend";
+
+    String REDIS_LIMITER_REGISTER = "homieMatching:limiter:register:";
     public static final String LOGIN_USER_KEY = "homieMatching:login:token:";
 
     public static final Long LOGIN_USER_TTL = 15L;

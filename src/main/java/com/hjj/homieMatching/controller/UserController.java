@@ -39,11 +39,11 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest, HttpServletRequest request) {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userRegisterRequest);
+        long result = userService.userRegister(request, userRegisterRequest);
         return ResultUtils.success(result);
     }
 

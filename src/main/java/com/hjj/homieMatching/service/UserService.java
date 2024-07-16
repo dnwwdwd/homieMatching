@@ -13,7 +13,7 @@ public interface UserService extends IService<User> {
      * @param userRegisterRequest
      * @return 新用户id
      */
-    long userRegister(UserRegisterRequest userRegisterRequest);
+    long userRegister(HttpServletRequest request, UserRegisterRequest userRegisterRequest);
 
     /**
      * @param userAccount  用户账户

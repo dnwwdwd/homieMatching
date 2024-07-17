@@ -91,11 +91,12 @@ CREATE TABLE `chat`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '聊天消息表' ROW_FORMAT = COMPACT;
 
 
+
+
 select userId from user_team where teamId = 6 and isDelete = 0;
 
 select * from team where id = 6 and isDelete = 0;
 
-# select * from user where id = 44 and isDelete = 0;
 
 select * from user_team where teamId = 3;
 

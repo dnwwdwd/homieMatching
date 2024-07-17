@@ -36,7 +36,9 @@ public class ImportUserGEO {
          }
     }
 
-
+    /**
+     * 将所有用户的经纬度导入 Redis
+     */
     @Test
     public void importUserGEOByRedis() {
         List<User> userList = userService.list();
@@ -49,6 +51,9 @@ public class ImportUserGEO {
         stringRedisTemplate.opsForGeo().add(key, locationList);
     }
 
+    /**
+     * 获取 id 为 1 的用户与所有用户的距离
+     */
     @Test
     public void getUserGeo() {
         String key = RedisConstant.USER_GEO_KEY;
@@ -63,6 +68,9 @@ public class ImportUserGEO {
         }
     }
 
+    /**
+     * 搜索距离 id 为 1 的 1500 km 的用户
+     */
     @Test
     public void searchUserByGeo() {
         User loginUser = userService.getById(1);

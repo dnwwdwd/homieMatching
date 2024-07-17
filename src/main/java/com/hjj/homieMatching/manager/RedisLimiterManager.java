@@ -3,7 +3,6 @@ package com.hjj.homieMatching.manager;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.SelectKey;
 import org.redisson.api.RRateLimiter;
 import org.redisson.api.RateIntervalUnit;
 import org.redisson.api.RateType;

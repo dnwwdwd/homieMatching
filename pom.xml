@@ -131,10 +131,11 @@
             <artifactId>guava-retrying</artifactId>
             <version>1.0.6</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
         <dependency>
-            <groupId>com.anji-plus</groupId>
-            <artifactId>spring-boot-starter-captcha</artifactId>
-            <version>1.3.0</version>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.17.2</version>
         </dependency>
     </dependencies>
 

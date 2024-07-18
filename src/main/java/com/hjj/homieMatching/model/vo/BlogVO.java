@@ -3,7 +3,6 @@ package com.hjj.homieMatching.model.vo;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 public class BlogVO implements Serializable{
@@ -65,7 +64,7 @@ public class BlogVO implements Serializable{
     /**
      * 创建时间
      */
-    private Date createTime;
+    private String createTime;
 
     private static final long serialVersionUID = 1L;
 }

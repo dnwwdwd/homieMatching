@@ -62,4 +62,7 @@ public interface UserService extends IService<User> {
 
     List<UserVO> recommendUsers(long pageSize, long pageNum, HttpServletRequest request);
 
+    long hasFollowerCount(long userId);
+
+    long hasBlogCount(long userId);
 }

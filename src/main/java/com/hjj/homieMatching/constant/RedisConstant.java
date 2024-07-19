@@ -8,7 +8,14 @@ public interface RedisConstant {
     String USER_RECOMMEND_KEY = "homieMatching:user:recommend";
 
     String REDIS_LIMITER_REGISTER = "homieMatching:limiter:register:";
-    public static final String LOGIN_USER_KEY = "homieMatching:login:token:";
+    String LOGIN_USER_KEY = "homieMatching:login:token:";
+
+    String REDIS_BLOG_STAR_KEY = "homieMatching:blog:star:";
+    String REDIS_BLOG_LIKE_KEY = "homieMatching:blog:like:";
+    String REDIS_BLOG_VIEW_KEY = "homieMatching:blog:view:";
+    String REDIS_USER_LIKE_BLOG_KEY = "homieMatching:user:like:blog:";
+    String REDIS_USER_VIEW_BLOG_KEY = "homieMatching:user:view:blog:";
+    String REDIS_USER_STAR_BLOG_KEY = "homieMatching:user:star:blog:";
 
     public static final Long LOGIN_USER_TTL = 15L;
     /**

@@ -547,6 +547,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userVOList;
     }
 
+    @Override
+    public long hasFollowerCount(long userId) {
+        if (userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return userMapper.hasFollowerCount(userId);
+    }
+
+    @Override
+    public long hasBlogCount(long userId) {
+        if (userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        return userMapper.hasBlogCount(userId);
+    }
+
     private static UserVO transferToUserVO(String userVOJson) {
         return JSONUtil.toBean(userVOJson, UserVO.class);
     }

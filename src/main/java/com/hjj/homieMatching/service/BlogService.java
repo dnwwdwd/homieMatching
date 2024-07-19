@@ -4,8 +4,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
-import com.hjj.homieMatching.model.request.PageRequest;
+import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.vo.BlogVO;
+import com.hjj.homieMatching.model.vo.FollowRequest;
+import com.hjj.homieMatching.model.vo.LikeRequest;
+import com.hjj.homieMatching.model.vo.StarRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -17,9 +20,23 @@ import java.util.List;
 */
 public interface BlogService extends IService<Blog> {
 
-    Boolean addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request);
+    Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request);
 
     List<BlogVO> listBlogs(BlogQueryRequest blogQueryRequest);
 
-    BlogVO getBlogById(Long id, HttpServletRequest request);
+    BlogVO getBlogDetailById(Long id, HttpServletRequest request);
+
+    boolean deleteBlog(DeleteRequest deleteRequest, HttpServletRequest request);
+
+    boolean starBlog(StarRequest starRequest, HttpServletRequest request);
+
+    boolean likeBlog(LikeRequest likeRequest, HttpServletRequest request);
+
+    boolean isStarred(long blogId, long userId);
+
+    boolean isLiked(long blogId, long userId);
+
+    int blogHasLikes(long blogId);
+
+    int blogHasStars(long blogId);
 }

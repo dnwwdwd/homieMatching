@@ -5,4 +5,8 @@ import com.hjj.homieMatching.model.domain.User;
 
 public interface UserMapper extends BaseMapper<User> {
 
+    long hasFollowerCount(long userId);
+
+    long hasBlogCount(long userId);
+
 }

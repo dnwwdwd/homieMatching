@@ -33,4 +33,14 @@
         isDelete,userRole,planetCode,
         tags,longitude,dimension
     </sql>
+
+    <select id="hasFollowerCount" resultType="java.lang.Long">
+        select count(followerId) from follow where userId = #{userId};
+    </select>
+
+    <select id="hasBlogCount" resultType="java.lang.Long">
+        select count(id) from blog where userId = #{userId};
+    </select>
+
+
 </mapper>

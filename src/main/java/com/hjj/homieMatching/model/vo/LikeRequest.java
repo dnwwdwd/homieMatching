@@ -11,7 +11,7 @@ public class LikeRequest implements Serializable {
 
     long blogId;
 
-    public boolean isLiked() {
+    public boolean getIsLiked() {
         return isLiked;
     }
 }

@@ -62,9 +62,27 @@ public class BlogVO implements Serializable{
     private BlogUserVO blogUserVO;
 
     /**
+     * 是否点赞
+     */
+    private boolean isLiked;
+
+    /**
+     * 是否收藏
+     */
+    private boolean isStarred;
+
+    /**
      * 创建时间
      */
     private String createTime;
 
     private static final long serialVersionUID = 1L;
+
+    public void setIsLiked(boolean liked) {
+        isLiked = liked;
+    }
+
+    public void setIsStarred(boolean starred) {
+        isStarred = starred;
+    }
 }

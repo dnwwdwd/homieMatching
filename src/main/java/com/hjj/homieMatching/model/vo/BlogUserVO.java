@@ -1,10 +1,12 @@
 package com.hjj.homieMatching.model.vo;
 
 import lombok.Data;
+import lombok.Setter;
 
 import java.io.Serializable;
 
 @Data
+@Setter
 public class BlogUserVO implements Serializable {
     /**
      * id
@@ -29,7 +31,7 @@ public class BlogUserVO implements Serializable {
     /**
      * 粉丝数
      */
-    private Integer fanNum;
+    private Long fanNum;
 
     /**
      * 博客数
@@ -40,4 +42,13 @@ public class BlogUserVO implements Serializable {
      * 浏览量
      */
     private Integer viewNum;
+
+    /**
+     * 是否关注
+     */
+    private boolean isFollowed;
+
+    public void setIsFollowed(boolean followed) {
+        isFollowed = followed;
+    }
 }

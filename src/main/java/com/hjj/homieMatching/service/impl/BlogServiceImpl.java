@@ -12,7 +12,10 @@ import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
-import com.hjj.homieMatching.model.vo.*;
+import com.hjj.homieMatching.model.vo.BlogUserVO;
+import com.hjj.homieMatching.model.vo.BlogVO;
+import com.hjj.homieMatching.model.vo.LikeRequest;
+import com.hjj.homieMatching.model.vo.StarRequest;
 import com.hjj.homieMatching.service.BlogService;
 import com.hjj.homieMatching.service.FollowService;
 import com.hjj.homieMatching.service.UserService;
@@ -20,11 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +40,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         implements BlogService {
+
+    private static final double TIME_UNIT = 1000.0;
 
     @Resource
     private UserService userService;
@@ -132,19 +137,46 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
 
     @Override
     public BlogVO getBlogDetailById(Long id, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
         Blog blog = this.getById(id);
         if (blog == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
+        Long blogId = blog.getId();
         BlogVO blogVO = new BlogVO();
         BlogUserVO blogUserVO = new BlogUserVO();
         BeanUtils.copyProperties(blog, blogVO);
         Long blogUserId = blog.getUserId();
         User user = userService.getById(blogUserId);
         BeanUtils.copyProperties(user, blogUserVO);
+        // 查询文章作者的文章数、粉丝数、总浏览量和是否关注他
+        blogUserVO.setBlogNum(userService.hasBlogCount(blogUserId));
+        blogUserVO.setFanNum(userService.hasFollowerCount(blogUserId));
+        blogUserVO.setIsFollowed(followService.isFollowed(blogUserId, userId));
+        // todo 查询作者的总浏览量
+
         blogVO.setBlogUserVO(blogUserVO);
-        // todo 查询文章作者的文章数、粉丝数、总浏览量和是否关注他
-        // todo 查询文章的相关评论，文章是否点赞，收藏，是否浏览过/添加浏览数
+        // 查询文章是否点赞、收藏
+        blogVO.setIsLiked(isLiked(blogId, userId));
+        blogVO.setIsStarred(isStarred(blogId, userId));
+        // todo 查询文章的相关评论
+        Boolean isViewed = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
+        // 增加文章浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有文章浏览量之和）
+        if (isViewed != null && !isViewed) {
+            stringRedisTemplate.opsForSet().add(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
+            blog = new Blog();
+            blog.setId(blog.getId());
+            blog.setViewNum(blog.getViewNum() + 1);
+            // 更新文章的浏览量，下次直接查询直接从数据库查
+            boolean updateBlog = this.updateById(blog);
+            if (!updateBlog) {
+                log.error("用户：{} 浏览博客：{} 后，更新博客的浏览量失败了", userId, blogId);
+            }
+        }
+        // 不管有没有浏览过，都要增加用户的浏览记录，由于 Redis 的 ZSet 天生不存在重复元素的特性，所以就无需判断是否存在了
+        stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId,
+                        String.valueOf(blogId), Instant.now().toEpochMilli() / TIME_UNIT);
         return blogVO;
     }
 
@@ -174,7 +206,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
         long blogId = starRequest.getBlogId();
-        boolean starred = starRequest.isStarred();
+        boolean starred = starRequest.getIsStarred();
         Long blogCount = this.lambdaQuery().eq(Blog::getId, blogId).count();
         // 校验参数
         if (blogCount < 1) {
@@ -212,7 +244,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
         long blogId = likeRequest.getBlogId();
-        boolean liked = likeRequest.isLiked();
+        boolean liked = likeRequest.getIsLiked();
         Long blogCount = this.lambdaQuery().eq(Blog::getId, blogId).count();
         // 校验参数
         if (blogCount < 1) {

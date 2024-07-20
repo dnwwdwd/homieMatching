@@ -39,4 +39,5 @@ public interface BlogService extends IService<Blog> {
     int blogHasLikes(long blogId);
 
     int blogHasStars(long blogId);
+
 }

@@ -12,6 +12,7 @@ import com.hjj.homieMatching.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
 * @author 何佳骏
@@ -33,7 +34,15 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         return this.lambdaQuery().eq(Follow::getUserId, userId).eq(Follow::getFollowerId, followerId).count() > 0;
     }
 
+    @Override
+    public boolean addFollow(long followerId, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        if (userId == followerId) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "不能关注自己");
+        }
 
+    }
 
 }
 

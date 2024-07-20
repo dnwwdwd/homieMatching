@@ -8,7 +8,7 @@ public class StarRequest {
 
     private long blogId;
 
-    public boolean isStarred() {
+    public boolean getIsStarred() {
         return isStarred;
     }
 }

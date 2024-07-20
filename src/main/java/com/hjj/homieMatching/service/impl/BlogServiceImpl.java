@@ -151,6 +151,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         User user = userService.getById(blogUserId);
         BeanUtils.copyProperties(user, blogUserVO);
         // 查询文章作者的文章数、粉丝数、总浏览量和是否关注他
+        // todo 将查询作者的文章数，粉丝数，总浏览量都改为查询数据库（发布文章后，关注后，浏览后都要把数据存在数据库中）
         blogUserVO.setBlogNum(userService.hasBlogCount(blogUserId));
         blogUserVO.setFanNum(userService.hasFollowerCount(blogUserId));
         blogUserVO.setIsFollowed(followService.isFollowed(blogUserId, userId));

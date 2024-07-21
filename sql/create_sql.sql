@@ -143,3 +143,4 @@ FROM hjj.user_team ut
 WHERE ut.isDelete = 0 AND t.isDelete = 0
 GROUP BY ut.teamId
 HAVING member_count > MAX(t.maxNum);
+

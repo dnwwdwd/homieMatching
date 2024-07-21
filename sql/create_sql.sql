@@ -130,7 +130,6 @@ create table hjj.blog
     comment '博客表';
 
 
-
 select userId from user_team where teamId = 6 and isDelete = 0;
 
 select * from team where id = 6 and isDelete = 0;

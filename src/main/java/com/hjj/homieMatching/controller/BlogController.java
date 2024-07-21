@@ -37,14 +37,14 @@ public class BlogController {
     }
 
     @GetMapping("/list")
-    public BaseResponse<List<BlogVO>> listBlogs(@RequestBody BlogQueryRequest blogQueryRequest) {
+    public BaseResponse<List<BlogVO>> listBlogs(@RequestBody BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
         if (blogQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         if (blogQueryRequest.getPageNum() <= 0 || blogQueryRequest.getPageSize() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        List<BlogVO> blogVOList = blogService.listBlogs(blogQueryRequest);
+        List<BlogVO> blogVOList = blogService.listBlogs(blogQueryRequest, request);
         return ResultUtils.success(blogVOList);
     }
 
@@ -85,4 +85,21 @@ public class BlogController {
         return ResultUtils.success(b);
     }
 
+    @PostMapping("/star/cancel")
+    public BaseResponse<Boolean> cancelStarBlog(@RequestBody StarRequest starRequest, HttpServletRequest request) {
+        if (starRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean b = blogService.cancelStarBlog(starRequest, request);
+        return ResultUtils.success(b);
+    }
+
+    @PostMapping("/like/cancel")
+    public BaseResponse<Boolean> cancelLikeBlog(@RequestBody LikeRequest likeRequest, HttpServletRequest request) {
+        if (likeRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        boolean b = blogService.cancelLikeBlog(likeRequest, request);
+        return ResultUtils.success(b);
+    }
 }

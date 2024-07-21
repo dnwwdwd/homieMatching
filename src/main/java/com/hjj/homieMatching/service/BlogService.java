@@ -22,7 +22,7 @@ public interface BlogService extends IService<Blog> {
 
     Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request);
 
-    List<BlogVO> listBlogs(BlogQueryRequest blogQueryRequest);
+    List<BlogVO> listBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
 
     BlogVO getBlogDetailById(Long id, HttpServletRequest request);
 
@@ -40,4 +40,7 @@ public interface BlogService extends IService<Blog> {
 
     int blogHasStars(long blogId);
 
+    boolean cancelStarBlog(StarRequest starRequest, HttpServletRequest request);
+
+    boolean cancelLikeBlog(LikeRequest likeRequest, HttpServletRequest request);
 }

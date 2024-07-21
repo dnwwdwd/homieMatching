@@ -14,6 +14,8 @@ public interface FollowService extends IService<Follow> {
 
     boolean isFollowed(long userId, long followerId);
 
-    boolean addFollow(long followerId, HttpServletRequest request);
+    boolean addFollow(long followeeId, HttpServletRequest request);
+
+    boolean deleteFollow(long followeeId, HttpServletRequest request);
     
 }

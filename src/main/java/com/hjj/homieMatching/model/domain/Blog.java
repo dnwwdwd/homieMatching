@@ -54,22 +54,22 @@ public class Blog implements Serializable {
     /**
      * 浏览数
      */
-    private Integer viewNum;
+    private Long viewNum;
 
     /**
      * 点赞数
      */
-    private Integer likeNum;
+    private Long likeNum;
 
     /**
      * 收藏数
      */
-    private Integer starNum;
+    private Long starNum;
 
     /**
      * 评论数
      */
-    private Integer commentNum;
+    private Long commentNum;
 
     /**
      * 创建时间

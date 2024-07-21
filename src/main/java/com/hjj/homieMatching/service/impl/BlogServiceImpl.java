@@ -62,6 +62,10 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         String content = blogAddRequest.getContent();
         List<String> tags = blogAddRequest.getTags();
         // 1.校验
+        loginUser = userService.getById(userId);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
         if (StringUtils.isEmpty(title) || title.length() > 10) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -110,12 +114,20 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         boolean save = this.save(blog);
         if (!save) {
             log.error("用户：{} 创建博客失败", userId);
+        } else {
+            User user = new User();
+            user.setId(userId);
+            user.setBlogNum(loginUser.getBlogNum() + 1);
+            boolean updateUser = userService.updateById(user);
+            if (!updateUser) {
+                log.error("用户：{} 发布博客：{}后， 更新博客数量失败", userId, blog.getId());
+            }
         }
         return blog.getId();
     }
 
     @Override
-    public List<BlogVO> listBlogs(BlogQueryRequest blogQueryRequest) {
+    public List<BlogVO> listBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
         String title = blogQueryRequest.getTitle();
         QueryWrapper<Blog> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(StringUtils.isNotEmpty(title), "title", title);
@@ -151,21 +163,21 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         User user = userService.getById(blogUserId);
         BeanUtils.copyProperties(user, blogUserVO);
         // 查询文章作者的文章数、粉丝数、总浏览量和是否关注他
-        // todo 将查询作者的文章数，粉丝数，总浏览量都改为查询数据库（发布文章后，关注后，浏览后都要把数据存在数据库中）
-        blogUserVO.setBlogNum(userService.hasBlogCount(blogUserId));
-        blogUserVO.setFanNum(userService.hasFollowerCount(blogUserId));
+        // todo 将查询作者的文章数粉丝数，总浏览量都改为查询数据库（发布文章后，关注后，浏览后都要把数据存在数据库中）
         blogUserVO.setIsFollowed(followService.isFollowed(blogUserId, userId));
-        // todo 查询作者的总浏览量
-
         blogVO.setBlogUserVO(blogUserVO);
         // 查询文章是否点赞、收藏
         blogVO.setIsLiked(isLiked(blogId, userId));
         blogVO.setIsStarred(isStarred(blogId, userId));
         // todo 查询文章的相关评论
+
+        // todo 后续改为 MQ 处理
         Boolean isViewed = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
         // 增加文章浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有文章浏览量之和）
         if (isViewed != null && !isViewed) {
+            // 添加用户的浏览记录
             stringRedisTemplate.opsForSet().add(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
+            // 更新文章的浏览量啊
             blog = new Blog();
             blog.setId(blog.getId());
             blog.setViewNum(blog.getViewNum() + 1);
@@ -173,6 +185,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             boolean updateBlog = this.updateById(blog);
             if (!updateBlog) {
                 log.error("用户：{} 浏览博客：{} 后，更新博客的浏览量失败了", userId, blogId);
+            }
+            // 更新用户总浏览量
+            user = new User();
+            user.setId(blogUserId);
+            Long totalViewNum = baseMapper.selectObjs(new QueryWrapper<Blog>().select("SUM(viewNum)"))
+                    .stream().findFirst().map(obj -> (long) obj).orElse(0L);
+            user.setBlogViewNum(totalViewNum);
+            boolean updateUser = userService.updateById(user);
+            if (!updateUser) {
+                log.error("用户：{} 浏览博客：{} 后，更新作者：{} 的总浏览量失败了", userId, blogId, blogUserId);
             }
         }
         // 不管有没有浏览过，都要增加用户的浏览记录，由于 Redis 的 ZSet 天生不存在重复元素的特性，所以就无需判断是否存在了
@@ -213,7 +235,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (blogCount < 1) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "文章不存在");
         }
-        if (starred) {
+        if (starred || isStarred(blogId, userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您已收藏");
         }
         // 判断用户是否收藏过该博客
@@ -236,6 +258,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         if (count2 == null || count2 < 1) {
             log.error("博客：{} 收藏添加用户：{} 失败了！", blogId, userId);
+        }
+        // todo 后续改为 MQ 处理
+        if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
+            Blog blog = new Blog();
+            blog.setId(blogId);
+            blog.setStarNum(count2 + 1);
+            boolean updateBlog = this.updateById(blog);
+            if (!updateBlog) {
+                log.error("用户：{} 收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
+            }
         }
         return (count1 != null && count1 >= 1) && (count2 != null && count2 >= 1);
     }
@@ -275,6 +307,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (count2 == null || count2 < 1) {
             log.error("博客：{} 点赞添加用户：{} 失败了！", blogId, userId);
         }
+        // todo 后续改为 MQ 处理
+        if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
+            Blog blog = new Blog();
+            blog.setId(blogId);
+            blog.setLikeNum(count2 + 1);
+            boolean updateBlog = this.updateById(blog);
+            if (!updateBlog) {
+                log.error("用户：{} 点赞博客：{} 后，更新博客点赞数失败了！", userId, blogId);
+            }
+        }
         return (count1 != null && count1 >= 1) && (count2 != null && count2 >= 1);
     }
 
@@ -286,6 +328,60 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     @Override
     public int blogHasStars(long blogId) {
         return stringRedisTemplate.opsForSet().size(RedisConstant.REDIS_BLOG_STAR_KEY + blogId).intValue();
+    }
+
+    @Override
+    public boolean cancelStarBlog(StarRequest starRequest, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        boolean isStarred = starRequest.getIsStarred();
+        long blogId = starRequest.getBlogId();
+        if (!isStarred || this.isStarred(blogId, userId)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未收藏");
+        }
+        Long remove1 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId, String.valueOf(blogId));
+        Long remove2 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_BLOG_STAR_KEY + blogId, String.valueOf(userId));
+        // todo 后续改为 MQ 处理
+        // 更新博客的点赞数
+        Blog blog = this.getById(blogId);
+        Long starNum = blog.getStarNum();
+        if (starNum != null && starNum > 0) {
+            blog = new Blog();
+            blog.setId(blogId);
+            blog.setStarNum(starNum - 1);
+            boolean updateBlog = this.updateById(blog);
+            if (!updateBlog) {
+                log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
+            }
+        }
+        return remove1 != null && remove1 >0 && remove2 != null && remove2 > 0;
+    }
+
+    @Override
+    public boolean cancelLikeBlog(LikeRequest likeRequest, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        boolean isLiked = likeRequest.getIsLiked();
+        long blogId = likeRequest.getBlogId();
+        if (!isLiked || this.isLiked(blogId, userId)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未点赞");
+        }
+        Long remove1 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId, String.valueOf(blogId));
+        Long remove2 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_BLOG_LIKE_KEY + blogId, String.valueOf(userId));
+        // todo 后续改为 MQ 处理
+        // 更新博客的点赞数
+        Blog blog = this.getById(blogId);
+        Long likeNum = blog.getLikeNum();
+        if (likeNum != null && likeNum > 0) {
+            blog = new Blog();
+            blog.setId(blogId);
+            blog.setLikeNum(likeNum - 1);
+            boolean updateBlog = this.updateById(blog);
+            if (!updateBlog) {
+                log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
+            }
+        }
+        return remove1 != null && remove1 >0 && remove2 != null && remove2 > 0;
     }
 
 
@@ -316,8 +412,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         return b1 != null && b1 && b2 != null &&b2;
     }
-
-
 
 }
 

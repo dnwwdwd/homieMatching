@@ -24,7 +24,7 @@ public class Follow implements Serializable {
     /**
      * 被关注者 id
      */
-    private Long userId;
+    private Long followeeId;
 
     /**
      * 粉丝 id

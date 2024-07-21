@@ -12,10 +12,10 @@
             <result property="content" column="content" jdbcType="VARCHAR"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
             <result property="tags" column="tags" jdbcType="VARCHAR"/>
-            <result property="viewNum" column="viewNum" jdbcType="INTEGER"/>
-            <result property="likeNum" column="likeNum" jdbcType="INTEGER"/>
-            <result property="starNum" column="starNum" jdbcType="INTEGER"/>
-            <result property="commentNum" column="commentNum" jdbcType="INTEGER"/>
+            <result property="viewNum" column="viewNum" jdbcType="BIGINT"/>
+            <result property="likeNum" column="likeNum" jdbcType="BIGINT"/>
+            <result property="starNum" column="starNum" jdbcType="BIGINT"/>
+            <result property="commentNum" column="commentNum" jdbcType="BIGINT"/>
             <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>

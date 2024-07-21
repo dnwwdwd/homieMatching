@@ -105,6 +105,27 @@ create table hjj.follow
 )
     comment '关注表';
 
+create table hjj.blog
+(
+    id         bigint auto_increment comment 'id'
+        primary key,
+    title      varchar(128)                       not null comment '标题',
+    coverImage varchar(256)                       null comment '封面图片',
+    images     varchar(2048)                      null comment '图片列表',
+    content    text                               not null comment '内容',
+    userId     bigint                             not null comment '作者 id',
+    tags       varchar(256)                       null comment '标签列表',
+    viewNum    int      default 0                 not null comment '浏览数',
+    likeNum    int      default 0                 not null comment '点赞数',
+    starNum    int      default 0                 not null comment '收藏数',
+    commentNum int      default 0                 not null comment '评论数',
+    createTime datetime default CURRENT_TIMESTAMP not null comment '创建时间',
+    updateTime datetime default CURRENT_TIMESTAMP not null on update CURRENT_TIMESTAMP comment '更新时间',
+    isDelete   tinyint  default 0                 not null comment '是否删除'
+)
+    comment '博客表';
+
+
 
 select userId from user_team where teamId = 6 and isDelete = 0;
 

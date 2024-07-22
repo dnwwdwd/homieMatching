@@ -10,8 +10,10 @@ import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.DeleteRequest;
+import com.hjj.homieMatching.model.request.FollowQueryRequest;
 import com.hjj.homieMatching.model.request.UserLoginRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.FollowVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -185,4 +187,5 @@ public class UserController {
         List<UserVO> userVOList = userService.searchNearby(radius, loginUser);
         return ResultUtils.success(userVOList);
     }
+
 }

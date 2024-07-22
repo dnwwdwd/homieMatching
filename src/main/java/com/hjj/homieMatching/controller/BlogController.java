@@ -36,7 +36,7 @@ public class BlogController {
         return ResultUtils.success(b);
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public BaseResponse<List<BlogVO>> listBlogs(@RequestBody BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
         if (blogQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);

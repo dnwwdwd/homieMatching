@@ -66,16 +66,16 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
-        if (StringUtils.isEmpty(title) || title.length() > 10) {
+        if (title.length() < 1 || title.length() > 100) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        if (StringUtils.isEmpty(coverImage) || coverImage.length() > 256) {
+        if (StringUtils.isBlank(coverImage) || coverImage.length() > 256) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         if (images.size() > 50) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片过多");
         }
-        if (StringUtils.isEmpty(content) || content.length() > 100000) {
+        if (StringUtils.isBlank(content) || content.length() > 100000) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章内容长度超过 100000");
         }
         if (tags.size() > 5) {
@@ -90,10 +90,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         StringBuffer stringBuffer = new StringBuffer();
         stringBuffer.append('[');
         for (int i = 0; i < tags.size(); i++) {
+            stringBuffer.append('"').append(tags.get(i)).append('"');
             if (i < tags.size() - 1) {
-                stringBuffer.append(tags.get(i) + ",");
-            } else {
-                stringBuffer.append(tags.get(i));
+                stringBuffer.append(',');
             }
         }
         stringBuffer.append(']');
@@ -101,10 +100,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         stringBuffer = new StringBuffer();
         stringBuffer.append('[');
         for (int i = 0; i < images.size(); i++) {
+            stringBuffer.append('"').append(images.get(i)).append('"');
             if (i < images.size() - 1) {
-                stringBuffer.append(images.get(i) + ",");
-            } else {
-                stringBuffer.append(images.get(i));
+                stringBuffer.append(',');
             }
         }
         stringBuffer.append(']');

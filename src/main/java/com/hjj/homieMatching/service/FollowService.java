@@ -2,8 +2,11 @@ package com.hjj.homieMatching.service;
 
 import com.hjj.homieMatching.model.domain.Follow;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hjj.homieMatching.model.request.FollowQueryRequest;
+import com.hjj.homieMatching.model.vo.FollowVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author 何佳骏
@@ -17,5 +20,6 @@ public interface FollowService extends IService<Follow> {
     boolean addFollow(long followeeId, HttpServletRequest request);
 
     boolean deleteFollow(long followeeId, HttpServletRequest request);
-    
+
+    List<FollowVO> listFollows(FollowQueryRequest followQueryRequest, HttpServletRequest request);
 }

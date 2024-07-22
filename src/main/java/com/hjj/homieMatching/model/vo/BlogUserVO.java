@@ -29,6 +29,10 @@ public class BlogUserVO implements Serializable {
     private String profile;
 
     /**
+     * 标签
+     */
+    private String tags;
+    /**
      * 粉丝数
      */
     private Long fanNum;
@@ -41,7 +45,7 @@ public class BlogUserVO implements Serializable {
     /**
      * 浏览量
      */
-    private Integer viewNum;
+    private Long blogViewNum;
 
     /**
      * 是否关注

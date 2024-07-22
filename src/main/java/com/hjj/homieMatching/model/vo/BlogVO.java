@@ -39,22 +39,22 @@ public class BlogVO implements Serializable{
     /**
      * 浏览量
      */
-    private Integer viewNum;
+    private Long viewNum;
 
     /**
      * 点赞数
      */
-    private Integer likeNum;
+    private Long likeNum;
 
     /**
      * 收藏数
      */
-    private Integer starNum;
+    private Long starNum;
 
     /**
      * 评论数
      */
-    private Integer commentNum;
+    private Long commentNum;
 
     /**
      * 作者名称

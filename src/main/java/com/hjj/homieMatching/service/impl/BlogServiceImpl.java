@@ -138,7 +138,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             BeanUtils.copyProperties(blog, blogVO);
             User user = userService.getById(blog.getUserId());
             BlogUserVO blogUserVO = new BlogUserVO();
-            blogUserVO.setUsername(user.getUsername());
+            BeanUtils.copyProperties(user, blogUserVO);
             blogVO.setBlogUserVO(blogUserVO);
             return blogVO;
         }).collect(Collectors.toList());
@@ -176,11 +176,12 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             // 添加用户的浏览记录
             stringRedisTemplate.opsForSet().add(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
             // 更新文章的浏览量啊
-            blog = new Blog();
-            blog.setId(blog.getId());
-            blog.setViewNum(blog.getViewNum() + 1);
+            Blog newBlog = new Blog();
+            newBlog.setId(blog.getId());
+            // todo 修复博客浏览数和用户总浏览数不 + 1 问题
+            newBlog.setViewNum(blog.getViewNum() + 1);
             // 更新文章的浏览量，下次直接查询直接从数据库查
-            boolean updateBlog = this.updateById(blog);
+            boolean updateBlog = this.updateById(newBlog);
             if (!updateBlog) {
                 log.error("用户：{} 浏览博客：{} 后，更新博客的浏览量失败了", userId, blogId);
             }
@@ -195,7 +196,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 浏览博客：{} 后，更新作者：{} 的总浏览量失败了", userId, blogId, blogUserId);
             }
         }
-        // 不管有没有浏览过，都要增加用户的浏览记录，由于 Redis 的 ZSet 天生不存在重复元素的特性，所以就无需判断是否存在了
+        // 不管有没有浏览过，都要增加用户的浏览记录
         stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId,
                         String.valueOf(blogId), Instant.now().toEpochMilli() / TIME_UNIT);
         return blogVO;

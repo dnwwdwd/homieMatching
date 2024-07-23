@@ -85,31 +85,39 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         if (type == 0) {
             followVOList = this.lambdaQuery().eq(Follow::getFolloweeId, loginUser.getId())
                     .page(new Page<>(pageNum, pageSize)).getRecords().stream().map(follow -> {
-                FollowVO followVO = new FollowVO();
-                BeanUtils.copyProperties(follow, followVO);
-                return followVO;
-            }).collect(Collectors.toList());
+                        User follower = userService.getById(follow.getFollowerId());
+                        FollowVO followVO = new FollowVO();
+                        BeanUtils.copyProperties(follower, followVO);
+                        followVO.setIsFollowed(this.isFollowed(loginUser.getId(), follow.getFollowerId()));
+                        return followVO;
+                    }).collect(Collectors.toList());
         } else if (type == 1) {
             followVOList = this.lambdaQuery().eq(Follow::getFollowerId, loginUser.getId()).page(new Page<>(pageNum, pageSize)).getRecords().
                     stream().map(follow -> {
-                FollowVO followVO = new FollowVO();
-                BeanUtils.copyProperties(follow, followVO);
-                return followVO;
-            }).collect(Collectors.toList());
+                        User followee = userService.getById(follow.getFolloweeId());
+                        FollowVO followVO = new FollowVO();
+                        BeanUtils.copyProperties(followee, followVO);
+                        followVO.setIsFollowed(this.isFollowed(follow.getFolloweeId(), loginUser.getId()));
+                        return followVO;
+                    }).collect(Collectors.toList());
         } else if (type == 2) {
             followVOList = this.lambdaQuery().eq(Follow::getFolloweeId, userId).
                     page(new Page<>(pageNum, pageSize)).getRecords().stream().map(follow -> {
-                FollowVO followVO = new FollowVO();
-                BeanUtils.copyProperties(follow, followVO);
-                return followVO;
-            }).collect(Collectors.toList());
+                        User follower = userService.getById(follow.getFollowerId());
+                        FollowVO followVO = new FollowVO();
+                        BeanUtils.copyProperties(follower, followVO);
+                        followVO.setIsFollowed(this.isFollowed(userId, follow.getFollowerId()));
+                        return followVO;
+                    }).collect(Collectors.toList());
         } else if (type == 3) {
             followVOList = this.lambdaQuery().eq(Follow::getFollowerId, userId)
                     .page(new Page<>(pageNum, pageSize)).getRecords().stream().map(follow -> {
-                FollowVO followVO = new FollowVO();
-                BeanUtils.copyProperties(follow, followVO);
-                return followVO;
-            }).collect(Collectors.toList());
+                        User followee = userService.getById(follow.getFolloweeId());
+                        FollowVO followVO = new FollowVO();
+                        BeanUtils.copyProperties(followee, followVO);
+                        followVO.setIsFollowed(this.isFollowed(follow.getFolloweeId(), userId));
+                        return followVO;
+                    }).collect(Collectors.toList());
         }
         return followVOList;
     }

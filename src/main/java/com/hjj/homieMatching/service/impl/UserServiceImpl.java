@@ -1,6 +1,7 @@
 package com.hjj.homieMatching.service.impl;
 
 import cn.hutool.json.JSONUtil;
+import cn.hutool.system.UserInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.rholder.retry.RetryException;
@@ -15,6 +16,7 @@ import com.hjj.homieMatching.manager.RedisLimiterManager;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.utils.AlgorithmUtils;
@@ -547,11 +549,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public long hasFollowerCount(long userId) {
-        if (userId <= 0) {
+    public long hasFollowerCount(long followeeId) {
+        if (followeeId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return userMapper.hasFollowerCount(userId);
+        return userMapper.hasFollowerCount(followeeId);
     }
 
     @Override
@@ -562,9 +564,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userMapper.hasBlogCount(userId);
     }
 
+    @Override
+    public long likeBlogNum(long userId) {
+        return stringRedisTemplate.opsForSet().size(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
+    }
+
+    @Override
+    public long starBlogNum(long userId) {
+        return stringRedisTemplate.opsForSet().size(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
+    }
+
+    @Override
+    public UserInfoVO getUserInfo(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        long userId = loginUser.getId();
+        UserInfoVO userInfoVO = new UserInfoVO();
+        userInfoVO.setBlogNum(this.hasBlogCount(userId));
+        userInfoVO.setFollowNum(this.hasFollowerCount(userId));
+        userInfoVO.setStarBlogNum(this.starBlogNum(userId));
+        userInfoVO.setLikeBlogNum(this.likeBlogNum(userId));
+        return userInfoVO;
+    }
+
     private static UserVO transferToUserVO(String userVOJson) {
         return JSONUtil.toBean(userVOJson, UserVO.class);
     }
-
 
 }

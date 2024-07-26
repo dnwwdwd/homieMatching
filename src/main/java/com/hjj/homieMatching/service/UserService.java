@@ -3,6 +3,7 @@ package com.hjj.homieMatching.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,4 +66,10 @@ public interface UserService extends IService<User> {
     long hasFollowerCount(long userId);
 
     long hasBlogCount(long userId);
+
+    long likeBlogNum(long userId);
+
+    long starBlogNum(long userId);
+
+    UserInfoVO getUserInfo(HttpServletRequest request);
 }

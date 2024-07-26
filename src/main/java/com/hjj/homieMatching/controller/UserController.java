@@ -14,6 +14,7 @@ import com.hjj.homieMatching.model.request.FollowQueryRequest;
 import com.hjj.homieMatching.model.request.UserLoginRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.model.vo.FollowVO;
+import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -186,6 +187,28 @@ public class UserController {
         User loginUser = userService.getById(user.getId());
         List<UserVO> userVOList = userService.searchNearby(radius, loginUser);
         return ResultUtils.success(userVOList);
+    }
+
+    @GetMapping("/blog/count")
+    public BaseResponse<Long> loginUserBlogCount(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        long count = userService.hasBlogCount(userId);
+        return ResultUtils.success(count);
+    }
+
+    @GetMapping("/follower/count")
+    public BaseResponse<Long> loginUserFollowerCount(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        long count = userService.hasFollowerCount(userId);
+        return ResultUtils.success(count);
+    }
+
+    @GetMapping("/info/get")
+    public BaseResponse<UserInfoVO> getUserInfo(HttpServletRequest request) {
+       UserInfoVO userInfoVO = userService.getUserInfo(request);
+       return ResultUtils.success(userInfoVO);
     }
 
 }

@@ -4,6 +4,7 @@ import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
@@ -33,7 +34,7 @@ public class BlogController {
         return ResultUtils.success(b);
     }
 
-    @PostMapping("/list")
+    @PostMapping("/recommend")
     public BaseResponse<List<BlogVO>> listBlogs(@RequestBody BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
         if (blogQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -98,5 +99,25 @@ public class BlogController {
         }
         boolean b = blogService.cancelLikeBlog(likeRequest, request);
         return ResultUtils.success(b);
+    }
+
+    @PostMapping("/user/{id}")
+    public BaseResponse<List<BlogVO>> listUserBlogs(@PathVariable("id") Long id,
+                                                    @RequestBody BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
+        if (id == null || id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
+        }
+        List<BlogVO> blogVOList = blogService.listUserBlogs(id, blogQueryRequest, request);
+        return ResultUtils.success(blogVOList);
+    }
+
+    @PostMapping("/like/or/star/list")
+    public BaseResponse<List<BlogVO>> listLikedOrStarredBlogs(@RequestBody BlogQueryRequest blogQueryRequest,
+                                                              HttpServletRequest request) {
+        if (blogQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<BlogVO> blogVOList = blogService.listLikedOrStarredBlogs(blogQueryRequest, request);
+        return ResultUtils.success(blogVOList);
     }
 }

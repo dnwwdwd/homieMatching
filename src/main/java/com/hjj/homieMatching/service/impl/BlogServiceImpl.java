@@ -20,15 +20,20 @@ import com.hjj.homieMatching.service.BlogService;
 import com.hjj.homieMatching.service.FollowService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -198,7 +203,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // 不管有没有浏览过，都要增加用户的浏览记录
         stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId,
-                        String.valueOf(blogId), Instant.now().toEpochMilli() / TIME_UNIT);
+                String.valueOf(blogId), Instant.now().toEpochMilli() / TIME_UNIT);
         return blogVO;
     }
 
@@ -353,7 +358,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
-        return remove1 != null && remove1 >0 && remove2 != null && remove2 > 0;
+        return remove1 != null && remove1 > 0 && remove2 != null && remove2 > 0;
     }
 
     @Override
@@ -380,7 +385,88 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
-        return remove1 != null && remove1 >0 && remove2 != null && remove2 > 0;
+        return remove1 != null && remove1 > 0 && remove2 != null && remove2 > 0;
+    }
+
+    @Override
+    public List<BlogVO> listUserBlogs(Long id, BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        String title = blogQueryRequest.getTitle();
+        int pageSize = blogQueryRequest.getPageSize();
+        int pageNum = blogQueryRequest.getPageNum();
+        QueryWrapper<Blog> queryWrapper = null;
+        if (userId == id) {
+            queryWrapper = new QueryWrapper<>();
+            queryWrapper.like(StringUtils.isNotBlank(title), "title", title);
+            queryWrapper.eq("userId", userId);
+            List<Blog> blogList = this.page(new Page<>(pageNum, pageSize), queryWrapper).getRecords();
+            User user = userService.getById(userId);
+            return blogList.stream().map(blog -> {
+                BlogVO blogVO = new BlogVO();
+                BeanUtils.copyProperties(blog, blogVO);
+                BlogUserVO blogUserVO = new BlogUserVO();
+                BeanUtils.copyProperties(user, blogUserVO);
+                blogVO.setBlogUserVO(blogUserVO);
+                return blogVO;
+            }).collect(Collectors.toList());
+        }
+        queryWrapper = new QueryWrapper<>();
+        queryWrapper.like(StringUtils.isNotBlank(title), "title", title);
+        queryWrapper.eq("userId", id);
+        List<Blog> blogList = this.page(new Page<>(pageNum, pageSize), queryWrapper).getRecords();
+        User user = userService.getById(id);
+        return blogList.stream().map(blog -> {
+            BlogVO blogVO = new BlogVO();
+            BeanUtils.copyProperties(blog, blogVO);
+            BlogUserVO blogUserVO = new BlogUserVO();
+            BeanUtils.copyProperties(user, blogUserVO);
+            blogVO.setBlogUserVO(blogUserVO);
+            return blogVO;
+        }).collect(Collectors.toList());
+
+    }
+
+    @Override
+    public List<BlogVO> listLikedOrStarredBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
+        String title = blogQueryRequest.getTitle();
+        String userId = blogQueryRequest.getUserId();
+        Integer type = blogQueryRequest.getType();
+        int pageSize = blogQueryRequest.getPageSize();
+        int pageNum = blogQueryRequest.getPageNum();
+        User loginUser = userService.getLoginUser(request);
+        long loginUserId = loginUser.getId();
+        if (type == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Set<String> blogStringIds = new HashSet<>();
+        // 查自己收藏的
+        if (type == 0) {
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + loginUserId);
+        } else if (type == 1) { // 查自己点赞的
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + loginUserId);
+        } else if (type == 2 && userId != null) { // 查他人收藏的
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
+        } else if (type == 3 && userId != null) { // 查他人点赞的
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
+        } else if (type == 4) { // 查询自己的阅读过的博客
+            blogStringIds = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + loginUserId, 0, -1);
+        }
+        // 如果没有任何收藏或者点赞的博客 id，就直接返回空的 List
+        if (CollectionUtils.isEmpty(blogStringIds)) {
+            return new ArrayList<>();
+        }
+        List<Long> blogIds = blogStringIds.stream().map(Long::valueOf).collect(Collectors.toList());
+        List<Blog> blogList = this.baseMapper.selectBatchIds(blogIds);
+        return blogList.stream().map(blog -> {
+            BlogVO blogVO = new BlogVO();
+            BeanUtils.copyProperties(blog, blogVO);
+            BlogUserVO blogUserVO = new BlogUserVO();
+            User user = userService.getById(blog.getId());
+            BeanUtils.copyProperties(user, blogUserVO);
+            blogVO.setBlogUserVO(blogUserVO);
+            return blogVO;
+        }).collect(Collectors.toList());
     }
 
 
@@ -395,7 +481,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (b2 != null && !b2 && b1 != null && b1) {
             stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId, String.valueOf(blogId));
         }
-        return b1 != null && b1 && b2 != null &&b2;
+        return b1 != null && b1 && b2 != null && b2;
     }
 
     @Override
@@ -409,7 +495,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (b2 != null && !b2 && b1 != null && b1) {
             stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId, String.valueOf(blogId));
         }
-        return b1 != null && b1 && b2 != null &&b2;
+        return b1 != null && b1 && b2 != null && b2;
     }
 
 }

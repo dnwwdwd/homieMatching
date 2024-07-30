@@ -43,4 +43,8 @@ public interface BlogService extends IService<Blog> {
     boolean cancelStarBlog(StarRequest starRequest, HttpServletRequest request);
 
     boolean cancelLikeBlog(LikeRequest likeRequest, HttpServletRequest request);
+
+    List<BlogVO> listUserBlogs(Long id, BlogQueryRequest blogQueryRequest, HttpServletRequest request);
+
+    List<BlogVO> listLikedOrStarredBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
 }

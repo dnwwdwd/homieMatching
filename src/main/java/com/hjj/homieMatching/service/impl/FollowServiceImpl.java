@@ -6,12 +6,16 @@ import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.FollowMapper;
 import com.hjj.homieMatching.model.domain.Follow;
+import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.FollowQueryRequest;
 import com.hjj.homieMatching.model.vo.FollowVO;
 import com.hjj.homieMatching.service.FollowService;
+import com.hjj.homieMatching.service.MessageService;
 import com.hjj.homieMatching.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,11 +31,15 @@ import java.util.stream.Collectors;
  * @createDate 2024-07-19 12:46:18
  */
 @Service
+@Slf4j
 public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         implements FollowService {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private MessageService messageService;
 
     @Override
     public boolean isFollowed(long followeeId, long followerId) {
@@ -58,6 +66,13 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         Follow follow = new Follow();
         follow.setFollowerId(userId);
         follow.setFolloweeId(followeeId);
+        // 添加关注消息到消息表
+        Message message = new Message();
+        message.setFromId(userId);
+        message.setToId(followeeId);
+        message.setType(2);
+        message.setText("关注了您");
+        messageService.addFollowMessage(message);
         return this.save(follow);
     }
 

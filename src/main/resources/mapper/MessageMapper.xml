@@ -5,20 +5,23 @@
 <mapper namespace="com.hjj.homieMatching.mapper.MessageMapper">
 
     <resultMap id="BaseResultMap" type="com.hjj.homieMatching.model.domain.Message">
-        <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="type" column="type" jdbcType="TINYINT"/>
-        <result property="fromId" column="from_id" jdbcType="BIGINT"/>
-        <result property="toId" column="to_id" jdbcType="BIGINT"/>
-        <result property="data" column="data" jdbcType="VARCHAR"/>
-        <result property="isRead" column="read" jdbcType="TINYINT"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-        <result property="isDelete" column="is_delete" jdbcType="TINYINT"/>
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="TINYINT"/>
+            <result property="fromId" column="fromId" jdbcType="BIGINT"/>
+            <result property="toId" column="toId" jdbcType="BIGINT"/>
+            <result property="text" column="text" jdbcType="VARCHAR"/>
+            <result property="blogId" column="blogId" jdbcType="BIGINT"/>
+            <result property="teamId" column="teamId" jdbcType="BIGINT"/>
+            <result property="isRead" column="isRead" jdbcType="TINYINT"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,type,from_id,
-        to_id,data,read,
-        create_time,update_time,is_delete
+        id,type,fromId,
+        toId,text,blogId,teamId,
+        isRead,createTime,updateTime,
+        isDelete
     </sql>
 </mapper>

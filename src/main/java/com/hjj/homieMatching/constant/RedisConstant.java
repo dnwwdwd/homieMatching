@@ -14,6 +14,8 @@ public interface RedisConstant {
     String REDIS_USER_LIKE_BLOG_KEY = "homieMatching:user:like:blog:";
     String REDIS_USER_VIEW_BLOG_KEY = "homieMatching:user:view:blog:";
     String REDIS_USER_STAR_BLOG_KEY = "homieMatching:user:star:blog:";
+    String REDIS_USER_SCORE_RANKING_KEY = "homieMatching:user:score:ranking";
+    String REDIS_USER_SIGNIN_KEY = "homieMatching:user:signin:";
     String BLOOM_FILTER_KEY = "homieMatching:blog";
     /**
      * 用户推荐缓存

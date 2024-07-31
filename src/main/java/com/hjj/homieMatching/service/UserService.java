@@ -72,4 +72,6 @@ public interface UserService extends IService<User> {
     long starBlogNum(long userId);
 
     UserInfoVO getUserInfo(HttpServletRequest request);
+
+    List<User> getUsersScoreRank();
 }

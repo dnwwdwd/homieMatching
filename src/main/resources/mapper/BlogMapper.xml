@@ -23,8 +23,8 @@
 
     <sql id="Base_Column_List">
         id,title,coverImage,
-        images,content,tags,
-        likeNum,starNum,commentNum,
+        images,content,userId,tags,
+        viewNum,likeNum,starNum,commentNum,
         createTime,updateTime,isDelete
     </sql>
 </mapper>

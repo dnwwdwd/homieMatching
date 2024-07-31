@@ -586,6 +586,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return userInfoVO;
     }
 
+    @Override
+    public List<User> getUsersScoreRank() {
+        // 查积分最高的前十位
+        Set<String> idSet = stringRedisTemplate.opsForZSet().reverseRange(RedisConstant.REDIS_USER_SCORE_RANKING_KEY, 0, 9);
+        List<Long> idList = idSet.stream().map(Long::valueOf).collect(Collectors.toList());
+        return this.listByIds(idList);
+    }
+
+
     private static UserVO transferToUserVO(String userVOJson) {
         return JSONUtil.toBean(userVOJson, UserVO.class);
     }

@@ -27,6 +27,7 @@
             <result property="blogViewNum" column="blogViewNum" jdbcType="BIGINT"/>
             <result property="followNum" column="followNum" jdbcType="BIGINT"/>
             <result property="fanNum" column="fanNum" jdbcType="BIGINT"/>
+            <result property="score" column="score" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -35,7 +36,9 @@
         userPassword,phone,email,
         userStatus,createTime,updateTime,
         isDelete,userRole,planetCode,
-        tags,longitude,dimension
+        tags,longitude,dimension,blogNum,
+        blogViewNum,followNum,fanNum,
+        score
     </sql>
 
     <select id="hasFollowerCount" resultType="java.lang.Long">

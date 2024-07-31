@@ -8,6 +8,7 @@ import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.BlogMapper;
 import com.hjj.homieMatching.model.domain.Blog;
+import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
@@ -18,12 +19,12 @@ import com.hjj.homieMatching.model.vo.LikeRequest;
 import com.hjj.homieMatching.model.vo.StarRequest;
 import com.hjj.homieMatching.service.BlogService;
 import com.hjj.homieMatching.service.FollowService;
+import com.hjj.homieMatching.service.MessageService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +57,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private MessageService messageService;
 
     @Override
     public Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request) {
@@ -121,9 +125,13 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             User user = new User();
             user.setId(userId);
             user.setBlogNum(loginUser.getBlogNum() + 1);
+            user.setScore(loginUser.getScore() + 10);
             boolean updateUser = userService.updateById(user);
             if (!updateUser) {
-                log.error("用户：{} 发布博客：{}后， 更新博客数量失败", userId, blog.getId());
+                log.error("用户：{} 发布博客：{}后， 更新博客数量和积分失败", userId, blog.getId());
+            } else {
+                stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_SCORE_RANKING_KEY,
+                        String.valueOf(userId), loginUser.getScore() + 10);
             }
         }
         return blog.getId();
@@ -234,9 +242,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         long userId = loginUser.getId();
         long blogId = starRequest.getBlogId();
         boolean starred = starRequest.getIsStarred();
-        Long blogCount = this.lambdaQuery().eq(Blog::getId, blogId).count();
+        Blog blog = this.getById(blogId);
         // 校验参数
-        if (blogCount < 1) {
+        if (blog == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "文章不存在");
         }
         if (starred || isStarred(blogId, userId)) {
@@ -265,7 +273,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            Blog blog = new Blog();
+            blog = new Blog();
             blog.setId(blogId);
             blog.setStarNum(count2 + 1);
             boolean updateBlog = this.updateById(blog);
@@ -273,6 +281,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
+        // 添加收藏消息到消息表
+        Message message = new Message();
+        message.setFromId(userId);
+        message.setToId(blog.getUserId());
+        message.setType(0);
+        message.setText("收藏了你的博客");
+        message.setBlogId(blogId);
+        messageService.addStarMessage(message);
         return (count1 != null && count1 >= 1) && (count2 != null && count2 >= 1);
     }
 
@@ -282,9 +298,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         long userId = loginUser.getId();
         long blogId = likeRequest.getBlogId();
         boolean liked = likeRequest.getIsLiked();
-        Long blogCount = this.lambdaQuery().eq(Blog::getId, blogId).count();
+        Blog blog = this.getById(blogId);
         // 校验参数
-        if (blogCount < 1) {
+        if (blog == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "文章不存在");
         }
         if (liked) {
@@ -313,7 +329,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            Blog blog = new Blog();
+            blog = new Blog();
             blog.setId(blogId);
             blog.setLikeNum(count2 + 1);
             boolean updateBlog = this.updateById(blog);
@@ -321,6 +337,14 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 点赞博客：{} 后，更新博客点赞数失败了！", userId, blogId);
             }
         }
+        // 添加点赞消息到消息表
+        Message message = new Message();
+        message.setFromId(userId);
+        message.setToId(blog.getUserId());
+        message.setType(1);
+        message.setText("点赞了你的博客");
+        message.setBlogId(blogId);
+        messageService.addLikeMessage(message);
         return (count1 != null && count1 >= 1) && (count2 != null && count2 >= 1);
     }
 

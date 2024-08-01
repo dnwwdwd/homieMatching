@@ -273,9 +273,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            blog = new Blog();
-            blog.setId(blogId);
-            blog.setStarNum(count2 + 1);
+            Blog newBlog = new Blog();
+            newBlog.setId(blogId);
+            newBlog.setLikeNum(count2 + 1);
             boolean updateBlog = this.updateById(blog);
             if (!updateBlog) {
                 log.error("用户：{} 收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
@@ -329,9 +329,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            blog = new Blog();
-            blog.setId(blogId);
-            blog.setLikeNum(count2 + 1);
+            Blog newBlog = new Blog();
+            newBlog.setId(blogId);
+            newBlog.setLikeNum(count2 + 1);
             boolean updateBlog = this.updateById(blog);
             if (!updateBlog) {
                 log.error("用户：{} 点赞博客：{} 后，更新博客点赞数失败了！", userId, blogId);

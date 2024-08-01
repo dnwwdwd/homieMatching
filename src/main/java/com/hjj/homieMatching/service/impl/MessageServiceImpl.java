@@ -9,11 +9,13 @@ import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.MessageQueryRequest;
 import com.hjj.homieMatching.model.vo.InteractionMessageVO;
+import com.hjj.homieMatching.model.vo.MessageVO;
 import com.hjj.homieMatching.service.BlogService;
 import com.hjj.homieMatching.service.MessageService;
 import com.hjj.homieMatching.mapper.MessageMapper;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
 * @author 何佳骏
@@ -48,6 +51,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         Long blogId = message.getBlogId();
         User user = userService.getById(fromId);
         Blog blog = blogService.getById(blogId);
+        message.setAvatarUrl(user.getAvatarUrl());
         message.setText(user.getUsername() + text + blog.getTitle());
         boolean save = this.save(message);
         if (!save) {
@@ -64,6 +68,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         Long blogId = message.getBlogId();
         User user = userService.getById(fromId);
         Blog blog = blogService.getById(blogId);
+        message.setAvatarUrl(user.getAvatarUrl());
         message.setText(user.getUsername() + text + blog.getTitle());
         boolean save = this.save(message);
         if (!save) {
@@ -78,6 +83,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         Long toId = message.getToId();
         String text = message.getText();
         User user = userService.getById(fromId);
+        message.setAvatarUrl(user.getAvatarUrl());
         message.setText(user.getUsername() + text);
         boolean save = this.save(message);
         if (!save) {
@@ -97,7 +103,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public List<Message> listMessages(MessageQueryRequest messageQueryRequest, HttpServletRequest request) {
+    public List<MessageVO> listMessages(MessageQueryRequest messageQueryRequest, HttpServletRequest request) {
         Integer type = messageQueryRequest.getType();
         User loginUser = userService.getLoginUser(request);
         if (type == null) {
@@ -107,7 +113,13 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
         queryWrapper.eq("toId", loginUser.getId());
         queryWrapper.eq("type", type);
         List<Message> messageList = this.list(queryWrapper);
-        return messageList;
+        List<MessageVO> messageVOList = messageList.stream().map(message -> {
+            MessageVO messageVO = new MessageVO();
+            BeanUtils.copyProperties(message, messageVO);
+            return messageVO;
+        }).collect(Collectors.toList());
+        // todo 查询的消息变为已读
+        return messageVOList;
     }
 
 }

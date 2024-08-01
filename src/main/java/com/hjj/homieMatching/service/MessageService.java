@@ -1,9 +1,10 @@
 package com.hjj.homieMatching.service;
 
-import com.hjj.homieMatching.model.domain.Message;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.request.MessageQueryRequest;
 import com.hjj.homieMatching.model.vo.InteractionMessageVO;
+import com.hjj.homieMatching.model.vo.MessageVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -22,5 +23,5 @@ public interface MessageService extends IService<Message> {
     InteractionMessageVO listInteractionMessage(HttpServletRequest request);
 
 
-    List<Message> listMessages(MessageQueryRequest messageQueryRequest, HttpServletRequest request);
+    List<MessageVO> listMessages(MessageQueryRequest messageQueryRequest, HttpServletRequest request);
 }

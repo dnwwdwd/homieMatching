@@ -144,3 +144,15 @@ WHERE ut.isDelete = 0 AND t.isDelete = 0
 GROUP BY ut.teamId
 HAVING member_count > MAX(t.maxNum);
 
+
+## 查询我和朋友们的最后一条聊天消息
+SELECT c.*
+FROM hjj.chat c
+         JOIN (
+    SELECT MAX(id) AS max_id
+    FROM hjj.chat
+    WHERE isDelete = 0
+      AND (fromId = ? OR toId = ?) -- 假设这里的 ? 是你的用户 id
+      AND toId IN (?) -- 假设这里的 ? 是 friendIdList
+    GROUP BY toId
+) AS max_ids ON c.id = max_ids.max_id;

@@ -4,25 +4,32 @@ package com.hjj.homieMatching.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.ChatMapper;
 import com.hjj.homieMatching.model.domain.Chat;
+import com.hjj.homieMatching.model.domain.Friend;
 import com.hjj.homieMatching.model.domain.Team;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
+import com.hjj.homieMatching.model.vo.PrivateMessageVO;
 import com.hjj.homieMatching.model.vo.WebSocketVO;
 import com.hjj.homieMatching.service.ChatService;
+import com.hjj.homieMatching.service.FriendService;
 import com.hjj.homieMatching.service.TeamService;
 import com.hjj.homieMatching.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +52,9 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
 
     @Resource
     private TeamService teamService;
+
+    @Resource
+    private FriendService friendService;
 
     /**
      * 获取私人聊天
@@ -244,6 +254,36 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         List<ChatMessageVO> chatMessageVOS = returnMessage(loginUser, null, chatLambdaQueryWrapper);
         saveCache(CACHE_CHAT_HALL, String.valueOf(loginUser.getId()), chatMessageVOS);
         return chatMessageVOS;
+    }
+
+    @Override
+    public List<PrivateMessageVO> listPrivateChat(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        List<Long> frinedIdList = friendService.list(new QueryWrapper<Friend>().eq("userId", userId))
+                .stream().map(Friend::getFriendId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(frinedIdList)) {
+            return new ArrayList<>();
+        }
+        QueryWrapper<Chat> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("toId", frinedIdList);
+        queryWrapper.groupBy("toId");
+        queryWrapper.last("limit 1");
+        List<Chat> chatList = this.list(queryWrapper);
+        System.out.println(chatList);
+        List<PrivateMessageVO> privateMessageVOList = chatList.stream().map(chat -> {
+            PrivateMessageVO privateMessageVO = new PrivateMessageVO();
+            privateMessageVO.setId(chat.getId());
+            Long friendId = chat.getToId();
+            User friend = userService.getById(friendId);
+            privateMessageVO.setFriendId(friendId);
+            privateMessageVO.setAvatarUrl(friend.getAvatarUrl());
+            privateMessageVO.setText(chat.getText());
+            privateMessageVO.setCreateTime(chat.getCreateTime());
+            privateMessageVO.setUsername(friend.getUsername());
+            return privateMessageVO;
+        }).collect(Collectors.toList());
+        return privateMessageVOList;
     }
 
     /**

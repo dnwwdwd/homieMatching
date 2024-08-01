@@ -66,6 +66,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         Follow follow = new Follow();
         follow.setFollowerId(userId);
         follow.setFolloweeId(followeeId);
+        // todo 增加被关注者粉丝数，增加关注者的关注数
         // 添加关注消息到消息表
         Message message = new Message();
         message.setFromId(userId);

@@ -5,7 +5,9 @@ import com.hjj.homieMatching.model.domain.Chat;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
+import com.hjj.homieMatching.model.vo.PrivateMessageVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -76,4 +78,6 @@ public interface ChatService extends IService<Chat> {
      * @return {@link List}<{@link ChatMessageVO}>
      */
     List<ChatMessageVO> getHallChat(int chatType, User loginUser);
+
+    List<PrivateMessageVO> listPrivateChat(HttpServletRequest request);
 }

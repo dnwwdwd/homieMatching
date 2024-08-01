@@ -1,24 +1,18 @@
-package com.hjj.homieMatching.model.domain;
+package com.hjj.homieMatching.model.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
-/**
- * 
- * @TableName message
- */
-@TableName(value ="message")
+import java.io.Serializable;
+import java.util.Date;
+
 @Data
-public class Message implements Serializable {
+public class MessageVO implements Serializable {
+
     /**
-     * 主键
+     * 博客标题
      */
-    @TableId(type = IdType.AUTO)
+    private String title;
+
     private Long id;
 
     /**
@@ -65,17 +59,4 @@ public class Message implements Serializable {
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 逻辑删除
-     */
-    private Integer isDelete;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }

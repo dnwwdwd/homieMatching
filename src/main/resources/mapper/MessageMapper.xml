@@ -10,6 +10,7 @@
             <result property="fromId" column="fromId" jdbcType="BIGINT"/>
             <result property="toId" column="toId" jdbcType="BIGINT"/>
             <result property="text" column="text" jdbcType="VARCHAR"/>
+            <result property="avatarUrl" column="avatarUrl" jdbcType="VARCHAR"/>
             <result property="blogId" column="blogId" jdbcType="BIGINT"/>
             <result property="teamId" column="teamId" jdbcType="BIGINT"/>
             <result property="isRead" column="isRead" jdbcType="TINYINT"/>
@@ -20,7 +21,7 @@
 
     <sql id="Base_Column_List">
         id,type,fromId,
-        toId,text,blogId,teamId,
+        toId,text,avatarUrl,blogId,teamId,
         isRead,createTime,updateTime,
         isDelete
     </sql>

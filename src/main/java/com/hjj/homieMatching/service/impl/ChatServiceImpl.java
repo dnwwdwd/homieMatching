@@ -56,6 +56,9 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
     @Resource
     private FriendService friendService;
 
+    @Resource
+    private ChatMapper chatMapper;
+
     /**
      * 获取私人聊天
      *
@@ -265,25 +268,27 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         if (CollectionUtils.isEmpty(frinedIdList)) {
             return new ArrayList<>();
         }
-        QueryWrapper<Chat> queryWrapper = new QueryWrapper<>();
-        queryWrapper.in("toId", frinedIdList);
-        queryWrapper.groupBy("toId");
-        queryWrapper.last("limit 1");
-        List<Chat> chatList = this.list(queryWrapper);
-        System.out.println(chatList);
-        List<PrivateMessageVO> privateMessageVOList = chatList.stream().map(chat -> {
+        List<Chat> privateMessageVOList = chatMapper.getLastPrivateChatMessages(userId, frinedIdList);
+        return privateMessageVOList.stream().map(chat -> {
             PrivateMessageVO privateMessageVO = new PrivateMessageVO();
             privateMessageVO.setId(chat.getId());
-            Long friendId = chat.getToId();
-            User friend = userService.getById(friendId);
-            privateMessageVO.setFriendId(friendId);
-            privateMessageVO.setAvatarUrl(friend.getAvatarUrl());
             privateMessageVO.setText(chat.getText());
-            privateMessageVO.setCreateTime(chat.getCreateTime());
+            privateMessageVO.setCreateTime(DateUtil.format(chat.getCreateTime(), "yyyy年MM月dd日 HH:mm:ss"));
+            Long fromId = chat.getFromId();
+            Long toId = chat.getToId();
+            long friendId = 0L;
+            if (fromId != userId) {
+                friendId = fromId;
+            }
+            if (toId != userId) {
+                friendId = toId;
+            }
+            privateMessageVO.setFriendId(friendId);
+            User friend = userService.getById(friendId);
+            privateMessageVO.setAvatarUrl(friend.getAvatarUrl());
             privateMessageVO.setUsername(friend.getUsername());
             return privateMessageVO;
         }).collect(Collectors.toList());
-        return privateMessageVOList;
     }
 
     /**
@@ -330,7 +335,3 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         }).collect(Collectors.toList());
     }
 }
-
-
-
-

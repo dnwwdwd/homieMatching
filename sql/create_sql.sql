@@ -152,7 +152,12 @@ FROM hjj.chat c
     SELECT MAX(id) AS max_id
     FROM hjj.chat
     WHERE isDelete = 0
-      AND (fromId = ? OR toId = ?) -- 假设这里的 ? 是你的用户 id
-      AND toId IN (?) -- 假设这里的 ? 是 friendIdList
+      AND (fromId = 2 or toId = 2)
+        AND toId IN (4, 5, 1, 3)
     GROUP BY toId
-) AS max_ids ON c.id = max_ids.max_id;
+        ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = 2 OR c.toId = 2) order by createTime desc limit 1;
+
+
+select id from chat where toId = 2 or fromId = 2;
+
+select friendId from friend where userId = 2;

@@ -21,4 +21,21 @@
         text,chatType,createTime,
         updateTime,teamId,isDelete
     </sql>
+
+    <select id="getLastPrivateChatMessages" resultType="com.hjj.homieMatching.model.domain.Chat">
+        SELECT c.*
+        FROM hjj.chat c
+        JOIN (
+        SELECT MAX(id) AS max_id
+        FROM hjj.chat
+        WHERE isDelete = 0
+        AND (fromId = #{userId} OR toId = #{userId})
+        AND toId IN
+        <foreach item="friendId" collection="friendIdList" open="(" separator="," close=")">
+            #{friendId}
+        </foreach>
+        GROUP BY toId
+        ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = #{userId} OR c.toId = #{userId})
+        order by createTime desc limit 1;
+    </select>
 </mapper>

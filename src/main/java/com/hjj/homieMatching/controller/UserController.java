@@ -211,4 +211,10 @@ public class UserController {
        return ResultUtils.success(userInfoVO);
     }
 
+    @GetMapping("/score/rank")
+    public BaseResponse<List<User>> getUsersScoreRank() {
+        List<User> users = userService.getUsersScoreRank();
+        return ResultUtils.success(users);
+    }
+
 }

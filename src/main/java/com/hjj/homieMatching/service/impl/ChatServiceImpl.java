@@ -17,10 +17,7 @@ import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
 import com.hjj.homieMatching.model.vo.PrivateMessageVO;
 import com.hjj.homieMatching.model.vo.WebSocketVO;
-import com.hjj.homieMatching.service.ChatService;
-import com.hjj.homieMatching.service.FriendService;
-import com.hjj.homieMatching.service.TeamService;
-import com.hjj.homieMatching.service.UserService;
+import com.hjj.homieMatching.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -57,7 +54,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
     private FriendService friendService;
 
     @Resource
-    private ChatMapper chatMapper;
+    private UserTeamService userTeamService;
 
     /**
      * 获取私人聊天
@@ -229,6 +226,10 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
             saveCache(CACHE_CHAT_TEAM, String.valueOf(teamId), chatMessageVOS);
             return chatMessageVOS;
         }
+        // 判断用户是否在队伍中
+        if (!userTeamService.teamHasUser(teamId, loginUser.getId())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未加入此队伍");
+        }
         Team team = teamService.getById(teamId);
         LambdaQueryWrapper<Chat> chatLambdaQueryWrapper = new LambdaQueryWrapper<>();
         chatLambdaQueryWrapper.eq(Chat::getChatType, chatType).eq(Chat::getTeamId, teamId);
@@ -268,7 +269,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         if (CollectionUtils.isEmpty(frinedIdList)) {
             return new ArrayList<>();
         }
-        List<Chat> privateMessageVOList = chatMapper.getLastPrivateChatMessages(userId, frinedIdList);
+        List<Chat> privateMessageVOList = this.baseMapper.getLastPrivateChatMessages(userId, frinedIdList);
         return privateMessageVOList.stream().map(chat -> {
             PrivateMessageVO privateMessageVO = new PrivateMessageVO();
             privateMessageVO.setId(chat.getId());

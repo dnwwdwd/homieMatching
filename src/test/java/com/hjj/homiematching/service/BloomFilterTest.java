@@ -1,6 +1,5 @@
 package com.hjj.homiematching.service;
 
-import cn.hutool.bloomfilter.BloomFilterUtil;
 import org.junit.jupiter.api.Test;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RedissonClient;
@@ -21,10 +20,10 @@ public class BloomFilterTest {
         System.out.println(expectedInsertions);
         bloomFilter.getFalseProbability();
         bloomFilter.getHashIterations();
-        bloomFilter.tryInit();
-        bloomFilter.getSize();
-        bloomFilter.addListener();
-        bloomFilter.copy();
-        bloomFilter.clearExpire();
+//        bloomFilter.tryInit();
+//        bloomFilter.getSize();
+//        bloomFilter.addListener();
+//        bloomFilter.copy();
+//        bloomFilter.clearExpire();
     }
 }

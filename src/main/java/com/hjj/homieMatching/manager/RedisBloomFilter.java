@@ -31,11 +31,11 @@ public class RedisBloomFilter {
         return bloomFilter.contains(id);
     }
 
-    public void addBlog(String key, long id) {
+    public void addValueToFilter(String key, long id) {
         RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(key);
         boolean add = bloomFilter.add(id);
         if (!add) {
-            log.error("布隆过滤器：{} 添加博客：{} 失败", key, id);
+            log.error("布隆过滤器：{} 添加元素（博客/用户）：{} 失败", key, id);
         }
     }
 }

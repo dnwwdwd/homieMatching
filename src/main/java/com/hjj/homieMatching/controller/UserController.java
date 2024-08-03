@@ -8,12 +8,14 @@ import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.model.domain.Feedback;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.request.FollowQueryRequest;
 import com.hjj.homieMatching.model.request.UserLoginRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.model.vo.FollowVO;
+import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -215,6 +218,17 @@ public class UserController {
     public BaseResponse<List<User>> getUsersScoreRank() {
         List<User> users = userService.getUsersScoreRank();
         return ResultUtils.success(users);
+    }
+
+    @PostMapping("/sign/in")
+    public void userSigIn(HttpServletRequest request) {
+        userService.userSigIn(request);
+    }
+
+    @GetMapping("/sign/in/info/get")
+    public BaseResponse<SignInInfoVO> getSignedDates(HttpServletRequest request) {
+        SignInInfoVO signInInfoVO = userService.getSignedDates(request);
+        return ResultUtils.success(signInInfoVO);
     }
 
 }

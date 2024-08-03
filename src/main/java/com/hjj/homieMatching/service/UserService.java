@@ -3,10 +3,12 @@ package com.hjj.homieMatching.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 public interface UserService extends IService<User> {
@@ -74,4 +76,10 @@ public interface UserService extends IService<User> {
     UserInfoVO getUserInfo(HttpServletRequest request);
 
     List<User> getUsersScoreRank();
+
+    void userSigIn(HttpServletRequest request);
+
+    boolean isSignedIn(HttpServletRequest request);
+
+    SignInInfoVO getSignedDates(HttpServletRequest request);
 }

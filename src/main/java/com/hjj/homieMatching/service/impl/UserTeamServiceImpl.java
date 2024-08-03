@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 public class UserTeamServiceImpl extends ServiceImpl<UserTeamMapper, UserTeam>
     implements UserTeamService{
 
+    @Override
+    public boolean teamHasUser(long teamId, long userId) {
+        return this.lambdaQuery().eq(UserTeam::getTeamId, teamId).eq(UserTeam::getUserId, userId).count() > 0;
+    }
 }
 
 

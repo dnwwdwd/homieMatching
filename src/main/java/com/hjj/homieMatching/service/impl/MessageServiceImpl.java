@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.mapper.MessageMapper;
 import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
@@ -12,7 +13,6 @@ import com.hjj.homieMatching.model.vo.InteractionMessageVO;
 import com.hjj.homieMatching.model.vo.MessageVO;
 import com.hjj.homieMatching.service.BlogService;
 import com.hjj.homieMatching.service.MessageService;
-import com.hjj.homieMatching.mapper.MessageMapper;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,9 +94,12 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     public InteractionMessageVO listInteractionMessage(HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
-        long starMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>().eq("toId", userId).eq("type", 0));
-        long likeMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>().eq("toId", userId).eq("type", 1));
-        long followMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>().eq("toId", userId).eq("type", 2));
+        long starMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>()
+                .eq("toId", userId).eq("type", 0).eq("isRead", 0));
+        long likeMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>()
+                .eq("toId", userId).eq("type", 1).eq("isRead", 0));
+        long followMessageNum = this.baseMapper.selectCount(new QueryWrapper<Message>()
+                .eq("toId", userId).eq("type", 2).eq("isRead", 0));
         return new InteractionMessageVO(likeMessageNum, starMessageNum, followMessageNum);
     }
 
@@ -118,7 +119,18 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
             BeanUtils.copyProperties(message, messageVO);
             return messageVO;
         }).collect(Collectors.toList());
-        // todo 查询的消息变为已读
+        // 查询的消息变为已读
+        // todo 可改为 MQ 执行
+        List<Message> readedMessageList = messageList.stream().map(message -> {
+            Message readedMessage = new Message();
+            readedMessage.setId(message.getId());
+            readedMessage.setIsRead(1);
+            return readedMessage;
+        }).collect(Collectors.toList());
+        boolean b = this.updateBatchById(readedMessageList, 100);
+        if (!b) {
+            log.error("用户：{} 读取消息后将消息改为已读失败了！", loginUser.getId());
+        }
         return messageVOList;
     }
 

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.manager.RedisBloomFilter;
 import com.hjj.homieMatching.mapper.BlogMapper;
 import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.domain.Message;
@@ -60,6 +61,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
 
     @Resource
     private MessageService messageService;
+
+    @Resource
+    private RedisBloomFilter redisBloomFilter;
 
     @Override
     public Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request) {
@@ -134,6 +138,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                         String.valueOf(userId), loginUser.getScore() + 10);
             }
         }
+        // todo 添加博客至博客的布隆过滤器
+        redisBloomFilter.createBloomFilter(RedisConstant.BLOG_BLOOM_FILTER_KEY, 1000, 0.01);
+        redisBloomFilter.addValueToFilter(RedisConstant.BLOG_BLOOM_FILTER_KEY, blog.getId());
         return blog.getId();
     }
 
@@ -162,9 +169,12 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     public BlogVO getBlogDetailById(Long id, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
+        if (redisBloomFilter.isContained(RedisConstant.BLOG_BLOOM_FILTER_KEY, id)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "该博客不存在");
+        }
         Blog blog = this.getById(id);
         if (blog == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "该博客不存在");
         }
         Long blogId = blog.getId();
         BlogVO blogVO = new BlogVO();

@@ -1,7 +1,6 @@
 package com.hjj.homieMatching.service.impl;
 
 import cn.hutool.json.JSONUtil;
-import cn.hutool.system.UserInfo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.rholder.retry.RetryException;
@@ -12,14 +11,18 @@ import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.manager.RedisBloomFilter;
 import com.hjj.homieMatching.manager.RedisLimiterManager;
+import com.hjj.homieMatching.manager.SignInManager;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import com.hjj.homieMatching.utils.AlgorithmUtils;
+import com.hjj.homieMatching.utils.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.math3.util.Pair;
@@ -52,13 +55,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     StringRedisTemplate stringRedisTemplate;
 
     @Resource
-    private UserMapper userMapper;
-
-    @Resource
     private Retryer<Boolean> retryer;
 
     @Resource
     private RedisLimiterManager redisLimiterManager;
+
+    @Resource
+    private SignInManager signInManager;
+
+    @Resource
+    private RedisBloomFilter redisBloomFilter;
 
     /**
      * 盐值为'hjj'，用以混淆密码
@@ -105,7 +111,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         redisLimiterManager.doRateLimiter(RedisConstant.REDIS_LIMITER_REGISTER + ip);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
-        Long userCount = userMapper.selectCount(queryWrapper);
+        Long userCount = this.baseMapper.selectCount(queryWrapper);
         if (userCount > 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号已存在");
         }
@@ -144,10 +150,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User updateUser = new User();
         updateUser.setId(userId);
         updateUser.setPlanetCode(String.valueOf(userId));
+        // 添加至用户布隆过滤器
+        redisBloomFilter.createBloomFilter(RedisConstant.USER_BLOOM_FILTER_KEY, 1000, 1);
+        redisBloomFilter.addValueToFilter(RedisConstant.USER_BLOOM_FILTER_KEY, userId);
         boolean updateResult = this.updateById(updateUser);
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
         } else {
+            // 删除用户缓存
             Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
             for (String key : keys) {
                 try {
@@ -188,7 +198,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<User> queryWrapper=new QueryWrapper<>();
         queryWrapper.eq("userAccount",userAccount);
         queryWrapper.eq("userPassword",encryptPassword);
-        User user = userMapper.selectOne(queryWrapper);
+        User user = this.baseMapper.selectOne(queryWrapper);
         // 用户不存在
         if(user==null){
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号密码不匹配");
@@ -248,7 +258,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         // 1.先查询所有用户
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.ne("id", loginUser.getId());
-        List<User> userList = userMapper.selectList(queryWrapper);
+        List<User> userList = this.baseMapper.selectList(queryWrapper);
         Gson gson = new Gson();
         // 2.在内存中判断是否包含要求的标签
         List<User> userListResult = userList.stream().filter(user -> {
@@ -304,11 +314,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if(!isAdmin(loginUser) && userId != loginUser.getId()){
             throw new BusinessException(ErrorCode.NO_AUTH);
         }
-        User oldUser = userMapper.selectById(userId);
+        User oldUser = this.baseMapper.selectById(userId);
         if (oldUser == null){
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        int i = userMapper.updateById(user);
+        int i = this.baseMapper.updateById(user);
         if (i > 0) {
             Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
             for (String key : keys) {
@@ -347,7 +357,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         for(String tagName : tagNameList){
             queryWrapper = queryWrapper.like("tags", tagName);
         }
-        List<User> userList = userMapper.selectList(queryWrapper);
+        List<User> userList = this.baseMapper.selectList(queryWrapper);
         return userList.stream().map(this::getSafetyUser).collect(Collectors.toList());
     }
 
@@ -553,7 +563,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (followeeId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return userMapper.hasFollowerCount(followeeId);
+        return this.baseMapper.hasFollowerCount(followeeId);
     }
 
     @Override
@@ -561,7 +571,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        return userMapper.hasBlogCount(userId);
+        return this.baseMapper.hasBlogCount(userId);
     }
 
     @Override
@@ -595,6 +605,41 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         List<Long> idList = idSet.stream().map(Long::valueOf).collect(Collectors.toList());
         return this.listByIds(idList);
+    }
+
+    @Override
+    public void userSigIn(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        long userId = loginUser.getId();
+        String key = RedisConstant.USER_SIGNIN_KEY + DateUtils.getNowYear() + ":" + userId;
+        if (signInManager.isSignIn(key)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "您今天已经签过到了");
+        }
+        signInManager.signIn(key);
+        // 签到增加积分
+        User user = new User();
+        user.setId(userId);
+        user.setScore(user.getScore() + 10);
+        boolean b = this.updateById(user);
+        if (!b) {
+            log.error("用户：{} 签到增加积分失败", userId);
+        }
+    }
+
+    @Override
+    public boolean isSignedIn(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        long userId = loginUser.getId();
+        String key = RedisConstant.USER_SIGNIN_KEY + DateUtils.getNowYear() + ":" + userId;
+        return signInManager.isSignIn(key);
+    }
+
+    @Override
+    public SignInInfoVO getSignedDates(HttpServletRequest request) {
+        User loginUser = this.getLoginUser(request);
+        long userId = loginUser.getId();
+        String key = RedisConstant.USER_SIGNIN_KEY + DateUtils.getNowYear() + ":" + userId;
+        return signInManager.getSignInInfo(key);
     }
 
 

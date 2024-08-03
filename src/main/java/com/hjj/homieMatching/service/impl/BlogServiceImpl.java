@@ -429,6 +429,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         String title = blogQueryRequest.getTitle();
         int pageSize = blogQueryRequest.getPageSize();
         int pageNum = blogQueryRequest.getPageNum();
+        if (!redisBloomFilter.isContained(RedisConstant.USER_BLOOM_FILTER_KEY, id)) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+        }
         QueryWrapper<Blog> queryWrapper = null;
         if (userId == id) {
             queryWrapper = new QueryWrapper<>();
@@ -450,6 +453,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         queryWrapper.eq("userId", id);
         List<Blog> blogList = this.page(new Page<>(pageNum, pageSize), queryWrapper).getRecords();
         User user = userService.getById(id);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户存在");
+        }
         return blogList.stream().map(blog -> {
             BlogVO blogVO = new BlogVO();
             BeanUtils.copyProperties(blog, blogVO);

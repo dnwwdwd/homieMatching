@@ -11,8 +11,6 @@ public class SignInInfoVO implements Serializable {
 
     private List<Date> signedInDates;
 
-    private List<Date> unSignedInDates;
-
     private int signedInDayNum; // 已签到天数
 
     private boolean isSignedIn;

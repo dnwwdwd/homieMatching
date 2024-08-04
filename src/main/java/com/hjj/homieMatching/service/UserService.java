@@ -77,7 +77,7 @@ public interface UserService extends IService<User> {
 
     List<User> getUsersScoreRank();
 
-    void userSigIn(HttpServletRequest request);
+    boolean userSigIn(HttpServletRequest request);
 
     boolean isSignedIn(HttpServletRequest request);
 

@@ -32,7 +32,7 @@ public class BitMapTest {
     public void signInTest() {
         String key = RedisConstant.USER_SIGNIN_KEY + DateUtils.getNowYear() + ":2";
         RBitSet bitSet = redissonClient.getBitSet(key);
-        bitSet.set(216, true);
+        bitSet.set(215, true);
         System.out.println(signInManager.isSignIn(key));
 
     }

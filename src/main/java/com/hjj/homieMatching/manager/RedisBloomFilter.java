@@ -1,10 +1,7 @@
 package com.hjj.homieMatching.manager;
 
-import com.hjj.homieMatching.common.ErrorCode;
-import com.hjj.homieMatching.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RBloomFilter;
-import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -14,28 +11,31 @@ import javax.annotation.Resource;
 public class RedisBloomFilter {
 
     @Resource
-    private RedissonClient redissonClient;
+    private RBloomFilter<Long> blogBloomFilter;
 
-    public void createBloomFilter(String key, int expectedInsertions, double fpp) {
-        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(key);
-        boolean b = bloomFilter.tryInit(expectedInsertions, fpp);
-        if (!b) {
-            log.error("布隆过滤器：{} 初始化失败", key);
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "布隆过滤器初始化失败");
-        }
+    @Resource
+    private RBloomFilter<Long> userBloomFilter;
 
+    public boolean userIsContained(long id) {
+        return userBloomFilter.contains(id);
     }
 
-    public boolean isContained(String key, long id) {
-        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(key);
-        return bloomFilter.contains(id);
+
+    public boolean blogIsContained(long id) {
+        return blogBloomFilter.contains(id);
     }
 
-    public void addValueToFilter(String key, long id) {
-        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(key);
-        boolean add = bloomFilter.add(id);
+    public void addUserToFilter(long id) {
+        boolean add = userBloomFilter.add(id);
         if (!add) {
-            log.error("布隆过滤器：{} 添加元素（博客/用户）：{} 失败", key, id);
+            log.error("用户布隆过滤器：{} 添加元素（博客/用户）：{} 失败", userBloomFilter.getName(), id);
+        }
+    }
+
+    public void addBlogToFilter(long id) {
+        boolean add = blogBloomFilter.add(id);
+        if (!add) {
+            log.error("文章布隆过滤器：{} 添加元素（博客/用户）：{} 失败", blogBloomFilter.getName(), id);
         }
     }
 }

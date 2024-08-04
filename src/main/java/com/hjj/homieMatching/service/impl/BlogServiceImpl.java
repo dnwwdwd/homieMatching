@@ -138,9 +138,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                         String.valueOf(userId), loginUser.getScore() + 10);
             }
         }
-        // todo 添加博客至博客的布隆过滤器
-        redisBloomFilter.createBloomFilter(RedisConstant.BLOG_BLOOM_FILTER_KEY, 1000, 0.01);
-        redisBloomFilter.addValueToFilter(RedisConstant.BLOG_BLOOM_FILTER_KEY, blog.getId());
+        // 添加博客至博客的布隆过滤器
+        redisBloomFilter.addBlogToFilter(blog.getId());
         return blog.getId();
     }
 
@@ -169,7 +168,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     public BlogVO getBlogDetailById(Long id, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
-        if (redisBloomFilter.isContained(RedisConstant.BLOG_BLOOM_FILTER_KEY, id)) {
+        if (!redisBloomFilter.blogIsContained(id)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "该博客不存在");
         }
         Blog blog = this.getById(id);
@@ -429,7 +428,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         String title = blogQueryRequest.getTitle();
         int pageSize = blogQueryRequest.getPageSize();
         int pageNum = blogQueryRequest.getPageNum();
-        if (!redisBloomFilter.isContained(RedisConstant.USER_BLOOM_FILTER_KEY, id)) {
+        if (!redisBloomFilter.userIsContained(id)) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
         }
         QueryWrapper<Blog> queryWrapper = null;

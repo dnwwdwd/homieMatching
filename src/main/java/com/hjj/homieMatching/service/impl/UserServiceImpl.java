@@ -151,8 +151,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         updateUser.setId(userId);
         updateUser.setPlanetCode(String.valueOf(userId));
         // 添加至用户布隆过滤器
-        redisBloomFilter.createBloomFilter(RedisConstant.USER_BLOOM_FILTER_KEY, 1000, 1);
-        redisBloomFilter.addValueToFilter(RedisConstant.USER_BLOOM_FILTER_KEY, userId);
+        redisBloomFilter.addUserToFilter(userId);
         boolean updateResult = this.updateById(updateUser);
         if (!updateResult) {
             log.info("{}用户星球编号设置失败", userId);
@@ -608,7 +607,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public void userSigIn(HttpServletRequest request) {
+    public boolean userSigIn(HttpServletRequest request) {
         User loginUser = this.getLoginUser(request);
         long userId = loginUser.getId();
         String key = RedisConstant.USER_SIGNIN_KEY + DateUtils.getNowYear() + ":" + userId;
@@ -617,13 +616,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         signInManager.signIn(key);
         // 签到增加积分
+        loginUser = this.getById(userId);
         User user = new User();
         user.setId(userId);
-        user.setScore(user.getScore() + 10);
+        user.setScore(loginUser.getScore() + 10);
         boolean b = this.updateById(user);
         if (!b) {
             log.error("用户：{} 签到增加积分失败", userId);
         }
+        return b;
     }
 
     @Override

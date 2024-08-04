@@ -221,8 +221,9 @@ public class UserController {
     }
 
     @PostMapping("/sign/in")
-    public void userSigIn(HttpServletRequest request) {
-        userService.userSigIn(request);
+    public BaseResponse<Boolean> userSigIn(HttpServletRequest request) {
+        boolean b = userService.userSigIn(request);
+        return ResultUtils.success(b);
     }
 
     @GetMapping("/sign/in/info/get")

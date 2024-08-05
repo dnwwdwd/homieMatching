@@ -14,14 +14,8 @@ import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
-import com.hjj.homieMatching.model.vo.BlogUserVO;
-import com.hjj.homieMatching.model.vo.BlogVO;
-import com.hjj.homieMatching.model.vo.LikeRequest;
-import com.hjj.homieMatching.model.vo.StarRequest;
-import com.hjj.homieMatching.service.BlogService;
-import com.hjj.homieMatching.service.FollowService;
-import com.hjj.homieMatching.service.MessageService;
-import com.hjj.homieMatching.service.UserService;
+import com.hjj.homieMatching.model.vo.*;
+import com.hjj.homieMatching.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +58,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
 
     @Resource
     private RedisBloomFilter redisBloomFilter;
+
+    @Resource
+    private CommentService commentService;
 
     @Override
     public Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request) {
@@ -189,8 +186,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         // 查询文章是否点赞、收藏
         blogVO.setIsLiked(isLiked(blogId, userId));
         blogVO.setIsStarred(isStarred(blogId, userId));
-        // todo 查询文章的相关评论
-
+        // 查询文章的相关评论
+        List<CommentVO> commentVOList = commentService.listComments(blogId);
+        blogVO.setCommentVOList(commentVOList);
         // todo 后续改为 MQ 处理
         Boolean isViewed = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
         // 增加文章浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有文章浏览量之和）
@@ -200,7 +198,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             // 更新文章的浏览量啊
             Blog newBlog = new Blog();
             newBlog.setId(blog.getId());
-            // todo 修复博客浏览数和用户总浏览数不 + 1 问题
             newBlog.setViewNum(blog.getViewNum() + 1);
             // 更新文章的浏览量，下次直接查询直接从数据库查
             boolean updateBlog = this.updateById(newBlog);

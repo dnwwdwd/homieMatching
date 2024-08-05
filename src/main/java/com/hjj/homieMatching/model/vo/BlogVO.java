@@ -3,6 +3,7 @@ package com.hjj.homieMatching.model.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class BlogVO implements Serializable{
@@ -57,7 +58,12 @@ public class BlogVO implements Serializable{
     private Long commentNum;
 
     /**
-     * 作者名称
+     * 评论列表
+     */
+    private List<CommentVO> commentVOList;
+
+    /**
+     * 博客作者 VO
      */
     private BlogUserVO blogUserVO;
 

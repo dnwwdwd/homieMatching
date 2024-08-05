@@ -161,3 +161,5 @@ FROM hjj.chat c
 select id from chat where toId = 2 or fromId = 2;
 
 select friendId from friend where userId = 2;
+
+truncate table blog;

@@ -1,6 +1,7 @@
 package com.hjj.homieMatching.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
@@ -9,6 +10,7 @@ import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.manager.RedisBloomFilter;
 import com.hjj.homieMatching.mapper.BlogMapper;
 import com.hjj.homieMatching.model.domain.Blog;
+import com.hjj.homieMatching.model.domain.Comment;
 import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
@@ -22,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -63,6 +66,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     private CommentService commentService;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long addBlog(BlogAddRequest blogAddRequest, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
@@ -80,13 +84,13 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         if (StringUtils.isBlank(coverImage) || coverImage.length() > 256) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "封面图片必须上传");
         }
         if (images.size() > 50) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片过多");
         }
         if (StringUtils.isBlank(content) || content.length() > 100000) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章内容长度超过 100000");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "博客内容长度超过 100000");
         }
         if (tags.size() > 5) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "标签不得超过 5 个");
@@ -179,27 +183,27 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Long blogUserId = blog.getUserId();
         User user = userService.getById(blogUserId);
         BeanUtils.copyProperties(user, blogUserVO);
-        // 查询文章作者的文章数、粉丝数、总浏览量和是否关注他
-        // todo 将查询作者的文章数粉丝数，总浏览量都改为查询数据库（发布文章后，关注后，浏览后都要把数据存在数据库中）
+        // 查询博客作者的博客数、粉丝数、总浏览量和是否关注他
+        // todo 将查询作者的博客数粉丝数，总浏览量都改为查询数据库（发布博客后，关注后，浏览后都要把数据存在数据库中）
         blogUserVO.setIsFollowed(followService.isFollowed(blogUserId, userId));
         blogVO.setBlogUserVO(blogUserVO);
-        // 查询文章是否点赞、收藏
+        // 查询博客是否点赞、收藏
         blogVO.setIsLiked(isLiked(blogId, userId));
         blogVO.setIsStarred(isStarred(blogId, userId));
-        // 查询文章的相关评论
-        List<CommentVO> commentVOList = commentService.listComments(blogId);
+        // 查询博客的相关评论
+        List<CommentVO> commentVOList = commentService.listComments(blogId, request);
         blogVO.setCommentVOList(commentVOList);
         // todo 后续改为 MQ 处理
         Boolean isViewed = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
-        // 增加文章浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有文章浏览量之和）
+        // 增加博客浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有博客浏览量之和）
         if (isViewed != null && !isViewed) {
             // 添加用户的浏览记录
             stringRedisTemplate.opsForSet().add(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
-            // 更新文章的浏览量啊
+            // 更新博客的浏览量啊
             Blog newBlog = new Blog();
             newBlog.setId(blog.getId());
             newBlog.setViewNum(blog.getViewNum() + 1);
-            // 更新文章的浏览量，下次直接查询直接从数据库查
+            // 更新博客的浏览量，下次直接查询直接从数据库查
             boolean updateBlog = this.updateById(newBlog);
             if (!updateBlog) {
                 log.error("用户：{} 浏览博客：{} 后，更新博客的浏览量失败了", userId, blogId);
@@ -207,8 +211,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             // 更新用户总浏览量
             user = new User();
             user.setId(blogUserId);
-            Long totalViewNum = baseMapper.selectObjs(new QueryWrapper<Blog>().select("SUM(viewNum)"))
-                    .stream().findFirst().map(obj -> (long) obj).orElse(0L);
+            Long totalViewNum = this.baseMapper.selectBlogTotalViewNum();
             user.setBlogViewNum(totalViewNum);
             boolean updateUser = userService.updateById(user);
             if (!updateUser) {
@@ -222,22 +225,56 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteBlog(DeleteRequest deleteRequest, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
         long id = deleteRequest.getId();
         if (id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章不存在");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "博客不存在");
         }
-        QueryWrapper<Blog> queryWrapper = new QueryWrapper();
-        queryWrapper.eq("id", id);
-        long count = this.count(queryWrapper);
-        if (count < 1) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文章不存在");
+        Blog blog = this.getById(id);
+        if (blog == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "博客不存在");
+        }
+        if (blog.getUserId() != userId || !userService.isAdmin(request)) {
+            throw new BusinessException(ErrorCode.NO_AUTH, "你没有权限删除该博客");
         }
         boolean b = this.removeById(id);
         if (!b) {
-            log.error("用户：{} 删除文章 {} 失败", userId, id);
+            log.error("用户：{} 删除博客 {} 失败", userId, id);
+        }
+        // 删除和博客相关的记录，用户关于此博客的浏览记录、点赞记录、收藏记录
+        Set<String> viewedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId);
+        Set<String> likedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
+        Set<String> starredMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
+        for (String viewedMemberId : viewedMembersId) {
+            stringRedisTemplate.opsForZSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(viewedMemberId), String.valueOf(id));
+        }
+        for (String likedMemberId : likedMembersId) {
+            stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(likedMemberId), String.valueOf(id));
+        }
+        for (String starredMemberId : starredMembersId) {
+            stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(starredMemberId), String.valueOf(id));
+        }
+        // 删除博客的收藏记录
+        stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_STAR_KEY + id);
+        stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_LIKE_KEY + id);
+        stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_VIEW_KEY + id);
+        // 减少博客作者的总浏览数
+        UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<>();
+        userUpdateWrapper.eq("id", blog.getUserId());
+        userUpdateWrapper.setSql("blogNum = blogNum - 1");
+        userUpdateWrapper.setSql("blogViewNum = blogViewNum -" + blog.getViewNum());
+        boolean updateUser = userService.update(userUpdateWrapper);
+        if (!updateUser) {
+            log.error("用户：{} 删除博客 {} 后，更新作者：{} 的总浏览量失败了", userId, id, blog.getUserId());
+        }
+        QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
+        commentQueryWrapper.eq("blogId", id);
+        boolean remove = commentService.remove(commentQueryWrapper);
+        if (!remove) {
+            log.error("用户：{} 删除博客 {} 后，删除博客的评论记录失败了", userId, id);
         }
         return b;
     }
@@ -251,7 +288,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Blog blog = this.getById(blogId);
         // 校验参数
         if (blog == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR, "文章不存在");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "博客不存在");
         }
         if (starred || isStarred(blogId, userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您已收藏");
@@ -279,11 +316,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            Blog newBlog = new Blog();
-            newBlog.setId(blogId);
-            newBlog.setLikeNum(count2 + 1);
-            boolean updateBlog = this.updateById(blog);
-            if (!updateBlog) {
+            UpdateWrapper<Blog> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.setSql("starNum = starNum + 1");
+            updateWrapper.eq("id", blogId);
+            boolean update = this.update(updateWrapper);
+            if (!update) {
                 log.error("用户：{} 收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
@@ -307,7 +344,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Blog blog = this.getById(blogId);
         // 校验参数
         if (blog == null) {
-            throw new BusinessException(ErrorCode.NULL_ERROR, "文章不存在");
+            throw new BusinessException(ErrorCode.NULL_ERROR, "博客不存在");
         }
         if (liked) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您已点赞过");
@@ -335,11 +372,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }
         // todo 后续改为 MQ 处理
         if (count1 != null && count1 > 0 && count2 != null && count2 > 0) {
-            Blog newBlog = new Blog();
-            newBlog.setId(blogId);
-            newBlog.setLikeNum(count2 + 1);
-            boolean updateBlog = this.updateById(blog);
-            if (!updateBlog) {
+            UpdateWrapper<Blog> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.setSql("likeNum = likeNum + 1");
+            updateWrapper.eq("id", blogId);
+            boolean update = this.update(updateWrapper);
+            if (!update) {
                 log.error("用户：{} 点赞博客：{} 后，更新博客点赞数失败了！", userId, blogId);
             }
         }
@@ -370,7 +407,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         long userId = loginUser.getId();
         boolean isStarred = starRequest.getIsStarred();
         long blogId = starRequest.getBlogId();
-        if (!isStarred || this.isStarred(blogId, userId)) {
+        if (!isStarred || !this.isStarred(blogId, userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未收藏");
         }
         Long remove1 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId, String.valueOf(blogId));
@@ -380,11 +417,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Blog blog = this.getById(blogId);
         Long starNum = blog.getStarNum();
         if (starNum != null && starNum > 0) {
-            blog = new Blog();
-            blog.setId(blogId);
-            blog.setStarNum(starNum - 1);
-            boolean updateBlog = this.updateById(blog);
-            if (!updateBlog) {
+            UpdateWrapper<Blog> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.setSql("starNum = starNum - 1");
+            updateWrapper.eq("id", blogId);
+            boolean update = this.update(updateWrapper);
+            if (!update) {
                 log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
@@ -397,7 +434,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         long userId = loginUser.getId();
         boolean isLiked = likeRequest.getIsLiked();
         long blogId = likeRequest.getBlogId();
-        if (!isLiked || this.isLiked(blogId, userId)) {
+        if (!isLiked || !this.isLiked(blogId, userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未点赞");
         }
         Long remove1 = stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId, String.valueOf(blogId));
@@ -407,11 +444,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Blog blog = this.getById(blogId);
         Long likeNum = blog.getLikeNum();
         if (likeNum != null && likeNum > 0) {
-            blog = new Blog();
-            blog.setId(blogId);
-            blog.setLikeNum(likeNum - 1);
-            boolean updateBlog = this.updateById(blog);
-            if (!updateBlog) {
+            UpdateWrapper<Blog> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.setSql("likeNum = likeNum - 1");
+            updateWrapper.eq("id", blogId);
+            boolean update = this.update(updateWrapper);
+            if (!update) {
                 log.error("用户：{} 取消收藏博客：{} 后，更新博客收藏数失败了！", userId, blogId);
             }
         }
@@ -510,7 +547,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     public boolean isStarred(long blogId, long userId) {
         Boolean b1 = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId, String.valueOf(blogId));
         Boolean b2 = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_STAR_KEY + blogId, String.valueOf(userId));
-        // 文章收藏 set 和用户收藏 set 比如都存在对方，否则删除
+        // 博客收藏 set 和用户收藏 set 比如都存在对方，否则删除
         if (b1 != null && !b1 && b2 != null && b2) {
             stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_STAR_KEY + blogId, String.valueOf(userId));
         }
@@ -524,7 +561,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     public boolean isLiked(long blogId, long userId) {
         Boolean b1 = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId, String.valueOf(blogId));
         Boolean b2 = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_LIKE_KEY + blogId, String.valueOf(userId));
-        // 文章收藏 set 和用户收藏 set 比如都存在对方，否则删除
+        // 博客收藏 set 和用户收藏 set 比如都存在对方，否则删除
         if (b1 != null && !b1 && b2 != null && b2) {
             stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_LIKE_KEY + blogId, String.valueOf(userId));
         }

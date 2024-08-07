@@ -2,6 +2,7 @@ package com.hjj.homieMatching.mapper;
 
 import com.hjj.homieMatching.model.domain.Blog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
 
 /**
 * @author hejiajun
@@ -10,6 +11,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @Entity com.hjj.homieMatching.model.domain.Blog
 */
 public interface BlogMapper extends BaseMapper<Blog> {
+
+    @Select("select sum(viewNum) from blog")
+    long selectBlogTotalViewNum();
 
 }
 

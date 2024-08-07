@@ -84,11 +84,11 @@ public class BlogVO implements Serializable{
 
     private static final long serialVersionUID = 1L;
 
-    public void setIsLiked(boolean liked) {
-        isLiked = liked;
+    public void setIsLiked(boolean isLiked) {
+        this.isLiked = isLiked;
     }
 
-    public void setIsStarred(boolean starred) {
-        isStarred = starred;
+    public void setIsStarred(boolean isStarred) {
+        this.isStarred = isStarred;
     }
 }

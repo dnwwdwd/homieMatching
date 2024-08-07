@@ -162,4 +162,6 @@ select id from chat where toId = 2 or fromId = 2;
 
 select friendId from friend where userId = 2;
 
-truncate table blog;
+select a.*,b.* from hjj.team a, hjj.user_team b where a.id = b.teamId;
+
+alter table hjj.blog auto_increment = 2;

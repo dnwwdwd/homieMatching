@@ -78,12 +78,23 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     @Override
     public boolean deleteComment(DeleteRequest deleteRequest, HttpServletRequest request) {
         long id = deleteRequest.getId();
+        Comment comment = this.getById(id);
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        if (comment == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "评论不存在");
+        }
+        if (!userService.isAdmin(request) || !this.isMyComment(userId, comment.getId())) {
+            throw new BusinessException(ErrorCode.NO_AUTH, "无权限");
+        }
         boolean b = this.removeById(id);
         return b;
     }
 
     @Override
-    public List<CommentVO> listComments(long blogId) {
+    public List<CommentVO> listComments(long blogId, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
         List<Comment> commentList = this.lambdaQuery().eq(Comment::getBlogId, blogId).list();
         List<CommentVO> commentVOList = commentList.stream().map(comment -> {
             CommentVO commentVO = new CommentVO();
@@ -91,9 +102,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             User user = userService.getById(comment.getUserId());
             commentVO.setUsername(user.getUsername());
             commentVO.setUserAvatarUrl(user.getAvatarUrl());
+            commentVO.setIsMyComment(comment.getId() == userId);
             return commentVO;
         }).collect(Collectors.toList());
         return commentVOList;
+    }
+
+    @Override
+    public boolean isMyComment(long userId, long commentId) {
+        Comment comment = this.getById(commentId);
+        return userId == comment.getUserId();
     }
 
 }

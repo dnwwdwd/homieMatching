@@ -20,5 +20,7 @@ public interface CommentService extends IService<Comment> {
 
     boolean deleteComment(DeleteRequest deleteRequest, HttpServletRequest request);
 
-    List<CommentVO> listComments(long blogId);
+    List<CommentVO> listComments(long blogId, HttpServletRequest request);
+
+    boolean isMyComment(long userId, long commentId);
 }

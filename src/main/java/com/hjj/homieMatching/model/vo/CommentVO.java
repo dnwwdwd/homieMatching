@@ -69,7 +69,7 @@ public class CommentVO implements Serializable {
     }
 
     public boolean getIsMyComment() {
-        return isMyComment;
+        return this.isMyComment;
     }
 
     public void setIsMyComment(boolean isMyComment) {

@@ -47,4 +47,6 @@ public interface BlogService extends IService<Blog> {
     List<BlogVO> listUserBlogs(Long id, BlogQueryRequest blogQueryRequest, HttpServletRequest request);
 
     List<BlogVO> listLikedOrStarredBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
+
+    List<BlogVO> listViewedBlogs(HttpServletRequest request);
 }

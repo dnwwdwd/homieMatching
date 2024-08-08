@@ -84,7 +84,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         if (comment == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR, "评论不存在");
         }
-        if (!userService.isAdmin(request) || !this.isMyComment(userId, comment.getId())) {
+        if (!userService.isAdmin(request) && userId != comment.getUserId()) {
             throw new BusinessException(ErrorCode.NO_AUTH, "无权限");
         }
         boolean b = this.removeById(id);
@@ -102,7 +102,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
             User user = userService.getById(comment.getUserId());
             commentVO.setUsername(user.getUsername());
             commentVO.setUserAvatarUrl(user.getAvatarUrl());
-            commentVO.setIsMyComment(comment.getId() == userId);
+            commentVO.setIsMyComment(comment.getUserId() == userId);
             return commentVO;
         }).collect(Collectors.toList());
         return commentVOList;
@@ -111,6 +111,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
     @Override
     public boolean isMyComment(long userId, long commentId) {
         Comment comment = this.getById(commentId);
+        if (comment == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "评论不存在");
+        }
         return userId == comment.getUserId();
     }
 

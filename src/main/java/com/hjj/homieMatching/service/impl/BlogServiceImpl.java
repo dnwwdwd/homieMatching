@@ -542,6 +542,24 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<BlogVO> listViewedBlogs(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        Set<String> blogIdList = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0, -1);
+        List<Blog> blogList = this.listByIds(blogIdList);
+        List<BlogVO> blogVOList = blogList.stream().map(blog -> {
+            BlogVO blogVO = new BlogVO();
+            BeanUtils.copyProperties(blog, blogVO);
+            User user = userService.getById(blog.getUserId());
+            BlogUserVO blogUserVO = new BlogUserVO();
+            BeanUtils.copyProperties(user, blogUserVO);
+            blogVO.setBlogUserVO(blogUserVO);
+            return blogVO;
+        }).collect(Collectors.toList());
+        return blogVOList;
+    }
+
 
     @Override
     public boolean isStarred(long blogId, long userId) {

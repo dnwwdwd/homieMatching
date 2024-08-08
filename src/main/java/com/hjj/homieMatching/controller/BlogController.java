@@ -120,4 +120,10 @@ public class BlogController {
         List<BlogVO> blogVOList = blogService.listLikedOrStarredBlogs(blogQueryRequest, request);
         return ResultUtils.success(blogVOList);
     }
+
+    @PostMapping("/viewed/list")
+    public BaseResponse<List<BlogVO>> listViewedBlogs(HttpServletRequest request) {
+        List<BlogVO> blogVOList = blogService.listViewedBlogs(request);
+        return ResultUtils.success(blogVOList);
+    }
 }

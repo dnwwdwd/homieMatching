@@ -22,7 +22,7 @@ public class Message implements Serializable {
     private Long id;
 
     /**
-     * 类型- 0 点赞 1-点赞 2- 关注消息 3 - 私发消息 4 - 队伍消息
+     * 类型- 0 点赞 1-收藏 2- 关注消息 3 - 私发消息 4 - 队伍消息
      */
     private Integer type;
 

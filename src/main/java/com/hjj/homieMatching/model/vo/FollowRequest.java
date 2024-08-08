@@ -7,9 +7,14 @@ public class FollowRequest {
 
     private boolean isFollowed;
 
-    private long blogId;
+    private long userId;
 
-    public boolean isFollowed() {
-        return isFollowed;
+    public boolean getIsFollowed() {
+        return this.isFollowed;
     }
+
+    public void setIsFollowed(boolean followed) {
+        this.isFollowed = followed;
+    }
+
 }

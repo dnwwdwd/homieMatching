@@ -108,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
         // 限流
-        redisLimiterManager.doRateLimiter(RedisConstant.REDIS_LIMITER_REGISTER + ip);
+        redisLimiterManager.doRateLimiter(RedisConstant.REDIS_LIMITER_REGISTER + ip, 2, 1);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         Long userCount = this.baseMapper.selectCount(queryWrapper);

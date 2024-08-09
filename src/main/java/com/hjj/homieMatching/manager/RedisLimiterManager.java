@@ -18,12 +18,12 @@ public class RedisLimiterManager {
     @Resource
     private RedissonClient redissonClient;
 
-    public void doRateLimiter(String key) {
+    public void doRateLimiter(String key, long time, long frequency) {
         RRateLimiter rateLimiter = redissonClient.getRateLimiter(key);
-        rateLimiter.setRate(RateType.OVERALL, 1, 1, RateIntervalUnit.MINUTES);
+        rateLimiter.setRate(RateType.OVERALL, time, frequency, RateIntervalUnit.MINUTES);
         boolean b = rateLimiter.tryAcquire();
         if (!b) {
-            log.error(key + "请求次数过多，获取注册锁失败");
+            log.error(key + "请求次数过多，请稍后重试");
             throw new BusinessException(ErrorCode.TOO_MANY_REQUEST);
         }
     }

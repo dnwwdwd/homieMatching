@@ -14,6 +14,7 @@ import com.hjj.homieMatching.model.domain.Comment;
 import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
+import com.hjj.homieMatching.model.request.BlogEditRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.vo.*;
@@ -81,10 +82,10 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         if (title.length() < 1 || title.length() > 100) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "标题过长");
         }
         if (StringUtils.isBlank(coverImage) || coverImage.length() > 256) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "封面图片必须上传");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "封面图片未上传或图片链接太长");
         }
         if (images.size() > 50) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "图片过多");
@@ -237,7 +238,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (blog == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "博客不存在");
         }
-        if (blog.getUserId() != userId || !userService.isAdmin(request)) {
+        if (blog.getUserId() != userId && !userService.isAdmin(request)) {
             throw new BusinessException(ErrorCode.NO_AUTH, "你没有权限删除该博客");
         }
         boolean b = this.removeById(id);
@@ -245,7 +246,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             log.error("用户：{} 删除博客 {} 失败", userId, id);
         }
         // 删除和博客相关的记录，用户关于此博客的浏览记录、点赞记录、收藏记录
-        Set<String> viewedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId);
+        Set<String> viewedMembersId = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0,-1);
         Set<String> likedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
         Set<String> starredMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
         for (String viewedMemberId : viewedMembersId) {
@@ -501,9 +502,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     }
 
     @Override
-    public List<BlogVO> listLikedOrStarredBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
+    public List<BlogVO> listInteractionBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
         String title = blogQueryRequest.getTitle();
-        String userId = blogQueryRequest.getUserId();
+        Long userId = blogQueryRequest.getUserId();
         Integer type = blogQueryRequest.getType();
         int pageSize = blogQueryRequest.getPageSize();
         int pageNum = blogQueryRequest.getPageNum();
@@ -513,17 +514,18 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Set<String> blogStringIds = new HashSet<>();
-        // 查自己收藏的
-        if (type == 0) {
+        if (type == 0) { // 查自己收藏的
             blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + loginUserId);
         } else if (type == 1) { // 查自己点赞的
             blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + loginUserId);
-        } else if (type == 2 && userId != null) { // 查他人收藏的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
-        } else if (type == 3 && userId != null) { // 查他人点赞的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
-        } else if (type == 4) { // 查询自己的阅读过的博客
+        } else if (type == 2) { // 查自己浏览过的
             blogStringIds = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + loginUserId, 0, -1);
+        } else if (type == 3 && userId != null && userId != loginUserId) { // 查他人收藏的
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
+        } else if (type == 4 && userId != null && userId != loginUserId) { // 查他人点赞的
+            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
+        } else if (type == 5 && userId != null && userId != loginUserId) { // 查他人浏览的
+            blogStringIds = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0, -1);
         }
         // 如果没有任何收藏或者点赞的博客 id，就直接返回空的 List
         if (CollectionUtils.isEmpty(blogStringIds)) {
@@ -535,7 +537,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             BlogVO blogVO = new BlogVO();
             BeanUtils.copyProperties(blog, blogVO);
             BlogUserVO blogUserVO = new BlogUserVO();
-            User user = userService.getById(blog.getId());
+            User user = userService.getById(blog.getUserId());
             BeanUtils.copyProperties(user, blogUserVO);
             blogVO.setBlogUserVO(blogUserVO);
             return blogVO;
@@ -544,20 +546,76 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
 
     @Override
     public List<BlogVO> listViewedBlogs(HttpServletRequest request) {
-        User loginUser = userService.getLoginUser(request);
-        long userId = loginUser.getId();
-        Set<String> blogIdList = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0, -1);
-        List<Blog> blogList = this.listByIds(blogIdList);
-        List<BlogVO> blogVOList = blogList.stream().map(blog -> {
-            BlogVO blogVO = new BlogVO();
-            BeanUtils.copyProperties(blog, blogVO);
-            User user = userService.getById(blog.getUserId());
-            BlogUserVO blogUserVO = new BlogUserVO();
-            BeanUtils.copyProperties(user, blogUserVO);
-            blogVO.setBlogUserVO(blogUserVO);
-            return blogVO;
-        }).collect(Collectors.toList());
+        BlogQueryRequest blogQueryRequest = new BlogQueryRequest();
+        blogQueryRequest.setType(2);
+        List<BlogVO> blogVOList = this.listInteractionBlogs(blogQueryRequest, request);
         return blogVOList;
+    }
+
+    @Override
+    public UserBlogVO listUserInteractionBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request) {
+        Long userId = blogQueryRequest.getUserId();
+        if (userId == null || userId <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+        }
+        User loginUser = userService.getLoginUser(request);
+        long loginUserId = loginUser.getId();
+        BlogUserVO blogUserVO = new BlogUserVO();
+        BeanUtils.copyProperties(user, blogUserVO);
+        blogUserVO.setIsFollowed(followService.isFollowed(userId, loginUserId));
+        UserBlogVO userBlogVO = new UserBlogVO();
+        List<BlogVO> blogVOList = null;
+        if (blogQueryRequest.getType() == -1) {
+            blogVOList = listUserBlogs(userId, blogQueryRequest, request);
+        } else {
+            blogVOList = listInteractionBlogs(blogQueryRequest, request);
+        }
+        userBlogVO.setBlogVOList(blogVOList);
+        userBlogVO.setBlogUserVO(blogUserVO);
+        return userBlogVO;
+    }
+
+    @Override
+    public long editBlog(BlogEditRequest blogEditRequest, HttpServletRequest request) {
+        List<String> tags = blogEditRequest.getTags();
+        List<String> images = blogEditRequest.getImages();
+        Blog blog = new Blog();
+        BeanUtils.copyProperties(blogEditRequest, blog);
+        if (!CollectionUtils.isEmpty(tags)) {
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append('[');
+            for (int i = 0; i < tags.size(); i++) {
+                stringBuffer.append('"').append(tags.get(i)).append('"');
+                if (i < tags.size() - 1) {
+                    stringBuffer.append(',');
+                }
+            }
+            stringBuffer.append(']');
+            String tagList = stringBuffer.toString();
+            blog.setTags(tagList);
+        }
+        if (!CollectionUtils.isEmpty(images)) {
+            StringBuffer stringBuffer = new StringBuffer();
+            stringBuffer.append('[');
+            for (int i = 0; i < images.size(); i++) {
+                stringBuffer.append('"').append(images.get(i)).append('"');
+                if (i < images.size() - 1) {
+                    stringBuffer.append(',');
+                }
+            }
+            stringBuffer.append(']');
+            String imageList = stringBuffer.toString();
+            blog.setImages(imageList);
+        }
+        boolean b = this.updateById(blog);
+        if (!b) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
+        return blog.getId();
     }
 
 

@@ -2,6 +2,7 @@ package com.hjj.homieMatching.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.request.UserEditRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
@@ -47,7 +48,7 @@ public interface UserService extends IService<User> {
      * @param user
      * @return
      */
-    int updateUser(User user, User loginUser);
+    int updateUser(UserEditRequest userEditRequest, User loginUser);
 
     User getLoginUser(HttpServletRequest request);
 

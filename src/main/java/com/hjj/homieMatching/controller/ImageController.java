@@ -62,4 +62,19 @@ public class ImageController {
         }
         return ResultUtils.success(url);
     }
+
+    @PostMapping("/avatar/upload")
+    public BaseResponse<String> uploadAvatar(@RequestPart MultipartFile file, HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        String url = null;
+        // 限制每个用户每分钟上传 2 次
+        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_IMAGE_UPLOAD_KEY + userId, 1, 2);
+        try {
+            url = aliOSSManager.upload(file);
+        } catch (IOException e) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "上传图片失败");
+        }
+        return ResultUtils.success(url);
+    }
 }

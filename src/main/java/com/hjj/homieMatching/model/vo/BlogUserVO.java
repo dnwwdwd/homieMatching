@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
+/**
+ * 博客的作者（用户）VO
+ */
 @Data
 @Setter
 public class BlogUserVO implements Serializable {

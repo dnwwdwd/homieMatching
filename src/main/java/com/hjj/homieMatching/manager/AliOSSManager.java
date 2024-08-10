@@ -1,16 +1,23 @@
 package com.hjj.homieMatching.manager;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.hjj.homieMatching.common.ErrorCode;
+import com.hjj.homieMatching.exception.BusinessException;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @Data
@@ -34,8 +41,17 @@ public class AliOSSManager {
      * 实现上传图片到OSS
      */
     public String upload(MultipartFile multipartFile) throws IOException {
-        // todo 限流
-        // todo 文件校验
+        // 文件校验
+        long size = multipartFile.getSize();
+        if (size > 5 * 1024 * 1024L) {
+            throw new RuntimeException("文件大小不能超过10M");
+        }
+        String fileSuffix = FileUtil.getSuffix(multipartFile.getOriginalFilename());
+        final List<String> validFileSuffixList = Arrays.asList("jpg", "png", "jpeg", "gif", "bmp");
+        if (!validFileSuffixList.contains(fileSuffix)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件后缀不合法，请重新上传");
+        }
+
         // 获取上传的文件的输入流
         InputStream inputStream = multipartFile.getInputStream();
 

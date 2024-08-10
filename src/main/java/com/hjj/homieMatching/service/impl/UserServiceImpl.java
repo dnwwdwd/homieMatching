@@ -16,6 +16,7 @@ import com.hjj.homieMatching.manager.RedisLimiterManager;
 import com.hjj.homieMatching.manager.SignInManager;
 import com.hjj.homieMatching.mapper.UserMapper;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.request.UserEditRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
@@ -34,7 +35,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -50,7 +50,7 @@ import static com.hjj.homieMatching.constant.UserConstant.USER_LOGIN_STATE;
 @Service
 @Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
-        implements UserService{
+        implements UserService {
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
@@ -69,13 +69,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     /**
      * 盐值为'hjj'，用以混淆密码
      */
-    private static final String SALT="hjj";
+    private static final String SALT = "hjj";
 
     // 表示 Redis 是否有数据
     private boolean redisHasData = false;
 
     @Override
-    @Transactional( rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public long userRegister(HttpServletRequest request, UserRegisterRequest userRegisterRequest) {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
@@ -176,49 +176,51 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
         // 1.校验
-        if(StringUtils.isAnyBlank(userAccount, userPassword)){
+        if (StringUtils.isAnyBlank(userAccount, userPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号或密码为空");
         }
-        if(userAccount.length() < 4){
+        if (userAccount.length() < 4) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号少于4位");
         }
-        if(userPassword.length() < 8){
+        if (userPassword.length() < 8) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码少于8位");
         }
         // 账户不能包含特殊字符
-        String validPattern="[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-        Matcher matcher= Pattern.compile(validPattern).matcher(userAccount);
-        if(matcher.find()){
+        String validPattern = "[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        Matcher matcher = Pattern.compile(validPattern).matcher(userAccount);
+        if (matcher.find()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账户不能包含特殊字符");
         }
         // 2.加密
-        String encryptPassword=DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
         // 查询用户是否存在
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("userAccount",userAccount);
-        queryWrapper.eq("userPassword",encryptPassword);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userAccount", userAccount);
+        queryWrapper.eq("userPassword", encryptPassword);
         User user = this.baseMapper.selectOne(queryWrapper);
         // 用户不存在
-        if(user==null){
+        if (user == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号密码不匹配");
         }
         // 3.用户脱敏
-        User safetyUser=getSafetyUser(user);
+        User safetyUser = getSafetyUser(user);
         // 4.记录用户的登录态
-        request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
+        request.getSession().setAttribute(USER_LOGIN_STATE, safetyUser);
         return safetyUser;
     }
+
     /**
      * 用户脱敏
+     *
      * @param originUser
      * @return
      */
     @Override
-    public User getSafetyUser(User originUser){
-        if (originUser == null){
+    public User getSafetyUser(User originUser) {
+        if (originUser == null) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        User safetyUser=new User();
+        User safetyUser = new User();
         safetyUser.setId(originUser.getId());
         safetyUser.setUsername(originUser.getUsername());
         safetyUser.setUserAccount(originUser.getUserAccount());
@@ -232,6 +234,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setCreateTime(originUser.getCreateTime());
         safetyUser.setProfile(originUser.getProfile());
         safetyUser.setTags(originUser.getTags());
+        safetyUser.setLongitude(originUser.getLongitude());
+        safetyUser.setDimension(originUser.getDimension());
         return safetyUser;
     }
 
@@ -243,12 +247,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * tagList 用户要拥有的标签
+     *
      * @param tagNameList
      * @return
      */
     @Override
     public List<UserVO> searchUsersByTags(List<String> tagNameList, HttpServletRequest request) {
-        if(CollectionUtils.isEmpty(tagNameList)){
+        if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         User loginUser = getLoginUser(request);
@@ -301,21 +306,46 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     }
 
     @Override
-    public int updateUser(@RequestBody User user, User loginUser) {
-        long userId = user.getId();
+    public int updateUser(UserEditRequest userEditRequest, User loginUser) {
+        long userId = userEditRequest.getId();
         // 如果是管理员允许更新任意用户信息
-        if(userId <= 0) {
+        if (userId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        if (this.getById(userId) == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+        }
         // todo 补充更多校验，如果用户传的值只有id，没有其它参数则不执行更新操作
-        // 如果是管理员，允许更新任意用户信息
-        // 如果不是管理员，只允许更新当前用户信息
-        if(!isAdmin(loginUser) && userId != loginUser.getId()){
+        // 如果是管理员，允许更新任意用户信息，只允许更新当前用户信息
+        if (!isAdmin(loginUser) && userId != loginUser.getId()) {
             throw new BusinessException(ErrorCode.NO_AUTH);
         }
         User oldUser = this.baseMapper.selectById(userId);
-        if (oldUser == null){
-            throw new BusinessException(ErrorCode.NULL_ERROR);
+        if (oldUser == null) {
+            throw new BusinessException(ErrorCode.NULL_ERROR, "用户不存在");
+        }
+        Double longitude = userEditRequest.getLongitude();
+        Double dimension = userEditRequest.getDimension();
+        if (longitude != null && (longitude > 180 || longitude < -180)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标经度不合法");
+        }
+        if (dimension != null && (dimension > 90 || dimension < -90)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userEditRequest, user);
+        List<String> tags = userEditRequest.getTags();
+        if (!CollectionUtils.isEmpty(tags)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append('[');
+            for (int i = 0; i < tags.size(); i++) {
+                stringBuilder.append('"').append(tags.get(i)).append('"');
+                if (i < tags.size() - 1) {
+                    stringBuilder.append(',');
+                }
+            }
+            stringBuilder.append(']');
+            user.setTags(stringBuilder.toString());
         }
         int i = this.baseMapper.updateById(user);
         if (i > 0) {
@@ -334,13 +364,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         return i;
     }
+
     @Override
-    public User getLoginUser(HttpServletRequest request){
-        if(request == null) {
+    public User getLoginUser(HttpServletRequest request) {
+        if (request == null) {
             return null;
         }
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
-        if(userObj == null) {
+        if (userObj == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         return (User) userObj;
@@ -348,12 +379,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     // 使用SQL实现标签的查询，@Deprecated表示该方法是过时的，暂不使用。private修饰该方法是为防止被误调用
     @Deprecated
-    private List<User> searchUsersByTagsBySQL(List<String> tagNameList){
-        if(CollectionUtils.isEmpty(tagNameList)){
+    private List<User> searchUsersByTagsBySQL(List<String> tagNameList) {
+        if (CollectionUtils.isEmpty(tagNameList)) {
             throw new BusinessException(ErrorCode.NULL_ERROR);
         }
-        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
-        for(String tagName : tagNameList){
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        for (String tagName : tagNameList) {
             queryWrapper = queryWrapper.like("tags", tagName);
         }
         List<User> userList = this.baseMapper.selectList(queryWrapper);
@@ -362,13 +393,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     /**
      * 是否为管理员
+     *
      * @param request
      * @return
      */
     @Override
     public boolean isAdmin(HttpServletRequest request) {
         Object userObj = request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
-        User user=(User) userObj;
+        User user = (User) userObj;
         return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
@@ -382,7 +414,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.isNotNull("tags");
         queryWrapper.ne("id", loginUser.getId());
-        queryWrapper.select("id","tags");
+        queryWrapper.select("id", "tags");
         List<User> userList = this.list(queryWrapper);
 
         String tags = loginUser.getTags();
@@ -390,7 +422,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         List<String> tagList = gson.fromJson(tags, new TypeToken<List<String>>() {
         }.getType());
         // 用户列表的下表 => 相似度'
-        List<Pair<User,Long>> list = new ArrayList<>();
+        List<Pair<User, Long>> list = new ArrayList<>();
         // 依次计算当前用户和所有用户的相似度
         for (User user : userList) {
             String userTags = user.getTags();
@@ -414,13 +446,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
         //根据id查询user完整信息
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
-        userQueryWrapper.in("id",userListVo);
+        userQueryWrapper.in("id", userListVo);
         Map<Long, List<User>> userIdUserListMap = this.list(userQueryWrapper).stream()
                 .map(user -> getSafetyUser(user))
                 .collect(Collectors.groupingBy(User::getId));
 
         List<User> finalUserList = new ArrayList<>();
-        for (Long userId : userListVo){
+        for (Long userId : userListVo) {
             finalUserList.add(userIdUserListMap.get(userId).get(0));
         }
 

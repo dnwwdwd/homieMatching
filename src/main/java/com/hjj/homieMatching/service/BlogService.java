@@ -3,12 +3,10 @@ package com.hjj.homieMatching.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
+import com.hjj.homieMatching.model.request.BlogEditRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
-import com.hjj.homieMatching.model.vo.BlogVO;
-import com.hjj.homieMatching.model.vo.FollowRequest;
-import com.hjj.homieMatching.model.vo.LikeRequest;
-import com.hjj.homieMatching.model.vo.StarRequest;
+import com.hjj.homieMatching.model.vo.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -46,7 +44,11 @@ public interface BlogService extends IService<Blog> {
 
     List<BlogVO> listUserBlogs(Long id, BlogQueryRequest blogQueryRequest, HttpServletRequest request);
 
-    List<BlogVO> listLikedOrStarredBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
+    List<BlogVO> listInteractionBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
 
     List<BlogVO> listViewedBlogs(HttpServletRequest request);
+
+    UserBlogVO listUserInteractionBlogs(BlogQueryRequest blogQueryRequest, HttpServletRequest request);
+
+    long editBlog(BlogEditRequest blogEditRequest, HttpServletRequest request);
 }

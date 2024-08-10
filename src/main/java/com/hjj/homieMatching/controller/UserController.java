@@ -10,10 +10,7 @@ import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.Feedback;
 import com.hjj.homieMatching.model.domain.User;
-import com.hjj.homieMatching.model.request.DeleteRequest;
-import com.hjj.homieMatching.model.request.FollowQueryRequest;
-import com.hjj.homieMatching.model.request.UserLoginRequest;
-import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.request.*;
 import com.hjj.homieMatching.model.vo.FollowVO;
 import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
@@ -129,16 +126,16 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {
+    public BaseResponse<Integer> updateUser(@RequestBody UserEditRequest userEditRequest, HttpServletRequest request) {
         // 1.校验参数是否为空
-        if (user == null) {
+        if (userEditRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 2.校验权限
         User loginUser = userService.getLoginUser(request);
 
         // 3.触发更新
-        int result = userService.updateUser(user, loginUser);
+        int result = userService.updateUser(userEditRequest, loginUser);
         return ResultUtils.success(result);
     }
 

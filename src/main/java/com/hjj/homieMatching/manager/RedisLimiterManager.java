@@ -20,7 +20,7 @@ public class RedisLimiterManager {
 
     public void doRateLimiter(String key, long time, long frequency) {
         RRateLimiter rateLimiter = redissonClient.getRateLimiter(key);
-        rateLimiter.setRate(RateType.OVERALL, time, frequency, RateIntervalUnit.MINUTES);
+        rateLimiter.trySetRate(RateType.OVERALL, time, frequency, RateIntervalUnit.MINUTES);
         boolean b = rateLimiter.tryAcquire();
         if (!b) {
             log.error(key + "请求次数过多，请稍后重试");

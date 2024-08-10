@@ -12,8 +12,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "spring.redis")
 @Data
 public class RedissonConfig {
+
     private String host;
+
     private String port;
+
     private String password;
 
     @Bean

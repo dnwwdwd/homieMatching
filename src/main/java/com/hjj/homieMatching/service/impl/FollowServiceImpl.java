@@ -1,5 +1,6 @@
 package com.hjj.homieMatching.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
@@ -15,14 +16,12 @@ import com.hjj.homieMatching.service.MessageService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -78,6 +77,7 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteFollow(long followeeId, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
@@ -87,7 +87,15 @@ public class FollowServiceImpl extends ServiceImpl<FollowMapper, Follow>
         if (!this.isFollowed(followeeId, userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未关注");
         }
-        return this.lambdaUpdate().eq(Follow::getFollowerId, userId).eq(Follow::getFolloweeId, followeeId).remove();
+        boolean remove = this.lambdaUpdate().eq(Follow::getFollowerId, userId).eq(Follow::getFolloweeId, followeeId).remove();
+        UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.eq("id", followeeId);
+        updateWrapper.setSql("blogNum = blogNum - 1");
+        boolean update = userService.update(updateWrapper);
+        if (!update || ! remove) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
+        return true;
     }
 
     @Override

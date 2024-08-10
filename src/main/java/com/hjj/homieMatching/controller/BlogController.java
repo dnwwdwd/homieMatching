@@ -6,11 +6,13 @@ import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.Blog;
 import com.hjj.homieMatching.model.request.BlogAddRequest;
+import com.hjj.homieMatching.model.request.BlogEditRequest;
 import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.vo.BlogVO;
 import com.hjj.homieMatching.model.vo.LikeRequest;
 import com.hjj.homieMatching.model.vo.StarRequest;
+import com.hjj.homieMatching.model.vo.UserBlogVO;
 import com.hjj.homieMatching.service.BlogService;
 import org.springframework.web.bind.annotation.*;
 
@@ -111,19 +113,42 @@ public class BlogController {
         return ResultUtils.success(blogVOList);
     }
 
-    @PostMapping("/like/or/star/list")
+    /**
+     * 查询自己或其他用户的点赞、收藏、浏览过的博客
+     * @param blogQueryRequest
+     * @param request
+     * @return
+     */
+    @PostMapping("/interaction/list")
     public BaseResponse<List<BlogVO>> listLikedOrStarredBlogs(@RequestBody BlogQueryRequest blogQueryRequest,
                                                               HttpServletRequest request) {
         if (blogQueryRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        List<BlogVO> blogVOList = blogService.listLikedOrStarredBlogs(blogQueryRequest, request);
+        List<BlogVO> blogVOList = blogService.listInteractionBlogs(blogQueryRequest, request);
         return ResultUtils.success(blogVOList);
     }
 
-    @PostMapping("/viewed/list")
-    public BaseResponse<List<BlogVO>> listViewedBlogs(HttpServletRequest request) {
-        List<BlogVO> blogVOList = blogService.listViewedBlogs(request);
+    /**
+     * 查询用户的点赞、收藏、浏览过的博客
+     */
+    @PostMapping("/user/list")
+    public BaseResponse<UserBlogVO> listUserInteractionBlogs(@RequestBody BlogQueryRequest blogQueryRequest,
+                                                             HttpServletRequest request) {
+        if (blogQueryRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        UserBlogVO blogVOList = blogService.listUserInteractionBlogs(blogQueryRequest, request);
         return ResultUtils.success(blogVOList);
     }
+
+    @PostMapping("/edit")
+    public BaseResponse<Long> editBlog(@RequestBody BlogEditRequest blogEditRequest, HttpServletRequest request) {
+        if (blogEditRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        long id = blogService.editBlog(blogEditRequest, request);
+        return ResultUtils.success(id);
+    }
+
 }

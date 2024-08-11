@@ -165,3 +165,5 @@ select friendId from friend where userId = 2;
 select a.*,b.* from hjj.team a, hjj.user_team b where a.id = b.teamId;
 
 alter table hjj.blog auto_increment = 8;
+
+select * from chat where toId = 2 or fromId = 2 order by createTime desc;

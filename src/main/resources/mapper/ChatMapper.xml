@@ -36,6 +36,6 @@
         </foreach>
         GROUP BY toId
         ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = #{userId} OR c.toId = #{userId})
-        order by createTime desc limit 1;
+        order by createTime desc;
     </select>
 </mapper>

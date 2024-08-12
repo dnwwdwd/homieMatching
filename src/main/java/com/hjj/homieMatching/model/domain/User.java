@@ -101,6 +101,31 @@ public class User implements Serializable {
      */
     private Double dimension;
 
+    /**
+     * 博客数量
+     */
+    private Long blogNum;
+
+    /**
+     * 博客浏览量
+     */
+    private Long blogViewNum;
+
+    /**
+     * 关注数
+     */
+    private Long followNum;
+
+    /**
+     * 粉丝数
+     */
+    private Long fanNum;
+
+    /**
+     * 积分
+     */
+    private Integer score;
+
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

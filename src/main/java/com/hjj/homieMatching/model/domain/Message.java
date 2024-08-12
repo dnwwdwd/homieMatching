@@ -4,15 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
 import java.io.Serializable;
 import java.util.Date;
+import lombok.Data;
 
-
-@TableName(value = "message")
+/**
+ * 
+ * @TableName message
+ */
+@TableName(value ="message")
 @Data
 public class Message implements Serializable {
     /**
@@ -22,7 +22,7 @@ public class Message implements Serializable {
     private Long id;
 
     /**
-     * 类型-0 博文点赞,1 评论点赞
+     * 类型- 0 点赞 1-收藏 2- 关注消息 3 - 私发消息 4 - 队伍消息
      */
     private Integer type;
 
@@ -39,7 +39,22 @@ public class Message implements Serializable {
     /**
      * 消息内容
      */
-    private String data;
+    private String text;
+
+    /**
+     * 头像
+     */
+    private String avatarUrl;
+
+    /**
+     * 队伍 id
+     */
+    private Long teamId;
+
+    /**
+     * 博客 id
+     */
+    private Long blogId;
 
     /**
      * 已读-0 未读 ,1 已读

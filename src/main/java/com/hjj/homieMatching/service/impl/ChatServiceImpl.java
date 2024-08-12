@@ -4,25 +4,29 @@ package com.hjj.homieMatching.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.mapper.ChatMapper;
 import com.hjj.homieMatching.model.domain.Chat;
+import com.hjj.homieMatching.model.domain.Friend;
 import com.hjj.homieMatching.model.domain.Team;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
+import com.hjj.homieMatching.model.vo.PrivateMessageVO;
 import com.hjj.homieMatching.model.vo.WebSocketVO;
-import com.hjj.homieMatching.service.ChatService;
-import com.hjj.homieMatching.service.TeamService;
-import com.hjj.homieMatching.service.UserService;
+import com.hjj.homieMatching.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -45,6 +49,12 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
 
     @Resource
     private TeamService teamService;
+
+    @Resource
+    private FriendService friendService;
+
+    @Resource
+    private UserTeamService userTeamService;
 
     /**
      * 获取私人聊天
@@ -216,6 +226,10 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
             saveCache(CACHE_CHAT_TEAM, String.valueOf(teamId), chatMessageVOS);
             return chatMessageVOS;
         }
+        // 判断用户是否在队伍中
+        if (!userTeamService.teamHasUser(teamId, loginUser.getId())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "您还未加入此队伍");
+        }
         Team team = teamService.getById(teamId);
         LambdaQueryWrapper<Chat> chatLambdaQueryWrapper = new LambdaQueryWrapper<>();
         chatLambdaQueryWrapper.eq(Chat::getChatType, chatType).eq(Chat::getTeamId, teamId);
@@ -244,6 +258,38 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         List<ChatMessageVO> chatMessageVOS = returnMessage(loginUser, null, chatLambdaQueryWrapper);
         saveCache(CACHE_CHAT_HALL, String.valueOf(loginUser.getId()), chatMessageVOS);
         return chatMessageVOS;
+    }
+
+    @Override
+    public List<PrivateMessageVO> listPrivateChat(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        List<Long> frinedIdList = friendService.list(new QueryWrapper<Friend>().eq("userId", userId))
+                .stream().map(Friend::getFriendId).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(frinedIdList)) {
+            return new ArrayList<>();
+        }
+        List<Chat> privateMessageVOList = this.baseMapper.getLastPrivateChatMessages(userId, frinedIdList);
+        return privateMessageVOList.stream().map(chat -> {
+            PrivateMessageVO privateMessageVO = new PrivateMessageVO();
+            privateMessageVO.setId(chat.getId());
+            privateMessageVO.setText(chat.getText());
+            privateMessageVO.setCreateTime(DateUtil.format(chat.getCreateTime(), "yyyy年MM月dd日 HH:mm:ss"));
+            Long fromId = chat.getFromId();
+            Long toId = chat.getToId();
+            long friendId = 0L;
+            if (fromId != userId) {
+                friendId = fromId;
+            }
+            if (toId != userId) {
+                friendId = toId;
+            }
+            privateMessageVO.setFriendId(friendId);
+            User friend = userService.getById(friendId);
+            privateMessageVO.setAvatarUrl(friend.getAvatarUrl());
+            privateMessageVO.setUsername(friend.getUsername());
+            return privateMessageVO;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -290,7 +336,3 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
         }).collect(Collectors.toList());
     }
 }
-
-
-
-

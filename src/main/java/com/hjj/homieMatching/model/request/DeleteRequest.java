@@ -9,5 +9,7 @@ import java.io.Serializable;
  */
 @Data
 public class DeleteRequest implements Serializable {
+
     private long id;
+
 }

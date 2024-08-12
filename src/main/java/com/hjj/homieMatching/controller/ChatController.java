@@ -8,6 +8,7 @@ import com.hjj.homieMatching.exception.BusinessException;
 import com.hjj.homieMatching.model.domain.User;
 import com.hjj.homieMatching.model.request.ChatRequest;
 import com.hjj.homieMatching.model.vo.ChatMessageVO;
+import com.hjj.homieMatching.model.vo.PrivateMessageVO;
 import com.hjj.homieMatching.service.ChatService;
 import com.hjj.homieMatching.service.UserService;
 import io.swagger.annotations.Api;
@@ -112,5 +113,11 @@ public class ChatController {
         }
         List<ChatMessageVO> hallChat = chatService.getHallChat(ChatConstant.HALL_CHAT, loginUser);
         return ResultUtils.success(hallChat);
+    }
+
+    @GetMapping("/private/list")
+    public BaseResponse<List<PrivateMessageVO>> listPrivateChat(HttpServletRequest request) {
+        List<PrivateMessageVO> privateMessageVOList = chatService.listPrivateChat(request);
+        return ResultUtils.success(privateMessageVOList);
     }
 }

@@ -135,12 +135,6 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
             userVO.setDistance(distance.getValue()); // 设置距离值
             return userVO;
         }).collect(Collectors.toList());
-//        List<User> userList = new ArrayList<>();
-//        for (Friend friend : friendList) {
-//            long friendId = friend.getFriendId();
-//            User user = userMapper.selectById(friendId);
-//            userList.add(user);
-//        }
         return userVOList;
     }
 

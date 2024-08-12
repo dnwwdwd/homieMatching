@@ -8,10 +8,12 @@ import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
+import com.hjj.homieMatching.model.domain.Feedback;
 import com.hjj.homieMatching.model.domain.User;
-import com.hjj.homieMatching.model.request.DeleteRequest;
-import com.hjj.homieMatching.model.request.UserLoginRequest;
-import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.request.*;
+import com.hjj.homieMatching.model.vo.FollowVO;
+import com.hjj.homieMatching.model.vo.SignInInfoVO;
+import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,11 +42,11 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest, HttpServletRequest request) {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userRegisterRequest);
+        long result = userService.userRegister(request, userRegisterRequest);
         return ResultUtils.success(result);
     }
 
@@ -123,16 +126,16 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public BaseResponse<Integer> updateUser(@RequestBody User user, HttpServletRequest request) {
+    public BaseResponse<Integer> updateUser(@RequestBody UserEditRequest userEditRequest, HttpServletRequest request) {
         // 1.校验参数是否为空
-        if (user == null) {
+        if (userEditRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 2.校验权限
         User loginUser = userService.getLoginUser(request);
 
         // 3.触发更新
-        int result = userService.updateUser(user, loginUser);
+        int result = userService.updateUser(userEditRequest, loginUser);
         return ResultUtils.success(result);
     }
 
@@ -185,4 +188,45 @@ public class UserController {
         List<UserVO> userVOList = userService.searchNearby(radius, loginUser);
         return ResultUtils.success(userVOList);
     }
+
+    @GetMapping("/blog/count")
+    public BaseResponse<Long> loginUserBlogCount(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        long count = userService.hasBlogCount(userId);
+        return ResultUtils.success(count);
+    }
+
+    @GetMapping("/follower/count")
+    public BaseResponse<Long> loginUserFollowerCount(HttpServletRequest request) {
+        User loginUser = userService.getLoginUser(request);
+        long userId = loginUser.getId();
+        long count = userService.hasFollowerCount(userId);
+        return ResultUtils.success(count);
+    }
+
+    @GetMapping("/info/get")
+    public BaseResponse<UserInfoVO> getUserInfo(HttpServletRequest request) {
+       UserInfoVO userInfoVO = userService.getUserInfo(request);
+       return ResultUtils.success(userInfoVO);
+    }
+
+    @GetMapping("/score/rank")
+    public BaseResponse<List<User>> getUsersScoreRank() {
+        List<User> users = userService.getUsersScoreRank();
+        return ResultUtils.success(users);
+    }
+
+    @PostMapping("/sign/in")
+    public BaseResponse<Boolean> userSigIn(HttpServletRequest request) {
+        boolean b = userService.userSigIn(request);
+        return ResultUtils.success(b);
+    }
+
+    @GetMapping("/sign/in/info/get")
+    public BaseResponse<SignInInfoVO> getSignedDates(HttpServletRequest request) {
+        SignInInfoVO signInInfoVO = userService.getSignedDates(request);
+        return ResultUtils.success(signInInfoVO);
+    }
+
 }

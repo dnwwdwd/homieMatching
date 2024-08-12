@@ -5,4 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface UserTeamService extends IService<UserTeam> {
 
+    boolean teamHasUser(long teamId, long userId);
+
 }

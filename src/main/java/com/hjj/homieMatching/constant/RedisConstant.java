@@ -6,53 +6,19 @@ public interface RedisConstant {
     String USER_GEO_KEY = "homiemacthing:user:geo";
     String USER_ADD_KEY = "homiematching:user:add";
     String USER_RECOMMEND_KEY = "homieMatching:user:recommend";
-    public static final String LOGIN_USER_KEY = "homieMatching:login:token:";
 
-    public static final Long LOGIN_USER_TTL = 15L;
-    /**
-     * 注册验证码键
-     */
-    public static final String REGISTER_CODE_KEY = "homieMatching:register:";
-    /**
-     * 注册验证码过期时间
-     */
-    public static final Long REGISTER_CODE_TTL = 15L;
-    /**
-     * 用户更新电话键
-     */
-    public static final String USER_UPDATE_PHONE_KEY = "homieMatching:user:update:phone:";
-    /**
-     * 用户更新电话过期时间
-     */
-    public static final Long USER_UPDATE_PHONE_TTL = 15L;
-    /**
-     * 用户更新邮件键
-     */
-    public static final String USER_UPDATE_EMAIL_KEY = "homieMatching:user:update:email:";
-    /**
-     * 用户更新邮件过期时间
-     */
-    public static final Long USER_UPDATE_EMAIL_TTL = 15L;
-    /**
-     * 用户忘记密码键
-     */
-    public static final String USER_FORGET_PASSWORD_KEY = "homieMatching:user:forget:";
-    /**
-     * 用户忘记密码过期时间
-     */
-    public static final Long USER_FORGET_PASSWORD_TTL = 15L;
-    /**
-     * 博客推送键
-     */
-    public static final String BLOG_FEED_KEY = "homieMatching:feed:blog:";
-    /**
-     * 新博文消息键
-     */
-    public static final String MESSAGE_BLOG_NUM_KEY = "homieMatching:message:blog:num:";
-    /**
-     * 新点赞消息键
-     */
-    public static final String MESSAGE_LIKE_NUM_KEY = "homieMatching:message:like:num:";
+    String REDIS_LIMITER_REGISTER = "homieMatching:limiter:register:";
+    String REDIS_BLOG_STAR_KEY = "homieMatching:blog:star:";
+    String REDIS_BLOG_LIKE_KEY = "homieMatching:blog:like:";
+    String REDIS_BLOG_VIEW_KEY = "homieMatching:blog:view:";
+    String REDIS_USER_LIKE_BLOG_KEY = "homieMatching:user:like:blog:";
+    String REDIS_USER_VIEW_BLOG_KEY = "homieMatching:user:view:blog:";
+    String REDIS_USER_STAR_BLOG_KEY = "homieMatching:user:star:blog:";
+    String USER_SIGNIN_KEY = "homieMatching:user:signin:";
+    String BLOG_BLOOM_FILTER_KEY = "homieMatching:blog:bloomfilter";
+    String USER_BLOOM_FILTER_KEY = "homieMatching:user:bloomfilter";
+    String BLOG_COVER_IMAGE_UPLOAD_KEY = "homieMatching:blog:cover:image:upload:";
+    String BLOG_IMAGE_UPLOAD_KEY = "homieMatching:blog:image:upload:";
     /**
      * 用户推荐缓存
      */

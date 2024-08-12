@@ -2,10 +2,14 @@ package com.hjj.homieMatching.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.hjj.homieMatching.model.domain.User;
+import com.hjj.homieMatching.model.request.UserEditRequest;
 import com.hjj.homieMatching.model.request.UserRegisterRequest;
+import com.hjj.homieMatching.model.vo.SignInInfoVO;
+import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 public interface UserService extends IService<User> {
@@ -13,7 +17,7 @@ public interface UserService extends IService<User> {
      * @param userRegisterRequest
      * @return 新用户id
      */
-    long userRegister(UserRegisterRequest userRegisterRequest);
+    long userRegister(HttpServletRequest request, UserRegisterRequest userRegisterRequest);
 
     /**
      * @param userAccount  用户账户
@@ -44,7 +48,7 @@ public interface UserService extends IService<User> {
      * @param user
      * @return
      */
-    int updateUser(User user, User loginUser);
+    int updateUser(UserEditRequest userEditRequest, User loginUser);
 
     User getLoginUser(HttpServletRequest request);
 
@@ -62,4 +66,21 @@ public interface UserService extends IService<User> {
 
     List<UserVO> recommendUsers(long pageSize, long pageNum, HttpServletRequest request);
 
+    long hasFollowerCount(long userId);
+
+    long hasBlogCount(long userId);
+
+    long likeBlogNum(long userId);
+
+    long starBlogNum(long userId);
+
+    UserInfoVO getUserInfo(HttpServletRequest request);
+
+    List<User> getUsersScoreRank();
+
+    boolean userSigIn(HttpServletRequest request);
+
+    boolean isSignedIn(HttpServletRequest request);
+
+    SignInInfoVO getSignedDates(HttpServletRequest request);
 }

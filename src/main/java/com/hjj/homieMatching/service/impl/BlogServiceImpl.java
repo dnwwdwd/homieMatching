@@ -19,6 +19,11 @@ import com.hjj.homieMatching.model.request.BlogQueryRequest;
 import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.vo.*;
 import com.hjj.homieMatching.service.*;
+import com.hjj.homieMatching.service.blogInteractionStrategy.BlogInteractionContext;
+import com.hjj.homieMatching.service.blogInteractionStrategy.BlogInteractionStrategy;
+import com.hjj.homieMatching.service.blogInteractionStrategy.impl.BlogLikedStrategy;
+import com.hjj.homieMatching.service.blogInteractionStrategy.impl.BlogStarredStrategy;
+import com.hjj.homieMatching.service.blogInteractionStrategy.impl.BlogViewedStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -135,9 +137,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             boolean updateUser = userService.updateById(user);
             if (!updateUser) {
                 log.error("用户：{} 发布博客：{}后， 更新博客数量和积分失败", userId, blog.getId());
-            } else {
-                stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_SCORE_RANKING_KEY,
-                        String.valueOf(userId), loginUser.getScore() + 10);
             }
         }
         // 添加博客至博客的布隆过滤器
@@ -513,26 +512,28 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (type == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        Set<String> blogStringIds = new HashSet<>();
-        if (type == 0) { // 查自己收藏的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + loginUserId);
-        } else if (type == 1) { // 查自己点赞的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + loginUserId);
-        } else if (type == 2) { // 查自己浏览过的
-            blogStringIds = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + loginUserId, 0, -1);
-        } else if (type == 3 && userId != null && userId != loginUserId) { // 查他人收藏的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
-        } else if (type == 4 && userId != null && userId != loginUserId) { // 查他人点赞的
-            blogStringIds = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
-        } else if (type == 5 && userId != null && userId != loginUserId) { // 查他人浏览的
-            blogStringIds = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0, -1);
-        }
+        Set<String> blogStringIds = null;
+        // 查询谁的博客的 map
+        Map<Integer, Long> blogInteractionUserMap = new LinkedHashMap<>();
+        blogInteractionUserMap.put(0, loginUserId);
+        blogInteractionUserMap.put(1, userId);
+        // 查询博客类型的 map
+        Map<Integer, BlogInteractionStrategy> blogInteractionTypeMap = new LinkedHashMap<>();
+        blogInteractionTypeMap.put(0, new BlogStarredStrategy());
+        blogInteractionTypeMap.put(1, new BlogLikedStrategy());
+        blogInteractionTypeMap.put(2, new BlogViewedStrategy());
+
+        BlogInteractionContext blogInteractionContext = new BlogInteractionContext(blogInteractionTypeMap.get(this.getSelectBlogType(type)));
+        // 查询博客 ids
+        blogStringIds = blogInteractionContext.blogInteractionMethod(blogQueryRequest, stringRedisTemplate,
+                blogInteractionUserMap.get(this.getSelectUserType(type)));
+
         // 如果没有任何收藏或者点赞的博客 id，就直接返回空的 List
         if (CollectionUtils.isEmpty(blogStringIds)) {
             return new ArrayList<>();
         }
         List<Long> blogIds = blogStringIds.stream().map(Long::valueOf).collect(Collectors.toList());
-        List<Blog> blogList = this.baseMapper.selectBatchIds(blogIds);
+        List<Blog> blogList = this.listByIds(blogIds);
         return blogList.stream().map(blog -> {
             BlogVO blogVO = new BlogVO();
             BeanUtils.copyProperties(blog, blogVO);
@@ -647,6 +648,13 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         return b1 != null && b1 && b2 != null && b2;
     }
 
+    private int getSelectUserType(int type) {
+        return type / 3;
+    }
+
+    private int getSelectBlogType(int type) {
+        return type % 3;
+    }
 }
 
 

@@ -630,12 +630,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public List<User> getUsersScoreRank() {
         // 查积分最高的前十位
-        Set<String> idSet = stringRedisTemplate.opsForZSet().reverseRange(RedisConstant.REDIS_USER_SCORE_RANKING_KEY, 0, 9);
-        if (CollectionUtils.isEmpty(idSet)) {
-            return new ArrayList<>();
-        }
-        List<Long> idList = idSet.stream().map(Long::valueOf).collect(Collectors.toList());
-        return this.listByIds(idList);
+        List<User> userList = this.baseMapper.selectUserTop10Score();
+        return userList;
     }
 
     @Override

@@ -41,7 +41,6 @@ public class InsertUserTest {
             user.setEmail("shayu-yusha@qq.com");
             user.setUserStatus(0);
             user.setUserRole(0);
-            user.setPlanetCode("931");
             user.setTags("[]");
            userList.add(user);
         }
@@ -80,7 +79,6 @@ public class InsertUserTest {
                 user.setEmail("shayu-yusha@qq.com");
                 user.setUserStatus(0);
                 user.setUserRole(0);
-                user.setPlanetCode("931");
                 user.setTags("[]");
                 userList.add(user);
                 if (j % batchSize == 0 ){

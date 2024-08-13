@@ -27,4 +27,13 @@
         viewNum,likeNum,starNum,commentNum,
         createTime,updateTime,isDelete
     </sql>
+
+    <select id="selectBlogByPage" resultType="com.hjj.homieMatching.model.domain.Blog">
+        select * from blog
+        where isDelete = 0
+        <if test="title != null and title != ''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        limit #{start}, #{end}
+    </select>
 </mapper>

@@ -33,7 +33,6 @@ public class InsertUsers {
             user.setEmail("14654@qq.com");
             user.setUserStatus(0);
             user.setUserRole(0);
-            user.setPlanetCode("111111");
             user.setTags("[]");
             userMapper.insert(user);
 

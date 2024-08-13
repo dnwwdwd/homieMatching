@@ -130,7 +130,6 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
             userVO.setCreateTime(user.getCreateTime());
             userVO.setUpdateTime(user.getUpdateTime());
             userVO.setUserRole(user.getUserRole());
-            userVO.setPlanetCode(user.getPlanetCode());
             userVO.setTags(user.getTags());
             userVO.setDistance(distance.getValue()); // 设置距离值
             return userVO;
@@ -170,7 +169,6 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
             userVO.setCreateTime(user.getCreateTime());
             userVO.setUpdateTime(user.getUpdateTime());
             userVO.setUserRole(user.getUserRole());
-            userVO.setPlanetCode(user.getPlanetCode());
             userVO.setTags(user.getTags());
             userVO.setDistance(distance.getValue()); // 设置距离值
             return userVO;

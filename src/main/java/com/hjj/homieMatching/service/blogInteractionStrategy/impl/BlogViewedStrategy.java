@@ -15,6 +15,6 @@ public class BlogViewedStrategy implements BlogInteractionStrategy {
      */
     @Override
     public Set<String> interactionMethod(BlogQueryRequest blogQueryRequest, StringRedisTemplate stringRedisTemplate, long userId) {
-        return stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId);
+        return stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0, -1);
     }
 }

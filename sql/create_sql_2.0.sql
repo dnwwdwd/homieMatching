@@ -7,7 +7,7 @@ create table hjj.user
 (
     id           bigint auto_increment comment 'id'
         primary key,
-    username     varchar(256)                                                                                 null comment '用户昵称',
+    username     varchar(256)  default '无名氏'                                                               not null comment '用户昵称',
     userAccount  varchar(256)                                                                                 null comment '账户',
     avatarUrl    varchar(1024) default 'https://www.keaitupian.cn/cjpic/frombd/0/253/936677050/470164789.jpg' not null comment '用户头像',
     gender       tinyint       default 1                                                                      null comment '用户性别',
@@ -20,7 +20,6 @@ create table hjj.user
     updateTime   datetime      default CURRENT_TIMESTAMP                                                      null on update CURRENT_TIMESTAMP comment '更新时间',
     isDelete     tinyint       default 0                                                                      not null comment '是否删除',
     userRole     int           default 0                                                                      not null comment '用户角色 0 - 普通用户 1 - 管理员',
-    planetCode   varchar(512)                                                                                 null comment '星球编号',
     tags         varchar(1024)                                                                                null comment '标签列表(json)',
     longitude    decimal(10, 6)                                                                               null comment '经度',
     dimension    decimal(10, 6)                                                                               null comment '纬度',
@@ -227,6 +226,6 @@ alter table hjj.blog auto_increment = 8;
 
 select * from chat where toId = 2 or fromId = 2 order by createTime desc;
 
-select id from blog limit 1, 4;
+select id from blog where isDelete = 0 limit 7, 4;
 select id from blog limit 2, 4;
 select id from blog limit 3, 4;

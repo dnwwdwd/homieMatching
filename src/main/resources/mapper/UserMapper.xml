@@ -19,7 +19,6 @@
             <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
             <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
             <result property="userRole" column="userRole" jdbcType="INTEGER"/>
-            <result property="planetCode" column="planetCode" jdbcType="VARCHAR"/>
             <result property="tags" column="tags" jdbcType="VARCHAR"/>
             <result property="longitude" column="longitude" jdbcType="DECIMAL"/>
             <result property="dimension" column="dimension" jdbcType="DECIMAL"/>
@@ -35,7 +34,7 @@
         avatarUrl,gender,profile,
         userPassword,phone,email,
         userStatus,createTime,updateTime,
-        isDelete,userRole,planetCode,
+        isDelete,userRole,
         tags,longitude,dimension,blogNum,
         blogViewNum,followNum,fanNum,
         score

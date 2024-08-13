@@ -226,6 +226,6 @@ alter table hjj.blog auto_increment = 8;
 
 select * from chat where toId = 2 or fromId = 2 order by createTime desc;
 
-select id from blog limit 1, 4;
+select id from blog where isDelete = 0 limit 7, 4;
 select id from blog limit 2, 4;
 select id from blog limit 3, 4;

@@ -151,8 +151,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         queryWrapper.like(StringUtils.isNotEmpty(title), "title", title);
         int pageSize = blogQueryRequest.getPageSize();
         int pageNum = blogQueryRequest.getPageNum();
-        Page<Blog> page = this.page(new Page<>(pageNum, pageSize), queryWrapper);
-        List<Blog> blogList = page.getRecords();
+        long start = (pageNum - 1) * pageSize;
+        long end = pageSize;
+        List<Blog> blogList = this.baseMapper.selectBlogByPage(start, end, title);
         List<BlogVO> blogVOList = blogList.stream().map(blog -> {
             BlogVO blogVO = new BlogVO();
             BeanUtils.copyProperties(blog, blogVO);
@@ -166,6 +167,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public BlogVO getBlogDetailById(Long id, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
@@ -197,7 +199,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         Boolean isViewed = stringRedisTemplate.opsForSet().isMember(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
         // 增加博客浏览量（前提没浏览过），增加用户的浏览记录（此处就不用增加作者的总浏览量了，因为用户的总浏览量是所有博客浏览量之和）
         if (isViewed != null && !isViewed) {
-            // 添加用户的浏览记录
+            // 添加博客的被浏览记录
             stringRedisTemplate.opsForSet().add(RedisConstant.REDIS_BLOG_VIEW_KEY + blogId, String.valueOf(userId));
             // 更新博客的浏览量啊
             Blog newBlog = new Blog();
@@ -218,7 +220,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
                 log.error("用户：{} 浏览博客：{} 后，更新作者：{} 的总浏览量失败了", userId, blogId, blogUserId);
             }
         }
-        // 不管有没有浏览过，都要增加用户的浏览记录
+        // 增加用户的浏览记录
         stringRedisTemplate.opsForZSet().add(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId,
                 String.valueOf(blogId), Instant.now().toEpochMilli() / TIME_UNIT);
         return blogVO;
@@ -245,31 +247,40 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
             log.error("用户：{} 删除博客 {} 失败", userId, id);
         }
         // 删除和博客相关的记录，用户关于此博客的浏览记录、点赞记录、收藏记录
-        Set<String> viewedMembersId = stringRedisTemplate.opsForZSet().range(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + userId, 0,-1);
-        Set<String> likedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
-        Set<String> starredMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
-        for (String viewedMemberId : viewedMembersId) {
-            stringRedisTemplate.opsForZSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(viewedMemberId), String.valueOf(id));
+        Set<String> viewedMembersId = null;
+        Boolean hasKey1 = stringRedisTemplate.hasKey(RedisConstant.REDIS_BLOG_VIEW_KEY + id);
+        if (hasKey1 != null && hasKey1) {
+            viewedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_BLOG_VIEW_KEY + id);
         }
-        for (String likedMemberId : likedMembersId) {
-            stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(likedMemberId), String.valueOf(id));
+        Set<String> likedMembersId = null;
+        Boolean hasKey2 = stringRedisTemplate.hasKey(RedisConstant.REDIS_BLOG_LIKE_KEY + id);
+        if (hasKey2 != null && hasKey2) {
+            likedMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_BLOG_LIKE_KEY + id);
         }
-        for (String starredMemberId : starredMembersId) {
-            stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(starredMemberId), String.valueOf(id));
+        Set<String> starredMembersId = null;
+        Boolean hasKey3 = stringRedisTemplate.hasKey(RedisConstant.REDIS_BLOG_STAR_KEY + id);
+        if (hasKey3 != null && hasKey3) {
+            starredMembersId = stringRedisTemplate.opsForSet().members(RedisConstant.REDIS_BLOG_STAR_KEY + id);
         }
-        // 删除博客的收藏记录
+        if (!CollectionUtils.isEmpty(viewedMembersId)) {
+            for (String viewedMemberId : viewedMembersId) {
+                stringRedisTemplate.opsForZSet().remove(RedisConstant.REDIS_USER_VIEW_BLOG_KEY + Long.parseLong(viewedMemberId), String.valueOf(id));
+            }
+        }
+        if (!CollectionUtils.isEmpty(likedMembersId)) {
+            for (String likedMemberId : likedMembersId) {
+                stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + Long.parseLong(likedMemberId), String.valueOf(id));
+            }
+        }
+        if (!CollectionUtils.isEmpty(starredMembersId)) {
+            for (String starredMemberId : starredMembersId) {
+                stringRedisTemplate.opsForSet().remove(RedisConstant.REDIS_USER_STAR_BLOG_KEY + Long.parseLong(starredMemberId), String.valueOf(id));
+            }
+        }
+        // 删除博客的点赞、收藏、浏览记录
         stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_STAR_KEY + id);
         stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_LIKE_KEY + id);
         stringRedisTemplate.delete(RedisConstant.REDIS_BLOG_VIEW_KEY + id);
-        // 减少博客作者的总浏览数
-        UpdateWrapper<User> userUpdateWrapper = new UpdateWrapper<>();
-        userUpdateWrapper.eq("id", blog.getUserId());
-        userUpdateWrapper.setSql("blogNum = blogNum - 1");
-        userUpdateWrapper.setSql("blogViewNum = blogViewNum -" + blog.getViewNum());
-        boolean updateUser = userService.update(userUpdateWrapper);
-        if (!updateUser) {
-            log.error("用户：{} 删除博客 {} 后，更新作者：{} 的总浏览量失败了", userId, id, blog.getUserId());
-        }
         QueryWrapper<Comment> commentQueryWrapper = new QueryWrapper<>();
         commentQueryWrapper.eq("blogId", id);
         boolean remove = commentService.remove(commentQueryWrapper);

@@ -60,7 +60,6 @@ public class RecommendUsersTest {
                     userVO.setCreateTime(user.getCreateTime());
                     userVO.setUpdateTime(user.getUpdateTime());
                     userVO.setUserRole(user.getUserRole());
-                    userVO.setPlanetCode(user.getPlanetCode());
                     userVO.setTags(user.getTags());
                     userVO.setDistance(value); // 设置距离值
                     return userVO;

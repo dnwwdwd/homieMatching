@@ -147,27 +147,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         // 设置星球编号
         long userId = user.getId();
-        User updateUser = new User();
-        updateUser.setId(userId);
-        updateUser.setPlanetCode(String.valueOf(userId));
         // 添加至用户布隆过滤器
         redisBloomFilter.addUserToFilter(userId);
-        boolean updateResult = this.updateById(updateUser);
-        if (!updateResult) {
-            log.info("{}用户星球编号设置失败", userId);
-        } else {
-            // 删除用户缓存
-            Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
-            for (String key : keys) {
-                try {
-                    retryer.call(() -> stringRedisTemplate.delete(key));
-                } catch (ExecutionException e) {
-                    log.error("用户注册后删除缓存重试时失败");
-                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
-                } catch (RetryException e) {
-                    log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
-                    throw new BusinessException(ErrorCode.SYSTEM_ERROR);
-                }
+        // 删除用户缓存
+        Set<String> keys = stringRedisTemplate.keys(RedisConstant.USER_RECOMMEND_KEY + ":*");
+        for (String key : keys) {
+            try {
+                retryer.call(() -> stringRedisTemplate.delete(key));
+            } catch (ExecutionException e) {
+                log.error("用户注册后删除缓存重试时失败");
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            } catch (RetryException e) {
+                log.error("用户注册后删除缓存达到最大重试次数或超过时间限制");
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR);
             }
         }
         return userId;
@@ -228,7 +220,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         safetyUser.setGender(originUser.getGender());
         safetyUser.setPhone(originUser.getPhone());
         safetyUser.setEmail(originUser.getEmail());
-        safetyUser.setPlanetCode(originUser.getPlanetCode());
         safetyUser.setUserRole(originUser.getUserRole());
         safetyUser.setUserStatus(originUser.getUserStatus());
         safetyUser.setCreateTime(originUser.getCreateTime());
@@ -298,7 +289,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             userVO.setCreateTime(user.getCreateTime());
             userVO.setUpdateTime(user.getUpdateTime());
             userVO.setUserRole(user.getUserRole());
-            userVO.setPlanetCode(user.getPlanetCode());
             userVO.setTags(user.getTags());
             userVO.setDistance(distance.getValue());
             return userVO;
@@ -474,7 +464,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             userVO.setCreateTime(user.getCreateTime());
             userVO.setUpdateTime(user.getUpdateTime());
             userVO.setUserRole(user.getUserRole());
-            userVO.setPlanetCode(user.getPlanetCode());
             userVO.setTags(user.getTags());
             userVO.setDistance(distance.getValue());
             return userVO;
@@ -565,7 +554,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                         userVO.setCreateTime(user.getCreateTime());
                         userVO.setUpdateTime(user.getUpdateTime());
                         userVO.setUserRole(user.getUserRole());
-                        userVO.setPlanetCode(user.getPlanetCode());
                         userVO.setTags(user.getTags());
                         if (value != null) {
                             userVO.setDistance(value); // 设置距离值

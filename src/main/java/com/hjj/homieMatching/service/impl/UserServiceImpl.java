@@ -322,6 +322,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         if (dimension != null && (dimension > 90 || dimension < -90)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "坐标维度不合法");
         }
+        if (longitude != null) {
+            stringRedisTemplate.opsForGeo().add(RedisConstant.USER_GEO_KEY, new Point(longitude, oldUser.getDimension()),
+                    String.valueOf(userId));
+        }
+        if (dimension != null) {
+            stringRedisTemplate.opsForGeo().add(RedisConstant.USER_GEO_KEY, new Point(oldUser.getDimension(), dimension),
+                    String.valueOf(userId));
+        }
         User user = new User();
         BeanUtils.copyProperties(userEditRequest, user);
         List<String> tags = userEditRequest.getTags();
@@ -595,12 +603,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
     @Override
     public long likeBlogNum(long userId) {
-        return stringRedisTemplate.opsForSet().size(RedisConstant.REDIS_USER_LIKE_BLOG_KEY + userId);
+        return this.baseMapper.likeBlogNum(userId);
     }
 
     @Override
     public long starBlogNum(long userId) {
-        return stringRedisTemplate.opsForSet().size(RedisConstant.REDIS_USER_STAR_BLOG_KEY + userId);
+        return this.baseMapper.starBlogNum(userId);
     }
 
     @Override

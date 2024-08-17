@@ -12,6 +12,12 @@ public interface UserMapper extends BaseMapper<User> {
 
     long hasBlogCount(long userId);
 
-    @Select("select * from user where score > 0 order by score desc")
+    @Select("select * from user where score > 0 order by score desc limit 10")
     List<User> selectUserTop10Score();
+
+    @Select("select sum(likeNum) from blog where userId = ${userId} and isDelete = 0")
+    long likeBlogNum(long userId);
+
+    @Select("select sum(starNum) from blog where userId = ${userId} and isDelete = 0")
+    long starBlogNum(long userId);
 }

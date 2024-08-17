@@ -41,11 +41,11 @@
     </sql>
 
     <select id="hasFollowerCount" resultType="java.lang.Long">
-        select count(followerId) from follow where followeeId = #{followeeId};
+        select count(followerId) from follow where followeeId = #{followeeId} and isDelete = 0;
     </select>
 
     <select id="hasBlogCount" resultType="java.lang.Long">
-        select count(id) from blog where userId = #{userId};
+        select count(id) from blog where userId = #{userId} and isDelete = 0;
     </select>
 
 

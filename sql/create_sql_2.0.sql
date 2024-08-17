@@ -210,11 +210,10 @@ FROM hjj.chat c
     SELECT MAX(id) AS max_id
     FROM hjj.chat
     WHERE isDelete = 0
-      AND (fromId = 2 or toId = 2)
-        AND toId IN (4, 5, 1, 3)
+      AND (fromId = 1 or toId = 1)
+        AND toId IN (5862, 2, 6, 5882, 7, 5, 5887, 5856, 5859, 5915, 5921, 5923, 9, 5934, 5937, 5938, 5943, 5945, 5936, 5944, 5948, 5956)
     GROUP BY toId
-        ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = 2 OR c.toId = 2) order by createTime desc;
-
+        ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = 1 OR c.toId = 1) and chatType = 1 order by createTime desc;
 
 select id from chat where toId = 2 or fromId = 2;
 
@@ -229,3 +228,9 @@ select * from chat where toId = 2 or fromId = 2 order by createTime desc;
 select id from blog where isDelete = 0 limit 7, 4;
 select id from blog limit 2, 4;
 select id from blog limit 3, 4;
+
+select friendId from friend where userId = 1 and isDelete = 0;
+
+select * from chat where isDelete = 0 and (toId = 1 or fromId = 1) and chatType = 1 group by toId;
+
+select sum(likeNum) from blog where userId = 1 and isDelete = 0

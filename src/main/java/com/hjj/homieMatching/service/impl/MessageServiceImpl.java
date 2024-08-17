@@ -42,30 +42,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     private BlogService blogService;
 
     @Override
-    public boolean addStarMessage(Message message) {
-        Long fromId = message.getFromId();
-        Long toId = message.getToId();
-        String text = message.getText();
-        Long blogId = message.getBlogId();
-        User user = userService.getById(fromId);
-        Blog blog = blogService.getById(blogId);
-        // 添加消息前，先检查此消息是否存在并且是否未读
-        Long count = this.lambdaQuery().eq(Message::getToId, toId).eq(Message::getFromId, fromId)
-                .eq(Message::getBlogId, blogId).eq(Message::getIsRead, 0).eq(Message::getType, 1).count();
-        boolean save = false;
-        if (count != null && count < 1) {
-            message.setAvatarUrl(user.getAvatarUrl());
-            message.setText(user.getUsername() + text + blog.getTitle());
-            save = this.save(message);
-            if (!save) {
-                log.error("用户：{} 收藏：{} 的博客：{} 后，添加收藏消息到消息表失败了！", fromId, toId, blogId);
-            }
-        }
-        return save;
-    }
-
-    @Override
-    public boolean addLikeMessage(Message message) {
+    public synchronized boolean addStarMessage(Message message) {
         Long fromId = message.getFromId();
         Long toId = message.getToId();
         String text = message.getText();
@@ -81,6 +58,29 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
             message.setText(user.getUsername() + text + blog.getTitle());
             save = this.save(message);
             if (!save) {
+                log.error("用户：{} 收藏：{} 的博客：{} 后，添加收藏消息到消息表失败了！", fromId, toId, blogId);
+            }
+        }
+        return save;
+    }
+
+    @Override
+    public synchronized boolean addLikeMessage(Message message) {
+        Long fromId = message.getFromId();
+        Long toId = message.getToId();
+        String text = message.getText();
+        Long blogId = message.getBlogId();
+        User user = userService.getById(fromId);
+        Blog blog = blogService.getById(blogId);
+        // 添加消息前，先检查此消息是否存在并且是否未读
+        Long count = this.lambdaQuery().eq(Message::getToId, toId).eq(Message::getFromId, fromId)
+                .eq(Message::getBlogId, blogId).eq(Message::getIsRead, 0).eq(Message::getType, 1).count();
+        boolean save = false;
+        if (count != null && count < 1) {
+            message.setAvatarUrl(user.getAvatarUrl());
+            message.setText(user.getUsername() + text + blog.getTitle());
+            save = this.save(message);
+            if (!save) {
                 log.error("用户：{} 点赞:{} 的博客：{} 后，添加点赞消息到消息表失败了！", fromId, toId, blogId);
             }
         }
@@ -88,7 +88,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message>
     }
 
     @Override
-    public boolean addFollowMessage(Message message) {
+    public synchronized boolean addFollowMessage(Message message) {
         Long fromId = message.getFromId();
         Long toId = message.getToId();
         String text = message.getText();

@@ -6,6 +6,7 @@ package com.hjj.homieMatching.constant;
  * @date 2023/06/22
  */
 public final class ChatConstant {
+
     private ChatConstant() {
     }
 

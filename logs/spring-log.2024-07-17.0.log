@@ -1,0 +1,1301 @@
+21:07:09.080 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 64008 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+21:07:09.081 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+21:07:09.127 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+21:07:09.127 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+21:07:09.868 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+21:07:09.870 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+21:07:09.897 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 12 ms. Found 0 Redis repository interfaces.
+21:07:10.581 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+21:07:10.587 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+21:07:10.588 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+21:07:10.589 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+21:07:10.651 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+21:07:10.651 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1524 ms
+21:07:10.694 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+21:07:11.684 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+21:07:12.472 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+21:07:12.715 [redisson-netty-4-6] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6379
+21:07:12.746 [redisson-netty-4-20] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for localhost/127.0.0.1:6379
+21:07:13.061 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+21:07:13.367 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+21:07:13.849 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+21:07:13.852 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+21:07:13.854 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+21:07:13.871 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@69e66a0a, ORIGINAL=[Ljava.lang.String;@1412e67a, PIC_CLICK=[Ljava.lang.String;@69ca612b]
+21:07:13.871 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+21:07:13.985 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+21:07:14.071 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@343b9591, ORIGINAL=[Ljava.lang.String;@293267df, PIC_CLICK=[Ljava.lang.String;@77f5658e]
+21:07:14.072 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+21:07:14.156 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+21:07:14.175 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+21:07:14.386 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+21:07:14.943 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+21:07:14.952 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+21:07:14.953 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+21:07:14.955 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+21:07:14.979 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+21:07:15.247 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+21:07:15.256 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 6.578 seconds (JVM running for 7.615)
+21:07:20.343 [http-nio-8081-exec-2] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:07:20.343 [http-nio-8081-exec-1] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 30F7F6C41F3672E10A3B9CA723DC0DCC
+21:07:20.351 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+21:07:20.351 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+21:07:20.352 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+21:07:20.407 [http-nio-8081-exec-2] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: b76024e9-6631-4d3d-a9f3-e8dc1db3cc9a, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 2, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@57e37e93]
+21:07:20.407 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 4aed3090-6989-4344-bff3-d2f80b24560c, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 1, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@51ac384f]
+21:07:20.413 [http-nio-8081-exec-1] ERROR c.h.h.e.GlobalExceptionHandler - businsessException未登录
+com.hjj.homieMatching.exception.BusinessException: 未登录
+	at com.hjj.homieMatching.service.impl.UserServiceImpl.getLoginUser(UserServiceImpl.java:334)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$FastClassBySpringCGLIB$$db23d2f7.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$d5e377c9.getLoginUser(<generated>)
+	at com.hjj.homieMatching.aop.LoginInterceptor.beforeControllerMethodExecution(LoginInterceptor.java:34)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:617)
+	at org.springframework.aop.aspectj.AspectJMethodBeforeAdvice.before(AspectJMethodBeforeAdvice.java:44)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:57)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.UserController$$EnhancerBySpringCGLIB$$52742ef4.recommendUsers(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+21:07:20.413 [http-nio-8081-exec-2] ERROR c.h.h.e.GlobalExceptionHandler - businsessException未登录
+com.hjj.homieMatching.exception.BusinessException: 未登录
+	at com.hjj.homieMatching.service.impl.UserServiceImpl.getLoginUser(UserServiceImpl.java:334)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$FastClassBySpringCGLIB$$db23d2f7.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$d5e377c9.getLoginUser(<generated>)
+	at com.hjj.homieMatching.aop.LoginInterceptor.beforeControllerMethodExecution(LoginInterceptor.java:34)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:617)
+	at org.springframework.aop.aspectj.AspectJMethodBeforeAdvice.before(AspectJMethodBeforeAdvice.java:44)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:57)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.UserController$$EnhancerBySpringCGLIB$$52742ef4.recommendUsers(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+21:07:20.468 [http-nio-8081-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.hjj.homieMatching.exception.BusinessException: 未登录]
+21:07:20.468 [http-nio-8081-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.hjj.homieMatching.exception.BusinessException: 未登录]
+21:07:25.629 [http-nio-8081-exec-6] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 6ADEEA90EBB64C269B4FC3A77CD27B07
+21:07:25.637 [http-nio-8081-exec-5] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:07:25.664 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 549c81c4-98b8-4379-bf90-d6ba9310a1e6, path: /api/user/login, ip: 0:0:0:0:0:0:0:1, params: [UserLoginRequest(userAccount=burger, userPassword=12345678), org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@2ac0e54b]
+21:07:25.683 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 549c81c4-98b8-4379-bf90-d6ba9310a1e6, cost: 18ms
+21:07:26.265 [http-nio-8081-exec-7] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:07:26.269 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 984db686-9f70-4353-b447-ea46af2c4b2b, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 1, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@bd8602b]
+21:07:26.277 [http-nio-8081-exec-8] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:07:26.282 [http-nio-8081-exec-8] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 5cf54e04-921b-4d39-a508-f11cdea3d5fa, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 2, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@30d9c284]
+21:07:26.355 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 984db686-9f70-4353-b447-ea46af2c4b2b, cost: 86ms
+21:07:26.358 [http-nio-8081-exec-8] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 5cf54e04-921b-4d39-a508-f11cdea3d5fa, cost: 77ms
+21:07:28.918 [http-nio-8081-exec-10] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:07:28.920 [http-nio-8081-exec-10] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: de52f026-e882-47af-ad45-53362e7e130e, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 3, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@4c945755]
+21:07:28.922 [http-nio-8081-exec-10] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: de52f026-e882-47af-ad45-53362e7e130e, cost: 2ms
+21:30:56.855 [http-nio-8081-exec-3] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:30:56.896 [http-nio-8081-exec-3] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 3a8ade7a-3e89-43d1-a0f4-35c6dff7c1ac, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@5f1fa804]
+21:30:57.024 [http-nio-8081-exec-3] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 3a8ade7a-3e89-43d1-a0f4-35c6dff7c1ac, cost: 128ms
+21:30:58.021 [http-nio-8081-exec-5] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:30:58.021 [http-nio-8081-exec-6] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:30:58.025 [http-nio-8081-exec-6] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: c0337381-4894-4166-b4e3-349974ffc281, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 1, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@604fead3]
+21:30:58.025 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 04f24840-cbc6-4300-ac79-2986f967748b, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 2, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@222c51]
+21:30:58.032 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 04f24840-cbc6-4300-ac79-2986f967748b, cost: 6ms
+21:30:58.034 [http-nio-8081-exec-6] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: c0337381-4894-4166-b4e3-349974ffc281, cost: 8ms
+21:30:58.796 [http-nio-8081-exec-7] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:30:58.799 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 016f25a5-3d64-4329-bf9c-3d6a33b7fb8a, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@7ef57842]
+21:30:58.815 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 016f25a5-3d64-4329-bf9c-3d6a33b7fb8a, cost: 15ms
+21:53:48.850 [http-nio-8081-exec-9] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 9FC48D3714B069744352AA8110083259
+21:53:48.859 [http-nio-8081-exec-9] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 949b6b4b-6077-4fa6-b2a9-cc4d82b2e236, path: /api/user/current, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@46c2a243]
+21:53:48.904 [http-nio-8081-exec-9] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 949b6b4b-6077-4fa6-b2a9-cc4d82b2e236, cost: 45ms
+22:30:32.639 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 93 class path changes (0 additions, 90 deletions, 3 modifications)
+22:30:33.130 [Thread-18] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-8081"]
+22:30:33.131 [Thread-18] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+22:30:33.136 [Thread-18] INFO  o.a.c.c.C.[.[localhost].[/api] - Destroying Spring FrameworkServlet 'dispatcherServlet'
+22:30:33.146 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-5] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.147 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-4] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.147 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-6] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.147 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-7] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.148 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-8] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.148 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-9] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.149 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-11] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.149 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-10] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.149 [Thread-18] WARN  o.a.c.loader.WebappClassLoaderBase - The web application [api] appears to have started a thread named [lettuce-eventExecutorLoop-1-12] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ sun.misc.Unsafe.park(Native Method)
+ java.util.concurrent.locks.LockSupport.park(LockSupport.java:175)
+ java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2039)
+ java.util.concurrent.LinkedBlockingQueue.take(LinkedBlockingQueue.java:442)
+ io.netty.util.concurrent.SingleThreadEventExecutor.takeTask(SingleThreadEventExecutor.java:244)
+ io.netty.util.concurrent.DefaultEventExecutor.run(DefaultEventExecutor.java:64)
+ io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+ io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+ io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+ java.lang.Thread.run(Thread.java:750)
+22:30:33.153 [Thread-18] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-8081"]
+22:30:33.159 [Thread-18] INFO  o.a.coyote.http11.Http11NioProtocol - Destroying ProtocolHandler ["http-nio-8081"]
+22:30:33.215 [Thread-18] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:30:33.223 [Thread-18] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:30:33.896 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 64008 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:30:33.896 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:30:34.238 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:30:34.238 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:30:34.239 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 0 ms. Found 0 Redis repository interfaces.
+22:30:34.275 [restartedMain] WARN  o.m.s.mapper.ClassPathMapperScanner - No MyBatis mapper was found in '[com.hjj.homieMatching.mapper]' package. Please check your configuration.
+22:30:34.397 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:30:34.398 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:30:34.398 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:30:34.398 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:30:34.416 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:30:34.416 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 514 ms
+22:30:34.434 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:30:34.445 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@1d052195, ORIGINAL=[Ljava.lang.String;@7a14d697, PIC_CLICK=[Ljava.lang.String;@40ccd709]
+22:30:34.445 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:30:34.524 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:30:34.662 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@4501218b, ORIGINAL=[Ljava.lang.String;@70efe9b0, PIC_CLICK=[Ljava.lang.String;@5db2a67b]
+22:30:34.662 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:30:34.755 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:30:34.897 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [com/baomidou/mybatisplus/autoconfigure/MybatisPlusAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is org.springframework.core.NestedIOException: Failed to parse mapping resource: 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+22:30:34.897 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+22:30:34.904 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLoggingListener - 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+22:30:34.935 [restartedMain] ERROR o.s.boot.SpringApplication - Application run failed
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sqlSessionFactory' defined in class path resource [com/baomidou/mybatisplus/autoconfigure/MybatisPlusAutoConfiguration.class]: Bean instantiation via factory method failed; nested exception is org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is org.springframework.core.NestedIOException: Failed to parse mapping resource: 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiateUsingFactoryMethod(ConstructorResolver.java:633)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.instantiateUsingFactoryMethod(AbstractAutowireCapableBeanFactory.java:1352)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1195)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:582)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:542)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:335)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:234)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:333)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:208)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:955)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:921)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:583)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:147)
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:731)
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:408)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:307)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
+	at com.hjj.homieMatching.HomieMatchingApplication.main(HomieMatchingApplication.java:13)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.boot.devtools.restart.RestartLauncher.run(RestartLauncher.java:50)
+Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [org.apache.ibatis.session.SqlSessionFactory]: Factory method 'sqlSessionFactory' threw exception; nested exception is org.springframework.core.NestedIOException: Failed to parse mapping resource: 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
+	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:648)
+	... 24 common frames omitted
+Caused by: org.springframework.core.NestedIOException: Failed to parse mapping resource: 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'; nested exception is org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean.buildSqlSessionFactory(MybatisSqlSessionFactoryBean.java:576)
+	at com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean.afterPropertiesSet(MybatisSqlSessionFactoryBean.java:445)
+	at com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean.getObject(MybatisSqlSessionFactoryBean.java:609)
+	at com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration.sqlSessionFactory(MybatisPlusAutoConfiguration.java:218)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:154)
+	... 25 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error parsing Mapper XML. The XML location is 'file [D:\planet_projects\homieMatching-master\target\classes\mapper\BlogMapper.xml]'. Cause: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:123)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.parse(XMLMapperBuilder.java:95)
+	at com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean.buildSqlSessionFactory(MybatisSqlSessionFactoryBean.java:574)
+	... 33 common frames omitted
+Caused by: org.apache.ibatis.builder.BuilderException: Error resolving class. Cause: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:118)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.resultMapElement(XMLMapperBuilder.java:263)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.resultMapElement(XMLMapperBuilder.java:254)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.resultMapElements(XMLMapperBuilder.java:246)
+	at org.apache.ibatis.builder.xml.XMLMapperBuilder.configurationElement(XMLMapperBuilder.java:119)
+	... 35 common frames omitted
+Caused by: org.apache.ibatis.type.TypeException: Could not resolve type alias 'com.hjj.homieMatching.model.domain.Blog'.  Cause: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:128)
+	at org.apache.ibatis.builder.BaseBuilder.resolveAlias(BaseBuilder.java:149)
+	at org.apache.ibatis.builder.BaseBuilder.resolveClass(BaseBuilder.java:116)
+	... 39 common frames omitted
+Caused by: java.lang.ClassNotFoundException: Cannot find class: com.hjj.homieMatching.model.domain.Blog
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:196)
+	at org.apache.ibatis.io.ClassLoaderWrapper.classForName(ClassLoaderWrapper.java:89)
+	at org.apache.ibatis.io.Resources.classForName(Resources.java:261)
+	at org.apache.ibatis.type.TypeAliasRegistry.resolveAlias(TypeAliasRegistry.java:124)
+	... 41 common frames omitted
+22:30:40.541 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 64008 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:30:40.542 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:30:40.872 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:30:40.873 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:30:40.882 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+22:30:41.033 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:30:41.034 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:30:41.034 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:30:41.034 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:30:41.049 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:30:41.049 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 503 ms
+22:30:41.073 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+22:30:41.361 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:30:41.855 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+22:30:41.910 [redisson-netty-10-9] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:30:42.205 [redisson-netty-10-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:30:42.465 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+22:30:42.482 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+22:30:42.581 [main] INFO  c.h.h.service.ImportUserGEO - Starting ImportUserGEO using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 49744 (started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:30:42.582 [main] INFO  c.h.h.service.ImportUserGEO - The following 1 profile is active: "dev"
+22:30:42.668 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:30:42.680 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@747405fb, ORIGINAL=[Ljava.lang.String;@55a7094f, PIC_CLICK=[Ljava.lang.String;@1fa179ce]
+22:30:42.680 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:30:42.764 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:30:42.926 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@73dfb46a, ORIGINAL=[Ljava.lang.String;@204f37e3, PIC_CLICK=[Ljava.lang.String;@77b2cc45]
+22:30:42.926 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:30:43.030 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:30:43.065 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:30:43.223 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+22:30:43.644 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+22:30:43.647 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+22:30:43.647 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:30:43.648 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:30:43.654 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:30:43.770 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:30:43.773 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:30:43.800 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 12 ms. Found 0 Redis repository interfaces.
+22:30:44.017 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:30:44.019 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 3.527 seconds (JVM running for 5016.377)
+22:30:44.021 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+22:30:46.558 [main] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:30:47.933 [main] INFO  org.redisson.Version - Redisson 3.17.5
+22:30:48.274 [redisson-netty-4-9] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:30:48.539 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:30:49.078 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:30:49.409 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:30:50.162 [main] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:30:50.166 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:30:50.173 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:30:50.202 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@5f803481, ORIGINAL=[Ljava.lang.String;@408f70ab, PIC_CLICK=[Ljava.lang.String;@5383bf08]
+22:30:50.203 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:30:50.330 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:30:50.424 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@142918a0, ORIGINAL=[Ljava.lang.String;@745cf754, PIC_CLICK=[Ljava.lang.String;@25bc65ab]
+22:30:50.424 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:30:50.506 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:30:50.550 [main] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:30:51.960 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:30:51.963 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:30:51.993 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:30:52.478 [main] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:30:52.487 [main] INFO  c.h.h.service.ImportUserGEO - Started ImportUserGEO in 10.35 seconds (JVM running for 11.467)
+22:30:52.839 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:30:52.854 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:33:31.925 [main] INFO  c.h.h.service.ImportUserGEO - Starting ImportUserGEO using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 65400 (started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:33:31.926 [main] INFO  c.h.h.service.ImportUserGEO - The following 1 profile is active: "dev"
+22:33:32.799 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:33:32.801 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:33:32.827 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 12 ms. Found 0 Redis repository interfaces.
+22:33:35.410 [main] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:33:36.901 [main] INFO  org.redisson.Version - Redisson 3.17.5
+22:33:37.142 [redisson-netty-4-10] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:33:37.413 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:33:38.040 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:33:38.370 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:33:39.155 [main] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:33:39.160 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:33:39.165 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:33:39.195 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@53d808ea, ORIGINAL=[Ljava.lang.String;@44864ebe, PIC_CLICK=[Ljava.lang.String;@5f803481]
+22:33:39.195 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:33:39.321 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:33:39.423 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@a1b7549, ORIGINAL=[Ljava.lang.String;@7aa63f50, PIC_CLICK=[Ljava.lang.String;@142918a0]
+22:33:39.424 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:33:39.503 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:33:39.566 [main] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:33:41.003 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:33:41.007 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:33:41.041 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:33:41.386 [main] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:33:41.395 [main] INFO  c.h.h.service.ImportUserGEO - Started ImportUserGEO in 9.92 seconds (JVM running for 10.97)
+22:33:41.742 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:33:41.752 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:37:56.343 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+22:37:56.351 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+22:37:59.525 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 45556 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:37:59.526 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:37:59.572 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+22:37:59.572 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+22:38:00.261 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:38:00.262 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:38:00.286 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 0 Redis repository interfaces.
+22:38:01.086 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:38:01.093 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:38:01.095 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:38:01.095 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:38:01.162 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:38:01.163 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1591 ms
+22:38:01.208 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+22:38:02.257 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:38:03.043 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+22:38:03.246 [redisson-netty-4-13] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:38:03.519 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:38:03.969 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:38:04.528 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:38:05.080 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:38:05.082 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:38:05.084 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:38:05.104 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@9d81785, ORIGINAL=[Ljava.lang.String;@59d538e8, PIC_CLICK=[Ljava.lang.String;@3d5b89fe]
+22:38:05.104 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:38:05.217 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:38:05.304 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@7f4fe1d5, ORIGINAL=[Ljava.lang.String;@322173e5, PIC_CLICK=[Ljava.lang.String;@305e169d]
+22:38:05.305 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:38:05.389 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:38:05.406 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:38:05.589 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+22:38:06.131 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+22:38:06.141 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+22:38:06.142 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:38:06.144 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:38:06.174 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:38:06.507 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:38:06.530 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 7.388 seconds (JVM running for 8.59)
+22:38:17.749 [http-nio-8081-exec-1] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:17.756 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+22:38:17.756 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+22:38:17.758 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+22:38:17.824 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: a3196e8e-2d88-45ee-9d2f-2435db74e1dc, path: /api/user/current, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@20e493b]
+22:38:17.829 [http-nio-8081-exec-1] ERROR c.h.h.e.GlobalExceptionHandler - businsessException未登录
+com.hjj.homieMatching.exception.BusinessException: 未登录
+	at com.hjj.homieMatching.service.impl.UserServiceImpl.getLoginUser(UserServiceImpl.java:334)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$FastClassBySpringCGLIB$$db23d2f7.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$8178a0b6.getLoginUser(<generated>)
+	at com.hjj.homieMatching.aop.LoginInterceptor.beforeControllerMethodExecution(LoginInterceptor.java:34)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:617)
+	at org.springframework.aop.aspectj.AspectJMethodBeforeAdvice.before(AspectJMethodBeforeAdvice.java:44)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:57)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.UserController$$EnhancerBySpringCGLIB$$b88b736a.getCurrentUser(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+22:38:17.979 [http-nio-8081-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.hjj.homieMatching.exception.BusinessException: 未登录]
+22:38:18.024 [http-nio-8081-exec-2] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:18.039 [http-nio-8081-exec-2] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 7da8a66d-f672-4d4d-9f2c-795c36165bde, path: /api/user/current, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@4a588104]
+22:38:18.040 [http-nio-8081-exec-2] ERROR c.h.h.e.GlobalExceptionHandler - businsessException未登录
+com.hjj.homieMatching.exception.BusinessException: 未登录
+	at com.hjj.homieMatching.service.impl.UserServiceImpl.getLoginUser(UserServiceImpl.java:334)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$FastClassBySpringCGLIB$$db23d2f7.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.UserServiceImpl$$EnhancerBySpringCGLIB$$8178a0b6.getLoginUser(<generated>)
+	at com.hjj.homieMatching.aop.LoginInterceptor.beforeControllerMethodExecution(LoginInterceptor.java:34)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:617)
+	at org.springframework.aop.aspectj.AspectJMethodBeforeAdvice.before(AspectJMethodBeforeAdvice.java:44)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:57)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.UserController$$EnhancerBySpringCGLIB$$b88b736a.getCurrentUser(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+22:38:18.129 [http-nio-8081-exec-2] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [com.hjj.homieMatching.exception.BusinessException: 未登录]
+22:38:24.275 [http-nio-8081-exec-3] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 7F4E67D32ABE2DD43AD3BCA2B6A67EA8
+22:38:24.373 [http-nio-8081-exec-4] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:24.417 [http-nio-8081-exec-4] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 76dc4258-407f-4413-a673-e203a5329430, path: /api/user/login, ip: 0:0:0:0:0:0:0:1, params: [UserLoginRequest(userAccount=burger, userPassword=12345678), org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@1f72993f]
+22:38:24.457 [http-nio-8081-exec-4] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 76dc4258-407f-4413-a673-e203a5329430, cost: 39ms
+22:38:25.217 [http-nio-8081-exec-5] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:25.227 [http-nio-8081-exec-6] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:25.256 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 9bd69061-a8b1-497a-9082-77a37907fe90, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 1, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@6eac24d0]
+22:38:25.266 [http-nio-8081-exec-6] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 39f11c88-fc6b-40fc-92b6-28668e4f041d, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 2, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@40c931ad]
+22:38:25.389 [http-nio-8081-exec-5] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 9bd69061-a8b1-497a-9082-77a37907fe90, cost: 132ms
+22:38:25.418 [http-nio-8081-exec-6] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 39f11c88-fc6b-40fc-92b6-28668e4f041d, cost: 152ms
+22:38:27.460 [http-nio-8081-exec-7] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: AE7C48AA2AC9CA6CFEA98E93353A19AF
+22:38:27.521 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 680f5f1d-4aa6-42c0-ba20-8f69aeb1794e, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@12b8332a]
+22:38:27.809 [http-nio-8081-exec-7] ERROR c.h.h.e.GlobalExceptionHandler - runtimeException
+java.lang.NullPointerException: null
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.lambda$listFriends$1(FriendServiceImpl.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1384)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:566)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.listFriends(FriendServiceImpl.java:137)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$FastClassBySpringCGLIB$$c0402304.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$EnhancerBySpringCGLIB$$dbe580fd.listFriends(<generated>)
+	at com.hjj.homieMatching.controller.FriendController.listFriends(FriendController.java:54)
+	at com.hjj.homieMatching.controller.FriendController$$FastClassBySpringCGLIB$$97e6b92a.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:58)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.FriendController$$EnhancerBySpringCGLIB$$e5945483.listFriends(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+22:38:28.039 [http-nio-8081-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.NullPointerException]
+22:39:07.875 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:39:07.883 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:39:11.613 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 35556 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:39:11.614 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:39:11.695 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+22:39:11.695 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+22:39:12.607 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:39:12.610 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:39:12.642 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 0 Redis repository interfaces.
+22:39:13.700 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:39:13.707 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:39:13.709 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:39:13.709 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:39:13.812 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:39:13.813 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2118 ms
+22:39:13.915 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+22:39:15.017 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:39:16.048 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+22:39:16.276 [redisson-netty-4-9] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:39:16.567 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:39:16.926 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:39:17.324 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:39:18.121 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:39:18.124 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:39:18.127 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:39:18.147 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@59837ce, ORIGINAL=[Ljava.lang.String;@b72a8db, PIC_CLICK=[Ljava.lang.String;@22f55aab]
+22:39:18.147 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:39:18.262 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:39:18.358 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@42bf3433, ORIGINAL=[Ljava.lang.String;@8f6a883, PIC_CLICK=[Ljava.lang.String;@319a09b7]
+22:39:18.358 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:39:18.446 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:39:18.467 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:39:18.674 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+22:39:19.308 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+22:39:19.318 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+22:39:19.319 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:39:19.322 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:39:19.348 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:39:19.668 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:39:19.676 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 8.546 seconds (JVM running for 10.513)
+22:39:46.703 [http-nio-8081-exec-1] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:39:46.710 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+22:39:46.710 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+22:39:46.712 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+22:39:46.782 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 3bb7da8e-60b1-4748-969f-7517e29f898a, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@7e71d2bc]
+22:39:46.898 [http-nio-8081-exec-1] ERROR c.h.h.e.GlobalExceptionHandler - runtimeException
+java.lang.NullPointerException: null
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.lambda$listFriends$1(FriendServiceImpl.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1384)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:566)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.listFriends(FriendServiceImpl.java:137)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$FastClassBySpringCGLIB$$c0402304.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$EnhancerBySpringCGLIB$$81a6c3f0.listFriends(<generated>)
+	at com.hjj.homieMatching.controller.FriendController.listFriends(FriendController.java:54)
+	at com.hjj.homieMatching.controller.FriendController$$FastClassBySpringCGLIB$$97e6b92a.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:58)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.FriendController$$EnhancerBySpringCGLIB$$a29f7762.listFriends(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+22:39:47.028 [http-nio-8081-exec-1] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.NullPointerException]
+22:40:10.656 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:40:10.663 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:40:13.790 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 40112 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:40:13.791 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:40:13.869 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+22:40:13.869 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+22:40:14.589 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:40:14.590 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:40:14.614 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+22:40:15.321 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:40:15.327 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:40:15.328 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:40:15.329 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:40:15.389 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:40:15.390 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1520 ms
+22:40:15.435 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+22:40:16.402 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:40:17.173 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+22:40:17.474 [redisson-netty-4-13] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:40:17.763 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:40:18.161 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:40:18.774 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:40:19.188 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:40:19.190 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:40:19.192 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:40:19.207 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@5d3b9af2, ORIGINAL=[Ljava.lang.String;@13c6f463, PIC_CLICK=[Ljava.lang.String;@1f0909a8]
+22:40:19.207 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:40:19.307 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:40:19.392 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@2ce8781b, ORIGINAL=[Ljava.lang.String;@71415f2f, PIC_CLICK=[Ljava.lang.String;@54189a1e]
+22:40:19.393 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:40:19.475 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:40:19.493 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:40:19.674 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+22:40:20.409 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+22:40:20.419 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+22:40:20.420 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:40:20.423 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:40:20.455 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:40:20.951 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:40:20.959 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 7.578 seconds (JVM running for 8.682)
+22:40:37.337 [http-nio-8081-exec-2] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:40:37.337 [http-nio-8081-exec-1] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:40:37.345 [http-nio-8081-exec-2] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+22:40:37.345 [http-nio-8081-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+22:40:37.347 [http-nio-8081-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+22:40:37.419 [http-nio-8081-exec-2] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 54e8d8a8-2eb4-46a6-a68a-fa146a6103ea, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 2, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@50c9775c]
+22:40:37.419 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 41ad8712-f4e1-4c5d-83ae-d9dd2504c88f, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 1, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@29fce53e]
+22:40:37.508 [http-nio-8081-exec-2] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 54e8d8a8-2eb4-46a6-a68a-fa146a6103ea, cost: 95ms
+22:40:37.526 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 41ad8712-f4e1-4c5d-83ae-d9dd2504c88f, cost: 113ms
+22:40:38.346 [http-nio-8081-exec-3] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:40:38.356 [http-nio-8081-exec-3] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 7a431453-0d49-4949-8be7-aa8c1edf6555, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 3, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@55bff4b]
+22:40:38.374 [http-nio-8081-exec-3] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 7a431453-0d49-4949-8be7-aa8c1edf6555, cost: 17ms
+22:40:39.878 [http-nio-8081-exec-4] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:40:39.889 [http-nio-8081-exec-4] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 820012aa-241d-49cb-93fc-87f96656cbce, path: /api/user/recommend, ip: 0:0:0:0:0:0:0:1, params: [3, 4, org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@4b254aea]
+22:40:39.907 [http-nio-8081-exec-4] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 820012aa-241d-49cb-93fc-87f96656cbce, cost: 18ms
+22:40:51.143 [http-nio-8081-exec-7] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:40:51.156 [http-nio-8081-exec-7] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: bd6e26cd-92e8-4c84-8867-0562d9573f32, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@4121dbda]
+22:42:30.194 [main] INFO  c.h.h.service.ImportUserGEO - Starting ImportUserGEO using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 51232 (started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:42:30.195 [main] INFO  c.h.h.service.ImportUserGEO - The following 1 profile is active: "dev"
+22:42:30.971 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:42:30.973 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:42:30.993 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+22:42:33.161 [main] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:42:34.467 [main] INFO  org.redisson.Version - Redisson 3.17.5
+22:42:35.228 [redisson-netty-4-13] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:42:39.409 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:42:39.962 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:42:40.760 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:42:41.788 [main] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:42:41.791 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:42:41.797 [main] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:42:41.827 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@595184d8, ORIGINAL=[Ljava.lang.String;@7d49a1a0, PIC_CLICK=[Ljava.lang.String;@3a0baec0]
+22:42:41.827 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:42:41.950 [main] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:42:42.053 [main] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@4738131e, ORIGINAL=[Ljava.lang.String;@3b576ee3, PIC_CLICK=[Ljava.lang.String;@705d914f]
+22:42:42.053 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:42:42.133 [main] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:42:42.187 [main] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:42:44.453 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:42:44.456 [main] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:42:44.496 [main] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:42:46.157 [main] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:42:46.166 [main] INFO  c.h.h.service.ImportUserGEO - Started ImportUserGEO in 16.346 seconds (JVM running for 17.396)
+22:42:47.129 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:42:48.359 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:43:15.436 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m26s534ms25µs900ns).
+22:43:15.441 [http-nio-8081-exec-8] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:43:15.446 [http-nio-8081-exec-7] ERROR c.h.h.e.GlobalExceptionHandler - runtimeException
+java.lang.NullPointerException: null
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.lambda$listFriends$1(FriendServiceImpl.java:135)
+	at java.util.stream.ReferencePipeline$3$1.accept(ReferencePipeline.java:193)
+	at java.util.ArrayList$ArrayListSpliterator.forEachRemaining(ArrayList.java:1384)
+	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:482)
+	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+	at java.util.stream.ReduceOps$ReduceOp.evaluateSequential(ReduceOps.java:708)
+	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+	at java.util.stream.ReferencePipeline.collect(ReferencePipeline.java:566)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl.listFriends(FriendServiceImpl.java:137)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$FastClassBySpringCGLIB$$c0402304.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy.invokeMethod(CglibAopProxy.java:386)
+	at org.springframework.aop.framework.CglibAopProxy.access$000(CglibAopProxy.java:85)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:703)
+	at com.hjj.homieMatching.service.impl.FriendServiceImpl$$EnhancerBySpringCGLIB$$77c6c46b.listFriends(<generated>)
+	at com.hjj.homieMatching.controller.FriendController.listFriends(FriendController.java:54)
+	at com.hjj.homieMatching.controller.FriendController$$FastClassBySpringCGLIB$$97e6b92a.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:792)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:58)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint.proceed(MethodInvocationProceedingJoinPoint.java:89)
+	at com.hjj.homieMatching.aop.LogInterceptor.doInterceptor(LogInterceptor.java:46)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethodWithGivenArgs(AbstractAspectJAdvice.java:634)
+	at org.springframework.aop.aspectj.AbstractAspectJAdvice.invokeAdviceMethod(AbstractAspectJAdvice.java:624)
+	at org.springframework.aop.aspectj.AspectJAroundAdvice.invoke(AspectJAroundAdvice.java:72)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:97)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:762)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:707)
+	at com.hjj.homieMatching.controller.FriendController$$EnhancerBySpringCGLIB$$67d79e82.listFriends(<generated>)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1072)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:965)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:529)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:623)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:209)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at com.hjj.homieMatching.config.HttpSessionFilter.doFilter(HttpSessionFilter.java:20)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.session.web.http.SessionRepositoryFilter.doFilterInternal(SessionRepositoryFilter.java:142)
+	at org.springframework.session.web.http.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:82)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:178)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:153)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:168)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:481)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:130)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:390)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:926)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1790)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.lang.Thread.run(Thread.java:750)
+22:43:15.451 [http-nio-8081-exec-8] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: 5843d1d7-83ae-4f0d-ae49-68ceb1db99c5, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@1c17c3a6]
+22:43:15.517 [http-nio-8081-exec-7] WARN  o.s.w.s.m.m.a.ExceptionHandlerExceptionResolver - Resolved [java.lang.NullPointerException]
+22:43:15.533 [http-nio-8081-exec-8] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: 5843d1d7-83ae-4f0d-ae49-68ceb1db99c5, cost: 82ms
+22:43:15.914 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:43:15.922 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+22:43:18.916 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Starting HomieMatchingApplication using Java 1.8.0_402 on DESKTOP-MCJU8J2 with PID 29704 (D:\planet_projects\homieMatching-master\target\classes started by 何佳骏 in D:\planet_projects\homieMatching-master)
+22:43:18.917 [restartedMain] INFO  c.h.h.HomieMatchingApplication - The following 1 profile is active: "dev"
+22:43:19.014 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+22:43:19.015 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+22:43:19.803 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+22:43:19.805 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+22:43:19.827 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 10 ms. Found 0 Redis repository interfaces.
+22:43:20.642 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8081 (http)
+22:43:20.649 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8081"]
+22:43:20.650 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+22:43:20.650 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.80]
+22:43:20.724 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+22:43:20.724 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1709 ms
+22:43:20.775 [restartedMain] INFO  o.s.b.web.servlet.RegistrationBean - Filter httpSessionFilter was not registered (possibly already registered?)
+22:43:21.813 [restartedMain] WARN  c.b.m.core.metadata.TableInfoHelper - This primary key of "id" is primitive !不建议如此请使用包装类 in Class: "com.hjj.homieMatching.model.domain.User"
+22:43:22.606 [restartedMain] INFO  org.redisson.Version - Redisson 3.17.5
+22:43:22.785 [redisson-netty-4-11] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:43:23.080 [redisson-netty-4-19] INFO  o.r.c.pool.MasterConnectionPool - 24 connections initialized for 47.116.208.231/47.116.208.231:6379
+22:43:23.445 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+22:43:23.927 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+22:43:24.317 [restartedMain] INFO  c.a.c.c.AjCaptchaServiceAutoConfiguration - 自定义配置项：
+AjCaptchaProperties{type=DEFAULT, jigsaw='', picClick='', waterMark='我的水印', waterFont='WenQuanZhengHei.ttf', fontType='WenQuanZhengHei.ttf', slipOffset='5', aesStatus=true, interferenceOptions='0', cacheNumber='1000', timingClear='180', cacheType=local, reqFrequencyLimitEnable=false, reqGetLockLimit=5, reqGetLockSeconds=300, reqGetMinuteLimit=100, reqCheckMinuteLimit=100, reqVerifyMinuteLimit=100}
+22:43:24.320 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaCache-service:[local]
+22:43:24.323 [restartedMain] INFO  c.a.c.s.impl.CaptchaServiceFactory - supported-captchaTypes-service:[clickWord, default, blockPuzzle]
+22:43:24.340 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@5a789bf4, ORIGINAL=[Ljava.lang.String;@225c1443, PIC_CLICK=[Ljava.lang.String;@408c279]
+22:43:24.341 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - --->>>初始化验证码底图<<<---clickWord
+22:43:24.451 [restartedMain] INFO  c.a.c.s.i.ClickWordCaptchaServiceImpl - 初始化local缓存...
+22:43:24.562 [restartedMain] INFO  com.anji.captcha.util.ImageUtils - 初始化底图:[SLIDING_BLOCK=[Ljava.lang.String;@37fc1249, ORIGINAL=[Ljava.lang.String;@220f79e1, PIC_CLICK=[Ljava.lang.String;@213ca0cd]
+22:43:24.563 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - --->>>初始化验证码底图<<<---blockPuzzle
+22:43:24.641 [restartedMain] INFO  c.a.c.s.i.BlockPuzzleCaptchaServiceImpl - 初始化local缓存...
+22:43:24.661 [restartedMain] INFO  s.d.s.w.WebMvcPropertySourcedRequestMappingHandlerMapping - Mapped URL path [/v2/api-docs] onto method [springfox.documentation.swagger2.web.Swagger2ControllerWebMvc#getDocumentation(String, HttpServletRequest)]
+22:43:24.862 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+22:43:25.560 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8081"]
+22:43:25.570 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8081 (http) with context path '/api'
+22:43:25.571 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Documentation plugins bootstrapped
+22:43:25.573 [restartedMain] INFO  s.d.s.w.p.DocumentationPluginsBootstrapper - Found 1 custom documentation plugin(s)
+22:43:25.600 [restartedMain] INFO  s.d.s.w.s.ApiListingReferenceScanner - Scanning for api listing references
+22:43:25.962 [restartedMain] INFO  o.s.s.a.ScheduledAnnotationBeanPostProcessor - No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+22:43:25.971 [restartedMain] INFO  c.h.h.HomieMatchingApplication - Started HomieMatchingApplication in 7.49 seconds (JVM running for 8.66)
+22:43:31.973 [http-nio-8081-exec-1] INFO  c.h.h.config.HttpSessionConfig - HttpSession initialized: 3C8638E0FC041E6D488A0BFF167C1E6C
+22:43:31.979 [http-nio-8081-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+22:43:31.979 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+22:43:31.980 [http-nio-8081-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+22:43:32.049 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request start，id: c9c9b311-0180-4ae7-aa61-e36a27a635a3, path: /api/friend/list, ip: 0:0:0:0:0:0:0:1, params: [org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper@48c23255]
+22:43:40.412 [http-nio-8081-exec-1] INFO  c.h.homieMatching.aop.LogInterceptor - request end, id: c9c9b311-0180-4ae7-aa61-e36a27a635a3, cost: 8369ms
+22:44:31.279 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+22:44:31.289 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

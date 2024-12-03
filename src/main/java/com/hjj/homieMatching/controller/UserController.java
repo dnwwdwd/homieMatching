@@ -1,33 +1,27 @@
 package com.hjj.homieMatching.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
-import com.hjj.homieMatching.constant.RedisConstant;
 import com.hjj.homieMatching.constant.UserConstant;
 import com.hjj.homieMatching.exception.BusinessException;
-import com.hjj.homieMatching.model.domain.Feedback;
 import com.hjj.homieMatching.model.domain.User;
-import com.hjj.homieMatching.model.request.*;
-import com.hjj.homieMatching.model.vo.FollowVO;
+import com.hjj.homieMatching.model.request.DeleteRequest;
+import com.hjj.homieMatching.model.request.UserEditRequest;
+import com.hjj.homieMatching.model.request.UserLoginRequest;
+import com.hjj.homieMatching.model.request.UserRegisterRequest;
 import com.hjj.homieMatching.model.vo.SignInInfoVO;
 import com.hjj.homieMatching.model.vo.UserInfoVO;
 import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.redis.connection.RedisGeoCommands;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

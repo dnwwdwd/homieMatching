@@ -293,7 +293,7 @@ public class ChatServiceImpl extends ServiceImpl<ChatMapper, Chat>
     }
 
     /**
-     * 支票是我信息
+     * 检查是我的信息
      *
      * @param loginUser   登录用户
      * @param chatRecords 聊天记录

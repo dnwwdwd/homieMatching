@@ -422,7 +422,9 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             UserVO userVO = new UserVO();
             Team team = this.getById(teamId);
             TeamUserVO teamUserVO = new TeamUserVO();
-            BeanUtils.copyProperties(team, teamUserVO);
+            if (team != null) {
+                BeanUtils.copyProperties(team, teamUserVO);
+            }
             BeanUtils.copyProperties(user, userVO);
             teamUserVO.setCreateUser(userVO);
             int hasJoinNum = (int) teamHasUserNum(teamId);

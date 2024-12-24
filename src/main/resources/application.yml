@@ -1,16 +1,14 @@
 spring:
-  profiles:
-    active: dev
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   application:
     name: homieMatching
   datasource:
+    url: jdbc:mysql://localhost:3306/hjj
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/hjj?characterEncoding=UTF-8
     username: root
-    password: 123456
+    password: 12345678
   session:
     timeout: 86400
     store-type: redis
@@ -30,8 +28,15 @@ server:
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: isDelete
       logic-delete-value: 1
       logic-not-delete-value: 0
+oss:
+  accessKeyId: LTAI5tDxFxYb9iiGbhpbr6EK
+  accessKeySecret: VmyUuAdJxtErtZ297LeqZy6odx4Fvn
+  folderName: hm/
+  endpoint: https://oss-cn-wuhan-lr.aliyuncs.com
+  bucketName: hejiajun-img-bucket

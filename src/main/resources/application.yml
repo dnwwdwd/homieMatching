@@ -35,8 +35,8 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
 oss:
-  accessKeyId: LTAI5tDxFxYb9iiGbhpbr6EK
-  accessKeySecret: VmyUuAdJxtErtZ297LeqZy6odx4Fvn
-  folderName: hm/
-  endpoint: https://oss-cn-wuhan-lr.aliyuncs.com
-  bucketName: hejiajun-img-bucket
+  accessKeyId:
+  accessKeySecret:
+  folderName:
+  endpoint:
+  bucketName:

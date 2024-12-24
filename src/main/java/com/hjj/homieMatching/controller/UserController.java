@@ -17,6 +17,7 @@ import com.hjj.homieMatching.model.vo.UserVO;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -223,4 +224,15 @@ public class UserController {
         return ResultUtils.success(signInInfoVO);
     }
 
+    @GetMapping("/get/id")
+    public BaseResponse<UserVO> getUserById(@RequestParam Long id, HttpServletRequest request) {
+        if (id == null || id < 1) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getById(id);
+        user = userService.getSafetyUser(user);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return ResultUtils.success(userVO);
+    }
 }

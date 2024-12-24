@@ -40,6 +40,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -575,6 +576,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             List<String> userVOJsonList = userVOList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
             try {
                 stringRedisTemplate.opsForList().rightPushAll(redisKey, userVOJsonList);
+                stringRedisTemplate.expire(redisKey, 10, TimeUnit.MINUTES);
             } catch (Exception e) {
                 log.error("redis set key error", e);
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "缓存写入失败");

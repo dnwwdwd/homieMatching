@@ -233,6 +233,8 @@ select friendId from friend where userId = 1 and isDelete = 0;
 
 select * from chat where isDelete = 0 and (toId = 1 or fromId = 1) and chatType = 1 group by toId;
 
-select sum(likeNum) from blog where userId = 1 and isDelete = 0
+select sum(likeNum) from blog where userId = 1 and isDelete = 0;
 
 select count(id) from user;
+
+select * from user where userAccount = 'burger' and userPassword = 'b84de60a71368ddf3112f8b784502894';

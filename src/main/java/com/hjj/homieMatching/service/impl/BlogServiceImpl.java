@@ -83,7 +83,10 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
-        if (title.length() < 1 || title.length() > 100) {
+        if (title.length() < 1) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "标题不能为空");
+        }
+        if (title.length() > 100) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "标题过长");
         }
         if (StringUtils.isBlank(coverImage) || coverImage.length() > 256) {

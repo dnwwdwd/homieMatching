@@ -39,7 +39,7 @@ public class ImageController {
         long userId = loginUser.getId();
         String url = null;
         // 限制每个用户每分钟上传 1 次
-        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_COVER_IMAGE_UPLOAD_KEY + userId, 1, 1);
+        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_COVER_IMAGE_UPLOAD_KEY + userId, 1, 4);
         try {
             url = aliOSSManager.upload(file);
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class ImageController {
         long userId = loginUser.getId();
         String url = null;
         // 限制每个用户每分钟上传 2 次
-        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_IMAGE_UPLOAD_KEY + userId, 1, 2);
+        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_IMAGE_UPLOAD_KEY + userId, 1, 10);
         try {
             url = aliOSSManager.upload(file);
         } catch (IOException e) {
@@ -69,7 +69,7 @@ public class ImageController {
         long userId = loginUser.getId();
         String url = null;
         // 限制每个用户每分钟上传 2 次
-        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_IMAGE_UPLOAD_KEY + userId, 1, 2);
+        redisLimiterManager.doRateLimiter(RedisConstant.BLOG_IMAGE_UPLOAD_KEY + userId, 1, 4);
         try {
             url = aliOSSManager.upload(file);
         } catch (IOException e) {

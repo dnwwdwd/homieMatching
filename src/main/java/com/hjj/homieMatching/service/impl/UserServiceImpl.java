@@ -189,7 +189,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userAccount", userAccount);
         queryWrapper.eq("userPassword", encryptPassword);
-        User user = this.baseMapper.selectOne(queryWrapper);
+        User user = this.getOne(queryWrapper);
         // 用户不存在
         if (user == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号密码不匹配");

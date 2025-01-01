@@ -191,6 +191,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         BlogVO blogVO = new BlogVO();
         BlogUserVO blogUserVO = new BlogUserVO();
         BeanUtils.copyProperties(blog, blogVO);
+
         Long blogUserId = blog.getUserId();
         User user = userService.getById(blogUserId);
         BeanUtils.copyProperties(user, blogUserVO);

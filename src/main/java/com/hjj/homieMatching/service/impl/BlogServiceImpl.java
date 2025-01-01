@@ -175,7 +175,13 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
         if (!redisBloomFilter.blogIsContained(id)) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "该博客不存在");
+            Blog blog = this.getById(id);
+            if (blog != null) {
+                // 添加博客至博客的布隆过滤器
+                redisBloomFilter.addBlogToFilter(id);
+            } else {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "该博客不存在");
+            }
         }
         Blog blog = this.getById(id);
         if (blog == null) {

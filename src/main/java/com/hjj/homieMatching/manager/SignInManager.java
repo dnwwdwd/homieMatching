@@ -21,18 +21,21 @@ public class SignInManager {
     @Resource
     private RedissonClient redissonClient;
 
+    // 判断是否签到
     public boolean isSignIn(String key) {
         int days = DateUtils.getGapDayFromFirstDayOfYear();
         RBitSet bitSet = redissonClient.getBitSet(key);
         return bitSet.get(days);
     }
 
+    // 签到
     public void signIn(String key) {
         RBitSet bitSet = redissonClient.getBitSet(key);
         int days = DateUtils.getGapDayFromFirstDayOfYear();
         bitSet.set(days, true);
     }
 
+    // 获取签到信息
     public SignInInfoVO getSignInInfo(String key) {
         RBitSet bitSet = redissonClient.getBitSet(key);
         SignInInfoVO signInInfoVO = new SignInInfoVO();
@@ -52,11 +55,6 @@ public class SignInManager {
                 return Date.from(signedInLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
             }).collect(Collectors.toList());
         }
-//        LocalDate date1 = LocalDate.of(2024, Month.AUGUST, 3);
-//        signedInDateList.add(java.sql.Date.valueOf(date1));
-//        LocalDate date2 = LocalDate.of(2024, Month.AUGUST, 8);
-//        signedInDateList.add(java.sql.Date.valueOf(date2));
-        System.out.println(signedInDateList);
         signInInfoVO.setSignedInDates(signedInDateList);
         return signInInfoVO;
     }

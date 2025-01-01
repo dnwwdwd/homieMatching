@@ -20,9 +20,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,6 +98,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment>
         User loginUser = userService.getLoginUser(request);
         long userId = loginUser.getId();
         List<Comment> commentList = this.lambdaQuery().eq(Comment::getBlogId, blogId).list();
+        if (CollectionUtils.isEmpty(commentList)) {
+            return new ArrayList<>();
+        }
         List<CommentVO> commentVOList = commentList.stream().map(comment -> {
             CommentVO commentVO = new CommentVO();
             BeanUtils.copyProperties(comment, commentVO);

@@ -10,14 +10,14 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Data
+@ConfigurationProperties(prefix = "redis")
 public class RedissonConfig {
 
-    private String host = "47.116.208.231";
-//    private String host = "localhost";
+    private String host;
 
-    private String port = "6379";
+    private String port;
 
-    private String password = "13584064183cz";
+    private String password;
 
     @Bean
     public RedissonClient redissonClient(){

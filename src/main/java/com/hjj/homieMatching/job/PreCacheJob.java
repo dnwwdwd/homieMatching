@@ -53,7 +53,7 @@ public class PreCacheJob {
 
     // 每天执行，预热缓存推荐用户
     @Scheduled(cron = "0 00 00 * * *")
-    synchronized public void doCacheRecommendUser() {
+    public void doCacheRecommendUser() {
         String doCacheLockId = String.format("%s:precachejob:docache:lock", RedisConstant.SYSTEM_ID);
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;
 

@@ -38,4 +38,31 @@
         ) AS max_ids ON c.id = max_ids.max_id AND (c.fromId = #{userId} OR c.toId = #{userId})
         order by createTime desc;
     </select>
+
+    <select id="listLastPrivateChatMessage" resultType="com.hjj.homieMatching.model.domain.Chat">
+        SELECT
+            c.id AS id,  -- 聊天记录的唯一标识
+            c.fromId AS fromId,  -- 发送消息的用户 ID
+            c.toId AS toId,  -- 接收消息的用户 ID
+            c.text AS text,  -- 聊天内容
+            c.chatType AS chatType,  -- 聊天类型
+            c.createTime AS createTime,  -- 创建时间
+            c.updateTime AS updateTime,  -- 更新时间
+            c.teamId AS teamId,  -- 队伍 ID
+            c.isDelete AS isDelete  -- 逻辑删除标志
+        FROM
+            hjj.friend f
+                JOIN
+            hjj.chat c
+            ON
+                (c.fromId = f.userId AND c.toId = f.friendId) OR
+                (c.fromId = f.friendId AND c.toId = f.userId)
+        WHERE
+            f.userId = #{userId}  -- 当前用户的 userId
+          AND c.chatType = 1  -- 私聊类型
+          AND c.isDelete = 0  -- 未删除的聊天记录
+        ORDER BY
+            c.createTime DESC;
+    </select>
+
 </mapper>

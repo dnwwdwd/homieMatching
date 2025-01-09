@@ -19,6 +19,13 @@ public interface ChatMapper extends BaseMapper<Chat> {
      */
     List<Chat> getLastPrivateChatMessages(@Param("userId") Long userId, @Param("friendIdList") List<Long> friendIdList);
 
+    /**
+     * 获取和好友最后一条的聊天消息（已弃用）
+     * @param userId
+     * @return
+     */
+    List<Chat> listLastPrivateChatMessage(@Param("userId") Long userId);
+
 }
 
 

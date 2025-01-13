@@ -34,13 +34,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
     implements FriendService{
 
     @Resource
-    UserMapper userMapper;
-
-    @Resource
     UserService userService;
-
-    @Resource
-    FriendMapper friendMapper;
 
     @Resource
     StringRedisTemplate stringRedisTemplate;
@@ -67,7 +61,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
                QueryWrapper<Friend> queryWrapper = new QueryWrapper();
                queryWrapper.eq("userId", userId);
                queryWrapper.eq("friendId", friendId);
-               Long count1 = friendMapper.selectCount(queryWrapper);
+               Long count1 = this.baseMapper.selectCount(queryWrapper);
                if (count1 > 0) {
                    throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
                }
@@ -75,7 +69,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
                queryWrapper = new QueryWrapper();
                queryWrapper.eq("userId", friendId);
                queryWrapper.eq("friendId", userId);
-               Long count2 = friendMapper.selectCount(queryWrapper);
+               Long count2 = this.baseMapper.selectCount(queryWrapper);
                if (count2 > 0) {
                    throw new BusinessException(ErrorCode.PARAMS_ERROR, "已添加该用户");
                }
@@ -107,9 +101,9 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend>
         User loginUser = userService.getLoginUser(request);
         QueryWrapper<Friend> queryWrapper = new QueryWrapper();
         queryWrapper.eq("userId", userId);
-        List<Friend> friendList = friendMapper.selectList(queryWrapper);
+        List<Friend> friendList = this.baseMapper.selectList(queryWrapper);
         List<User> userList = friendList.stream().map(friend -> {
-            User user = userMapper.selectById(friend.getFriendId());
+            User user = userService.getById(friend.getFriendId());
             return user;
         }).collect(Collectors.toList());
         String redisUserGeoKey = RedisConstant.USER_GEO_KEY;

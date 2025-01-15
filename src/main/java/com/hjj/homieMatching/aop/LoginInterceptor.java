@@ -36,4 +36,5 @@ public class LoginInterceptor {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
     }
+
 }

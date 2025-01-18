@@ -95,7 +95,7 @@ public class InsertUserTest {
         CompletableFuture.allOf(futureList.toArray(new CompletableFuture[]{})).join();
 
         stopWatch.stop();
-        System.out.println( stopWatch.getLastTaskTimeMillis());
+        System.out.println(stopWatch.getLastTaskTimeMillis());
 
     }
 }

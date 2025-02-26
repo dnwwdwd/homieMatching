@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
-    implements TeamService{
+        implements TeamService {
 
     @Resource
     UserTeamService userTeamService;
@@ -87,7 +87,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         }
         // 5. 如果status是加密状态，一定要有密码，且密码 <= 10
         if (TeamStatusEnum.SECRET.equals(statusEnum) &&
-                (StringUtils.isBlank( team.getPassword()) || team.getPassword().length() > 10)) {
+                (StringUtils.isBlank(team.getPassword()) || team.getPassword().length() > 10)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码格式不正确");
         }
         // 6. 超时时间 > 当前时间
@@ -95,16 +95,33 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
         if (new Date().after(expireTime)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "过期时间不能小于当前时间");
         }
-        // 7. 校验用户只能创建5个队伍
-        // todo 有bug，可能同时创建100个队伍
-        QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("userId", userId);
-        long hasTeamNum = this.count(queryWrapper);
-        if (hasTeamNum >= 5) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户最多创建5个队伍");
+        RLock lock = redissonClient.getLock(RedisConstant.USER_ADD_TEAM + team.getId());
+        try {
+            while (true) {
+                if (lock.tryLock(0, 3000, TimeUnit.MILLISECONDS)) {
+                    log.info(Thread.currentThread().getName() + "抢到了分布式锁");
+                    // 7. 校验用户只能创建5个队伍
+                    // todo 有bug，可能同时创建100个队伍
+                    QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("userId", userId);
+                    long hasTeamNum = this.count(queryWrapper);
+                    if (hasTeamNum >= 5) {
+                        throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户最多创建5个队伍");
+                    }
+                    break;
+                }
+            }
+        } catch (InterruptedException e) {
+          log.info("User add team error：获取分布式锁后执行逻辑异常");
+          throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                log.info(Thread.currentThread().getName() + "锁释放成功");
+                lock.unlock();
+            }
         }
+
         // 8. 插入队伍信息到队伍表
-        team.setId(null);
         team.setUserId(userId);
         boolean result = this.save(team);
         Long teamId = team.getId();
@@ -125,7 +142,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
 
     @Override
     public List<TeamUserVO> listTeam(TeamQuery teamQuery, boolean isAdmin) {
-        QueryWrapper<Team> queryWrapper =  new QueryWrapper<>();
+        QueryWrapper<Team> queryWrapper = new QueryWrapper<>();
         // 1.组合成立条件
         if (teamQuery != null) {
             Long id = teamQuery.getId();
@@ -134,7 +151,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             }
             List<Long> idList = teamQuery.getIdList();
             if (CollectionUtils.isNotEmpty(idList)) {
-                queryWrapper.in("id" ,idList);
+                queryWrapper.in("id", idList);
             }
             // 搜索关键词从name字段和description两个字段里面查
             String searchText = teamQuery.getSearchText();
@@ -163,7 +180,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             Integer status = teamQuery.getStatus();
             TeamStatusEnum statusEnum = TeamStatusEnum.getEnumByValue(status);
             // statusEnum为空说明其是公开的
-            if (statusEnum == null){
+            if (statusEnum == null) {
                 statusEnum = TeamStatusEnum.PUBLIC;
             }
             if (!isAdmin && statusEnum.equals(TeamStatusEnum.PRIVATE)) {
@@ -209,7 +226,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Long id = teamUpdateRequest.getId();
-        if (id == null || id <=0) {
+        if (id == null || id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Team oldTeam = this.getById(id);
@@ -255,7 +272,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             }
         }
 
-        String lockId = RedisConstant.USER_JOIN_TEAM + teamId;
+        String lockId = RedisConstant.USER_JOIN_TEAM + userId;
         RLock lock = redissonClient.getLock(lockId);
         try {
             // 只有一个线程能够获取锁，并执行下面的代码
@@ -291,7 +308,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             }
         } catch (InterruptedException e) {
             log.error("User join team error，获取分布式锁后执行逻辑异常", e);
-            return  false;
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         } finally { // 不管所是否会失效都会执行下段保证释放锁
             // 只能释放自己的锁
             if (lock.isHeldByCurrentThread()) { // 判断当前的锁是不是当前这个线程加的锁，每次抢锁时都会有一个线程Id，
@@ -304,7 +321,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
 
     @NotNull
     private Team getTeamById(Long teamId) {
-        if (teamId == null || teamId <=0) {
+        if (teamId == null || teamId <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Team team = this.getById(teamId);
@@ -400,6 +417,7 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
 
     /**
      * 查询队伍里的用户数量
+     *
      * @param teamId
      * @return
      */

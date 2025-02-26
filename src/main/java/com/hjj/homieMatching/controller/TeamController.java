@@ -189,20 +189,6 @@ public class TeamController {
         return ResultUtils.success(teamList);
     }
 
-//    @GetMapping("/list/my/create")
-//    public BaseResponse<List<TeamUserVO>> listMyCreateTeams(TeamQuery teamQuery, HttpServletRequest request){
-//        if (teamQuery == null) {
-//            throw new BusinessException(ErrorCode.PARAMS_ERROR);
-//        }
-//        if (userService.getLoginUser(request) == null) {
-//            throw new BusinessException(ErrorCode.NOT_LOGIN);
-//        }
-//        User loginUser = userService.getLoginUser(request);
-//        teamQuery.setUserId(loginUser.getId());
-//        List<TeamUserVO> teamList = teamService.listTeam(teamQuery, true);
-//        return ResultUtils.success(teamList);
-//    }
-
     /**
      * 获取我创建的队伍
      * @param request

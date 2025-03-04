@@ -130,7 +130,8 @@ public class TeamController {
         if (CollectionUtils.isEmpty(teamList)) {
             return ResultUtils.success(teamList);
         }
-        final List<Long> teamIdList = teamList.stream().map(TeamUserVO::getId).collect(Collectors.toList());
+        final List<Long> teamIdList = teamList.stream().map(TeamUserVO::getId)
+                .collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
         // 2、判断当前用户是否已加入队伍
         QueryWrapper<UserTeam> userTeamQueryWrapper = new QueryWrapper<>();
         try {

@@ -4,14 +4,11 @@ import com.hjj.homieMatching.common.BaseResponse;
 import com.hjj.homieMatching.common.ErrorCode;
 import com.hjj.homieMatching.common.ResultUtils;
 import com.hjj.homieMatching.exception.BusinessException;
-import com.hjj.homieMatching.model.domain.Message;
 import com.hjj.homieMatching.model.request.DeleteRequest;
 import com.hjj.homieMatching.model.request.MessageQueryRequest;
 import com.hjj.homieMatching.model.vo.InteractionMessageVO;
 import com.hjj.homieMatching.model.vo.MessageVO;
 import com.hjj.homieMatching.service.MessageService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

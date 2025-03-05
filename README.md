@@ -304,6 +304,14 @@ npm run build
 
 
 
+### 如何跑通聊天功能
+
+找到前端项目（homeiMatching-frontend）的 src/plugins/myAxios.ts 文件，将其中的 URL 替换为自己的“后端地址:端口”的形式
+
+![](https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/20250305175100.png)
+
+
+
 ### 数据库
 
 1）对于拉去后端项目的同学直接运行 /sql/create_sql.ql 文件即可，前提电脑装了 MySQL（5.7 或 8.x 都可）

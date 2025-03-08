@@ -106,31 +106,16 @@ public class WebSocket {
         WebSocket.onlineCount--;
     }
 
-    /**
-     * 集热地图服务
-     *
-     * @param userService 用户服务
-     */
     @Resource
     public void setHeatMapService(UserService userService) {
         WebSocket.userService = userService;
     }
 
-    /**
-     * 集热地图服务
-     *
-     * @param chatService 聊天服务
-     */
     @Resource
     public void setHeatMapService(ChatService chatService) {
         WebSocket.chatService = chatService;
     }
 
-    /**
-     * 集热地图服务
-     *
-     * @param teamService 团队服务
-     */
     @Resource
     public void setHeatMapService(TeamService teamService) {
         WebSocket.teamService = teamService;

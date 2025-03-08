@@ -22,6 +22,7 @@ public class MessageController {
     @Resource
     private MessageService messageService;
 
+
     @GetMapping("/interaction/list")
     public BaseResponse<InteractionMessageVO> listInteractionMessage(HttpServletRequest request) {
         InteractionMessageVO interactionMessageVO = messageService.listInteractionMessage(request);

@@ -64,16 +64,6 @@ homie 匹配系统是一个移动端网页的在线云交友平台。实现了�
 | Guava-Retrying       | 提供重试机制的库                             | 1.0.6   |
 | Apache-commons-lang3 | 工具库                                       | 3.12.0  |
 
-
-
-## 个人介绍
-
-一个普通学校的大三学生，即将大四毕业了，正在做毕设。
-
-<img src="https://hejiajun-img-bucket.oss-cn-wuhan-lr.aliyuncs.com/img/20240609142050.jpg" alt="597f123b20d2e350ad2916f61c377ef" style="zoom: 33%;" />
-
-> 觉得项目还不错的同学可否给我项目点个 Star 呢？如果可以，小弟不胜感激，谢谢！
-
 ## 功能展示
 
 登录
@@ -394,3 +384,4 @@ git clone https://github.com/dnwwdwd/homieMatching.git
 [homie 匹配部署教程](https://blog.csdn.net/xyendjsj/article/details/135921460?spm=1001.2014.3001.5501)
 
 跟着上面的教程一步一步来即可，不行你不会，如果中间有任何问题欢迎在这个网站，或者 CSDN 上，亦或者是微信上向我提问。觉得项目还不错的话，请给我点个 Star 呗，谢谢！
+

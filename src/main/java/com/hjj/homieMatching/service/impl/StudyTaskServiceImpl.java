@@ -16,7 +16,6 @@ import com.hjj.homieMatching.model.vo.StudyTaskUserVO;
 import com.hjj.homieMatching.model.vo.StudyTaskVO;
 import com.hjj.homieMatching.service.FollowService;
 import com.hjj.homieMatching.service.MessageService;
-import com.hjj.homieMatching.service.StudyCheckinService;
 import com.hjj.homieMatching.service.StudyTaskService;
 import com.hjj.homieMatching.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +41,6 @@ public class StudyTaskServiceImpl extends ServiceImpl<StudyTaskMapper, StudyTask
 
     @Resource
     private FollowService followService;
-
-    @Resource
-    private StudyCheckinService studyCheckinService;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;

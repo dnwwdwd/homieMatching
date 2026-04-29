@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjj.homieMatching.mapper.StudyTaskMapper">
+
+    <resultMap id="BaseResultMap" type="com.hjj.homieMatching.model.domain.StudyTask">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="userId" column="userId" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="targetTime" column="targetTime" jdbcType="INTEGER"/>
+            <result property="taskDate" column="taskDate" jdbcType="DATE"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="likeNum" column="likeNum" jdbcType="BIGINT"/>
+            <result property="checkinCount" column="checkinCount" jdbcType="INTEGER"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
+            <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,userId,title,
+        description,targetTime,taskDate,status,
+        likeNum,checkinCount,createTime,updateTime,isDelete
+    </sql>
+
+    <select id="selectStudyTaskByPage" resultType="com.hjj.homieMatching.model.domain.StudyTask">
+        select * from study_task
+        where isDelete = 0
+        <if test="userId != null">
+            and userId = #{userId}
+        </if>
+        <if test="title != null and title != ''">
+            and title like CONCAT('%', #{title}, '%')
+        </if>
+        order by createTime desc
+        limit #{start}, #{end}
+    </select>
+</mapper>

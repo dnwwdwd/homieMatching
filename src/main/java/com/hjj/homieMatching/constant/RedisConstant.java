@@ -20,6 +20,10 @@ public interface RedisConstant {
     String USER_BLOOM_FILTER_KEY = "homieMatching:user:bloomfilter";
     String BLOG_COVER_IMAGE_UPLOAD_KEY = "homieMatching:blog:cover:image:upload:";
     String BLOG_IMAGE_UPLOAD_KEY = "homieMatching:blog:image:upload:";
+
+    String REDIS_STUDY_TASK_LIKE_KEY = "homieMatching:study:task:like:";
+    String REDIS_USER_LIKE_STUDY_TASK_KEY = "homieMatching:user:like:study:task:";
+
     /**
      * 用户推荐缓存
      */
